@@ -53,23 +53,22 @@ function preloading()
 function keyDownHandler(event)
 {
 	var keyPressed = String.fromCharCode(event.keyCode);
-
-	if (keyPressed == "W")
+	if (keyPressed == "W" || event.keyCode === CONST.ARROW_UP)
 	{		
 		facing = "N";
 		isMoving = true;
 	}
-	else if (keyPressed == "D")
+	else if (keyPressed == "D" || event.keyCode === CONST.ARROW_RIGHT)
 	{	
 		facing = "E";
 		isMoving = true;		
 	}
-	else if (keyPressed == "S")
+	else if (keyPressed == "S" || event.keyCode === CONST.ARROW_DOWN)
 	{	
 		facing = "S";
 		isMoving = true;		
 	}
-	else if (keyPressed == "A")
+	else if (keyPressed == "A" || event.keyCode === CONST.ARROW_LEFT)
 	{	
 		facing = "W";
 		isMoving = true;		
@@ -81,7 +80,11 @@ function keyUpHandler(event)
 	var keyPressed = String.fromCharCode(event.keyCode);
 	
 	if ((keyPressed == "W") || (keyPressed == "A") || 
-		(keyPressed == "S") || (keyPressed == "D"))
+		(keyPressed == "S") || (keyPressed == "D") ||
+        (event.keyCode === CONST.ARROW_DOWN) ||
+        (event.keyCode === CONST.ARROW_LEFT) ||
+        (event.keyCode === CONST.ARROW_RIGHT) ||
+        (event.keyCode === CONST.ARROW_UP))
 	{
 		isMoving = false;
 	}
