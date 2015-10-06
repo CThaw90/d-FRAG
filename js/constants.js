@@ -25,5 +25,27 @@ var TEXT_PRELOADING = "Loading ...",
 	TEXT_PRELOADING_Y = 200;
 	
 	
-	
-	
+var CONST = {
+
+	// DIRECTIONAL STRINGS
+	RIGHT: 'RIGHT',
+	LEFT: 'LEFT',
+	DOWN: 'DOWN',
+	UP: 'UP',
+
+	// Arrow Keys Codes By Character
+	ARROW_RIGHT: 39,
+	ARROW_DOWN: 40,
+	ARROW_LEFT: 37,
+	ARROW_UP: 38,
+
+	// Default values
+	DEFAULT_FRAME_RATE: 100,
+	STAGE_HEIGHT: 400,
+	STAGE_WIDTH: 600,
+
+	TEXT_PRELOADING: 'Loading...',
+	TEXT_PRELOADING_X: 200,
+	TEXT_PRELOADING_Y: 200
+
+};
