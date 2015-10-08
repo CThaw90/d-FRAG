@@ -17,15 +17,21 @@ var $const = {
     faceUp: 'up',
 
     defaultFrameRate: 100,
-    // [ stageHeight and stageWidth ] Should be determined by the size of the users screen
-    // These are just place holders for now
-    stageHeight: 400,
-    stageWidth: 600,
 
+    stageHeight: window.innerHeight,
+    stageWidth: window.innerWidth,
+
+    screenOffset: 16,
 
     // Regular Expression objects
     // ----------------------------------
 
     // Checks to determine if string represents an Html Object
-    htmlObjectRegex: /^\[object\sHTML(?:.*?)\]/
+    htmlObjectRegex: /^\[object\sHTML(?:.*?)\]/,
+
+
+    // Color Schemes
+    // ----------------------------------
+    black: '#000000'
+
 };
