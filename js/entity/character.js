@@ -11,19 +11,19 @@
  * @param charFrameRate frame determines how fast a character can move
  * @constructor
  */
-function Character(charImageParams, facing, isMoveable, charFrameRate) {
+function Character(imageConfig, charConfig) {
 
     // Save the Character object to the variable self
     var self = this;
 
-    if (!charImageParams.toString() || typeof charImageParams !== 'object')
-        charImageParams = {};
+    imageConfig = $util.isObject(imageConfig) ? imageConfig : {};
+    charConfig = $util.isObject(charConfig) ? charConfig : {};
 
     // Determines if a character is allowed to be moved with arrow keys
-    self.isMoveable = isMoveable || false;
+    self.isMoveable = charConfig.isMoveable || false;
 
     // Default frame rate for a given character. Controls character speed
-    self.charFrameRate = charFrameRate || CONST.DEFAULT_FRAME_RATE;
+    self.charFrameRate = charConfig.frameRate || $const.defaultFrameRate;
 
     // The default sprite image for a character.
     // If no image is path is passed as an argument this image path is used
@@ -33,10 +33,10 @@ function Character(charImageParams, facing, isMoveable, charFrameRate) {
     var charImage = new Image();
     charImage.ready = false;
     charImage.onload = setAssetReady;
-    charImage.src = charImageParams.src || defaultCharImageSrc;
+    charImage.src = imageConfig.src || defaultCharImageSrc;
 
     // Character Facing Direction
-    var facing = facing || CONST.LEFT;
+    var facing = facing || $const.faceLeft;
 
     var isMoving = false;
 
@@ -46,8 +46,8 @@ function Character(charImageParams, facing, isMoveable, charFrameRate) {
 
     // Makes the current character moveable by the user
     self.makeMoveable = function() {
-        document.addEventListener("keydown", self.move, false);
-        document.addEventListener("keyup", self.move, false);
+        document.addEventListener($const.keyDown, self.move, false);
+        document.addEventListener($const.keyUp, self.move, false);
     };
 
     // Move a character in a certain direction
@@ -55,24 +55,24 @@ function Character(charImageParams, facing, isMoveable, charFrameRate) {
 
         switch (event.keyCode) {
 
-            case CONST.ARROW_DOWN:
-                isMoving = (event.type === 'keydown');
-                facing = CONST.DOWN;
+            case $const.arrowDown:
+                isMoving = (event.type === $const.keyDown);
+                facing = $const.faceDown;
                 break;
 
-            case CONST.ARROW_LEFT:
-                isMoving = (event.type === 'keydown');
-                facing = CONST.LEFT;
+            case $const.arrowLeft:
+                isMoving = (event.type === $const.keyDown);
+                facing = $const.faceLeft;
                 break;
 
-            case CONST.ARROW_RIGHT:
-                isMoving = (event.type === 'keydown');
-                facing = CONST.RIGHT;
+            case $const.arrowRight:
+                isMoving = (event.type === $const.keyDown);
+                facing = $const.faceRight;
                 break;
 
-            case CONST.ARROW_UP:
-                isMoving = (event.type === 'keydown');
-                facing = CONST.UP;
+            case $const.arrowUp:
+                isMoving = (event.type === $const.keyDown);
+                facing = $const.faceUp;
                 break;
         }
     };
