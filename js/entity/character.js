@@ -15,7 +15,10 @@ function Character(charConfig, imageConfig) {
     var self = this;
 
     // The Html Element container the character object will be held in
-    self.$container = charConfig.container || document.createElement('span');
+    self.$container = charConfig.container || document.createElement('canvas');
+
+    // Captures the context of the character canvas
+    self.ctx = self.$container.getContext('2d');
 
     imageConfig = $util.isObject(imageConfig) ? imageConfig : {};
     charConfig = $util.isObject(charConfig) ? charConfig : {};
@@ -37,17 +40,17 @@ function Character(charConfig, imageConfig) {
     // Initializes an image Object
     var charImage = new Image();
     charImage.ready = false;
-    charImage.onload = setAssetReady;
     charImage.src = imageConfig.src || defaultCharImageSrc;
-
+    charImage.height = 700;
+    charImage.width = 700;
+    charImage.onload = function() {
+        self.ctx.drawImage(this, 0, 0);
+    };
+    self.$container.appendChild(charImage);
     // Character Facing Direction
     var facing = facing || $const.faceLeft;
 
     var isMoving = false, frameHandle = null;
-
-    function setAssetReady() {
-        this.ready = true;
-    }
 
     // Makes the current character moveable by the user
     self.enableControl = function() {
@@ -78,7 +81,7 @@ function Character(charConfig, imageConfig) {
             facing = $const.faceUp;
         }
     };
-    self.ctx = self.$container.getContext('2d');
+
     // Makes the current Character moveable by a user
     //if (self.isControllable)
     //    self.enableControl();
@@ -93,6 +96,5 @@ function Character(charConfig, imageConfig) {
     //    }
     //
     //}, self.charFrameRate);
-    self.ctx.drawImage(charImage, 0, 0, 200, 200, 200, 200, 200, 200);
     //self.$container.appendChild(charImage);
 }

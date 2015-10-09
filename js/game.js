@@ -7,10 +7,10 @@ function Game(config) {
     var self = this;
     var entities = {};
 
-    self.currentStage = new Stage(document.getElementById('gameCanvas'), {
+    self.currentStage = new Stage({
 
-        height: $util.getWindowHeight(),
-        width: $util.getWindowWidth(),
+
+        screenType: 'full',
         background: {
             color: '#000000',
             image: null
@@ -21,10 +21,12 @@ function Game(config) {
 
         container: document.createElement('canvas'),
         isControllable: true,
+        id: 'main-character',
         frameRate: 100,
 
-        height: 200,
-        width: 200
+
+        height: 100,
+        width: 72
 
     }, {
 
@@ -34,7 +36,7 @@ function Game(config) {
 
     self.play = function () {
 
-    //    self.currentStage.placeEntity(entities['main-character'], {});
+        self.currentStage.placeEntity(entities['main-character'], {});
 
     };
 }
