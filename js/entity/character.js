@@ -93,6 +93,6 @@ function Character(charConfig, imageConfig) {
     //    }
     //
     //}, self.charFrameRate);
-    console.log(self.ctx);
+    self.ctx.drawImage(charImage, 0, 0, 200, 200, 200, 200, 200, 200);
     //self.$container.appendChild(charImage);
 }

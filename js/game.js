@@ -12,7 +12,7 @@ function Game(config) {
         height: $util.getWindowHeight(),
         width: $util.getWindowWidth(),
         background: {
-            color: $const.black,
+            color: '#000000',
             image: null
         }
     });
@@ -34,9 +34,7 @@ function Game(config) {
 
     self.play = function () {
 
-        console.log('Game Started');
-
-        self.currentStage.placeEntity(entities['main-character'], {});
+    //    self.currentStage.placeEntity(entities['main-character'], {});
 
     };
 }
