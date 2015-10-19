@@ -5,10 +5,10 @@
 function Stage(params) {
 
     // Binds the stage object to the body of the Html Document
-    var $stage = document.body,
+    var $stage = params.container || document.body,
 
         // Ensures variable params is a valid object
-        params = $util.isObject(params) ? params : {},
+        params = _util.isObject(params) ? params : {},
 
         // All the objects and entities present on this stage
         // Indexed by id
@@ -17,9 +17,14 @@ function Stage(params) {
         // Save the stage object to the variable self
         self = this;
 
+    // If the stage container isn't the body element
+    // add itself to the screen
+    if ($stage !== document.body) {
+        document.body.appendChild($stage);
+    }
     // Dimensions of the current stage
-    // $stage.height = params.height || $util.getWindowHeight();
-    // $stage.width = params.width || $util.getWindowWidth();
+    // $stage.height = params.height || _util.getWindowHeight();
+    // $stage.width = params.width || _util.getWindowWidth();
 
     if (params.background && params.background.color) {
         //$stage.setAttribute('style', 'background-color: '+params.background.color +
@@ -49,4 +54,16 @@ function Stage(params) {
     self.resize = function () {
 
     };
+
+    self.activate = function() {
+        activateEntities();
+    };
+
+    function activateEntities () {
+
+        for (var entity in entities) {
+            if (entities[entity].activate)
+                entities[entity].activate();
+        }
+    }
 }

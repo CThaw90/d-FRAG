@@ -9,9 +9,26 @@
 
 (function () {
     // Initialize game
-    var game = new Game({});
+    var start = function(elem) {
+        elem.parentNode.removeChild(elem);
+        new Game({}).play();
+    }, buttonElem;
 
-    // Start game play
-    game.play();
+    // Start game play after document finishes loading
+    var waitingForGameToLoad = setInterval(function(){
+        if (document.readyState === 'complete') {
+            clearInterval(waitingForGameToLoad);
+
+            buttonElem = document.createElement('button');
+            buttonElem.setAttribute('id', 'start-game');
+            buttonElem.innerText = 'Start Game';
+            buttonElem.onclick = function () {
+                buttonElem.parentNode.removeChild(document.getElementById('start-game'));
+                new Game({}).play();
+            };
+            document.body.appendChild(buttonElem);
+        }
+    }, 500);
+
 
 })();

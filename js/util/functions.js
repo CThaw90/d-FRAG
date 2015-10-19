@@ -5,7 +5,7 @@
  * conveniently used anywhere around the app.
  */
 
-var $util = {
+var _util = {
 
     // Checks if a variable is javascript object
     isObject: function(o) {
@@ -15,7 +15,7 @@ var $util = {
 
     // Checks if a variable is an HtmlElement
     isHtmlElement: function(h) {
-        return h.toString().search($const.htmlObjectRegex) !== -1
+        return h.toString().search(_const.htmlObjectRegex) !== -1
             && typeof o === 'object';
     },
 

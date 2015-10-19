@@ -20,14 +20,14 @@ function Character(charConfig, imageConfig) {
     // Captures the context of the character canvas
     self.ctx = self.$container.getContext('2d');
 
-    imageConfig = $util.isObject(imageConfig) ? imageConfig : {};
-    charConfig = $util.isObject(charConfig) ? charConfig : {};
+    imageConfig = _util.isObject(imageConfig) ? imageConfig : {};
+    charConfig = _util.isObject(charConfig) ? charConfig : {};
 
     // Determines if a character is allowed to be moved with arrow keys
     self.isControllable = charConfig.isControllable || false;
 
     // Default frame rate for a given character. Controls character speed
-    self.charFrameRate = charConfig.frameRate || $const.defaultFrameRate;
+    self.charFrameRate = charConfig.frameRate || _const.defaultFrameRate;
 
     // The default sprite image for a character.
     // If no image is path is passed as an argument this image path is used
@@ -37,6 +37,17 @@ function Character(charConfig, imageConfig) {
     self.$container.height = charConfig.height || 200;
     self.$container.width = charConfig.width || 200;
 
+    // Sets an id for the character object container for arbitrary reference
+    self.$container.setAttribute('id', (charConfig.id || 'character-xzf'));
+
+    // Sets the specified position of the character object
+    self.position = charConfig.position || {left: 0, top: 0};
+
+    // Applies position coordinates to parent container
+    self.$container.style.left = self.position.left+'px';
+    self.$container.style.top = self.position.top+'px';
+    self.$container.style.position = 'absolute';
+
     // Initializes an image Object
     var charImage = new Image();
     charImage.ready = false;
@@ -44,57 +55,117 @@ function Character(charConfig, imageConfig) {
     charImage.height = 700;
     charImage.width = 700;
     charImage.onload = function() {
-        self.ctx.drawImage(this, 0, 0);
+        self.ctx.drawImage(
+            this, 0, 0,
+            imageConfig.sectionWidth, imageConfig.sectionHeight,
+            0, 0,
+            charConfig.width, charConfig.height
+        );
     };
-    self.$container.appendChild(charImage);
-    // Character Facing Direction
-    var facing = facing || $const.faceLeft;
 
-    var isMoving = false, frameHandle = null;
+    // Binds the character image to the container canvas
+    self.$container.appendChild(charImage);
+
+    // Character Facing Direction
+    var facing = _const.faceLeft,
+
+        direction = {left: false, right: false, up: false, down: false};
+
+    var frameHandle = null;
 
     // Makes the current character moveable by the user
     self.enableControl = function() {
-        document.addEventListener($const.keyDown, self.move, false);
-        document.addEventListener($const.keyUp, self.move, false);
+        document.addEventListener(_const.keyDown, self.move, false);
+        document.addEventListener(_const.keyUp, self.move, false);
     };
 
     // Disables character control for the user
     self.disableControl = function() {
-        document.removeEventListener($const.keyDown, self.move);
-        document.removeEventListener($const.keyUp, self.move);
+        document.removeEventListener(_const.keyDown, self.move);
+        document.removeEventListener(_const.keyUp, self.move);
     };
 
     // Move a character in a certain direction
     self.move = function(event) {
+        var keyPressed = (event.type === _const.keyDown)
+        if (event.keyCode === _const.arrowDown) {
+            direction.down = keyPressed;
+            facing = _const.faceDown;
 
-        if (event.keyCode === $const.arrowDown) {
-            isMoving = (event.type === $const.keyDown);
-            facing = $const.faceDown;
-        } else if (event.keyCode === $const.arrowLeft) {
-            isMoving = (event.type === $const.keyDown);
-            facing = $const.faceLeft;
-        } else if (event.keyCode === $const.arrowRight) {
-            isMoving = (event.type === $const.keyDown);
-            facing = $const.faceRight;
-        } else if (event.keyCode === $const.arrowUp) {
-            isMoving = (event.type === $const.keyDown);
-            facing = $const.faceUp;
+        } else if (event.keyCode === _const.arrowLeft) {
+            direction.left = keyPressed;
+            facing = _const.faceLeft;
+
+        } else if (event.keyCode === _const.arrowRight) {
+            direction.right = keyPressed;
+            facing = _const.faceRight;
+
+        } else if (event.keyCode === _const.arrowUp) {
+            direction.up = keyPressed;
+            facing = _const.faceUp;
         }
     };
 
-    // Makes the current Character moveable by a user
-    //if (self.isControllable)
-    //    self.enableControl();
-    //
-    //frameHandle = setInterval(function() {
-    //
-    //    var $parentElement = null;
-    //    // Erase image
-    //    if (charImage.parentElement) {
-    //        $parentElement = charImage.parentElement;
-    //        charImage.remove();
-    //    }
-    //
-    //}, self.charFrameRate);
-    //self.$container.appendChild(charImage);
+    self.activate = function () {
+        frameHandle = setInterval(_reloadObjectState, self.charFrameRate);
+        self.enableControl();
+    };
+
+    self.deactivate = function(timeout) {
+        clearInterval(frameHandle);
+        self.disableControl();
+        if (timeout) {
+            setTimeout(function() {
+                self.enableControl();
+                self.activate();
+            }, timeout);
+        }
+    };
+
+    function _reloadObjectState() {
+
+        // Clear Canvas
+        self.ctx.fillStyle = 'black';
+        self.ctx.fillRect(
+            0, 0,
+            self.$container.width,
+            self.$container.height
+        );
+        if (direction.down) {
+            if (self.isMoving())
+                self.position.top += charConfig.speed;
+        }
+        if (direction.left) {
+            if (self.isMoving())
+                self.position.left -= charConfig.speed;
+        }
+        if (direction.up) {
+            if (self.isMoving())
+                self.position.top -= charConfig.speed;
+        }
+        if (direction.right) {
+            if (self.isMoving())
+                self.position.left += charConfig.speed;
+        }
+
+        self.$container.style.left = self.position.left + 'px';
+        self.$container.style.top = self.position.top + 'px';
+
+        // Redraw the image unto the canvas
+        self.ctx.drawImage(
+            charImage, 0, 0,
+            imageConfig.sectionWidth, imageConfig.sectionHeight,
+            0, 0,
+            charConfig.width, charConfig.height
+        );
+    }
+
+    self.isMoving = function () {
+        return direction.left ||
+            direction.right ||
+            direction.up ||
+            direction.down;
+    };
+
+
 }

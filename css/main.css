@@ -10,3 +10,9 @@
     height: 99%;
     width: 99%;
 }
+
+html, body {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}

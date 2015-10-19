@@ -2,7 +2,7 @@
  * Created by Chris on 10/7/2015.
  */
 
-var $const = {
+var _const = {
 
     keyDown: 'keydown',
     keyUp: 'keyup',
