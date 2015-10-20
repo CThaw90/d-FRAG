@@ -38,7 +38,132 @@ function Game(config) {
 
         src: 'img/spritesheet.png',
         sectionHeight: 100,
-        sectionWidth: 72
+        sectionWidth: 72,
+        // This is definitely gonna have to be moved into its own JSON file
+        // Animation Vector is responsible for all animations pertaining to a certain entity object
+        animationVector: {
+            'animate-movingUp': [
+                {
+                    description: 'Left foot forward animation walking up',
+                    height: 100,
+                    width: 72,
+                    x: 0,
+                    y: 0
+                },
+                {
+                    description: 'Standing animation looking up',
+                    height: 100,
+                    width: 72,
+                    x: 72,
+                    y: 0
+                },
+                {
+                    description: 'Right foot forward animation walking up',
+                    height: 100,
+                    width: 72,
+                    x: 144,
+                    y: 0
+                },
+                {
+                    description: 'Standing animation looking up',
+                    height: 100,
+                    width: 72,
+                    x: 144,
+                    y: 0
+                }
+            ],
+            'animate-movingRight' : [
+                {
+                    description: 'Right foot forward animation walking right',
+                    height: 100,
+                    width: 72,
+                    x: 0,
+                    y: 100
+                },
+                {
+                    description: 'Standing animation looking right',
+                    height: 100,
+                    width: 72,
+                    x: 72,
+                    y: 100
+                },
+                {
+                    description: 'Left foot forward animation walking right',
+                    height: 100,
+                    width: 72,
+                    x: 144,
+                    y: 100
+                },
+                {
+                    description: 'Standing animation looking right',
+                    height: 100,
+                    width: 72,
+                    x: 72,
+                    y: 100
+                }
+            ],
+            'animate-movingDown' : [
+                {
+                    description: 'Right foot forward animation walking down',
+                    height: 100,
+                    width: 72,
+                    x: 0,
+                    y: 200
+                },
+                {
+                    description: 'Standing animation looking down',
+                    height: 100,
+                    width: 72,
+                    x: 72,
+                    y: 200
+                },
+                {
+                    description: 'Left foot forward animation walking down',
+                    height: 100,
+                    width: 72,
+                    x: 144,
+                    y: 200
+                },
+                {
+                    description: 'Standing animation looking down',
+                    height: 100,
+                    width: 72,
+                    x: 72,
+                    y: 200
+                }
+            ],
+            'animate-movingLeft' : [
+                {
+                    description: 'Right foot forward animation walking left',
+                    height: 100,
+                    width: 72,
+                    x: 0,
+                    y: 300
+
+                },
+                {
+                    description: 'Standing animation looking left',
+                    height: 100,
+                    width: 72,
+                    x: 72,
+                    y: 300
+                },
+                {
+                    description: 'Left foot forward animation walking left',
+                    height: 100,
+                    width: 72,
+                    x: 144,
+                    y: 300
+                },
+                {
+                    description: 'Standing animation looking left',
+                    height: 100,
+                    width: 72,
+                    x: 72,
+                    y: 300
+                }
+            ]
+        }
 
     });
 

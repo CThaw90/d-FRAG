@@ -11,10 +11,10 @@ var _const = {
     arrowRight: 39,
     arrowDown: 40,
 
-    faceRight: 'right',
-    faceLeft: 'left',
-    faceDown: 'down',
-    faceUp: 'up',
+    faceRight: 'Right',
+    faceLeft: 'Left',
+    faceDown: 'Down',
+    faceUp: 'Up',
 
     defaultFrameRate: 100,
 
@@ -27,7 +27,7 @@ var _const = {
     // ----------------------------------
 
     // Checks to determine if string represents an Html Object
-    htmlObjectRegex: /^\[object\sHTML(?:.*?)\]/,
+    htmlObjectRegex: /^\[object\sHTML(?:.*?)]/,
 
 
     // Color Schemes

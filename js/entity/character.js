@@ -20,6 +20,8 @@ function Character(charConfig, imageConfig) {
     // Captures the context of the character canvas
     self.ctx = self.$container.getContext('2d');
 
+    self.animationIndex = 0;
+
     imageConfig = _util.isObject(imageConfig) ? imageConfig : {};
     charConfig = _util.isObject(charConfig) ? charConfig : {};
 
@@ -69,9 +71,9 @@ function Character(charConfig, imageConfig) {
     // Character Facing Direction
     var facing = _const.faceLeft,
 
-        direction = {left: false, right: false, up: false, down: false};
+        direction = {left: false, right: false, up: false, down: false},
 
-    var frameHandle = null;
+        frameHandle = null;
 
     // Makes the current character moveable by the user
     self.enableControl = function() {
@@ -87,7 +89,7 @@ function Character(charConfig, imageConfig) {
 
     // Move a character in a certain direction
     self.move = function(event) {
-        var keyPressed = (event.type === _const.keyDown)
+        var keyPressed = (event.type === _const.keyDown);
         if (event.keyCode === _const.arrowDown) {
             direction.down = keyPressed;
             facing = _const.faceDown;
@@ -104,6 +106,13 @@ function Character(charConfig, imageConfig) {
             direction.up = keyPressed;
             facing = _const.faceUp;
         }
+    };
+
+    self.isMoving = function () {
+        return direction.left ||
+            direction.right ||
+            direction.up ||
+            direction.down;
     };
 
     self.activate = function () {
@@ -131,21 +140,22 @@ function Character(charConfig, imageConfig) {
             self.$container.width,
             self.$container.height
         );
-        if (direction.down) {
-            if (self.isMoving())
+        // Store the character animation vector in a temporary object
+        var cav = imageConfig.animationVector['animate-moving'+facing];
+        if (self.isMoving()) {
+            self.animationIndex = self.animationIndex < cav.length - 1 ? self.animationIndex+1 : 0;
+            if (direction.down) {
                 self.position.top += charConfig.speed;
-        }
-        if (direction.left) {
-            if (self.isMoving())
+            }
+            if (direction.left) {
                 self.position.left -= charConfig.speed;
-        }
-        if (direction.up) {
-            if (self.isMoving())
+            }
+            if (direction.up) {
                 self.position.top -= charConfig.speed;
-        }
-        if (direction.right) {
-            if (self.isMoving())
+            }
+            if (direction.right) {
                 self.position.left += charConfig.speed;
+            }
         }
 
         self.$container.style.left = self.position.left + 'px';
@@ -153,19 +163,10 @@ function Character(charConfig, imageConfig) {
 
         // Redraw the image unto the canvas
         self.ctx.drawImage(
-            charImage, 0, 0,
+            charImage, cav[self.animationIndex].x, cav[self.animationIndex].y,
             imageConfig.sectionWidth, imageConfig.sectionHeight,
             0, 0,
             charConfig.width, charConfig.height
         );
     }
-
-    self.isMoving = function () {
-        return direction.left ||
-            direction.right ||
-            direction.up ||
-            direction.down;
-    };
-
-
 }
