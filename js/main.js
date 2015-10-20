@@ -22,6 +22,7 @@
             buttonElem = document.createElement('button');
             buttonElem.setAttribute('id', 'start-game');
             buttonElem.innerText = 'Start Game';
+	    buttonElem.textContent = 'Start Game';
             buttonElem.onclick = function () {
                 buttonElem.parentNode.removeChild(document.getElementById('start-game'));
                 new Game({}).play();
