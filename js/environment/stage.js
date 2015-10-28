@@ -17,30 +17,30 @@ function Stage(params) {
         // Save the stage object to the variable self
         self = this;
 
+    self.id = params.id;
     // If the stage container isn't the body element
     // add itself to the screen
     if ($stage !== document.body) {
         document.body.appendChild($stage);
     }
-    // Dimensions of the current stage
-    // $stage.height = params.height || _util.getWindowHeight();
-    // $stage.width = params.width || _util.getWindowWidth();
 
     if (params.background && params.background.color) {
-        //$stage.setAttribute('style', 'background-color: '+params.background.color +
-        //                    ';position: relative;height: 99%'+
-        //                    ';width: 99%;overflow: hidden;');
+        self.id = self.id ? self.id : 'currentStage-fullscreen';
         $stage.setAttribute('class', 'full-screen');
+        $stage.setAttribute('id', self.id);
+
     } else if (params.background && params.background.image) {
+        self.id = self.id ? self.id : 'currentStage-backgroundImage';
         $stage.backgroundImage = params.background.image;
+        $stage.setAttribute('id', self.id);
     }
 
-    self.placeEntity = function (object, params) {
+    self.placeEntity = function (params) {
 
         if (!params.id) return;
 
-        $stage.appendChild(object.$container);
-        entities[params.id] = object;
+        $stage.appendChild(params.object.$container);
+        entities[params.id] = params.object;
     };
 
     self.removeEntity = function(id) {

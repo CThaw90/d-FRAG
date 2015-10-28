@@ -92,19 +92,22 @@ function Character(charConfig, imageConfig) {
         var keyPressed = (event.type === _const.keyDown);
         if (event.keyCode === _const.arrowDown) {
             direction.down = keyPressed;
-            facing = _const.faceDown;
+            facing = direction.down ? _const.faceDown : facing;
 
-        } else if (event.keyCode === _const.arrowLeft) {
+        }
+        if (event.keyCode === _const.arrowLeft) {
             direction.left = keyPressed;
-            facing = _const.faceLeft;
+            facing = direction.left ? _const.faceLeft : facing;
 
-        } else if (event.keyCode === _const.arrowRight) {
+        }
+        if (event.keyCode === _const.arrowRight) {
             direction.right = keyPressed;
-            facing = _const.faceRight;
+            facing = direction.right ? _const.faceRight : facing;
 
-        } else if (event.keyCode === _const.arrowUp) {
+        }
+        if (event.keyCode === _const.arrowUp) {
             direction.up = keyPressed;
-            facing = _const.faceUp;
+            facing = direction.up ? _const.faceUp : facing;
         }
     };
 

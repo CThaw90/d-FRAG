@@ -4,22 +4,25 @@
 
 function Game(config) {
 
-    var self = this;
-    var entities = {};
+    var collision = new Collision(),
+        entities = {},
+        self = this;
 
     self.currentStage = new Stage({
 
         // We should probably put the stage inside an Html container
         // to control the position, spacing and size more seamlessly
-        
+        id: 'currentStage-fullscreen',
         container: document.createElement('div'),
         screenType: 'full',
         background: {
             color: '#000000',
             image: null
         }
+
     });
 
+    // Probably going to load all data for configurations from a server resource
     entities['main-character'] = new Character({
 
         container: document.createElement('canvas'),
@@ -32,6 +35,8 @@ function Game(config) {
         },
         height: 100,
         width: 72,
+        // Not sure whether to make speed a configurable attribute
+        // or fixed at a certain value for movement consistency
         speed: 5
 
     }, {
@@ -168,8 +173,13 @@ function Game(config) {
     });
 
     self.play = function () {
-
-        self.currentStage.placeEntity(entities['main-character'], {id : 'main-character'});
         self.currentStage.activate();
     };
+
+    // Initializing the Game
+    self.currentStage.placeEntity({object: entities['main-character'], id: 'main-character'});
+
+    // Setting up the boundaries
+    collision.add(self.currentStage);
+
 }
