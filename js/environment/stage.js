@@ -26,7 +26,18 @@ function Stage(params) {
 
     if (params.background && params.background.color) {
         self.id = self.id ? self.id : 'currentStage-fullscreen';
-        $stage.setAttribute('class', 'full-screen');
+        // $stage.setAttribute('class', 'full-screen');
+        $stage.setAttribute('style', _util.jsonToCSS({
+            'background-color': params.background.color,
+            position: 'absolute',
+
+            /* Dynamically allocate these values based on how big
+             * the client screen is to make edges remain consistent */
+            height: '99%',
+            width: '99%',
+            left: 0,
+            top: 0
+        }));
         $stage.setAttribute('id', self.id);
 
     } else if (params.background && params.background.image) {
@@ -51,6 +62,7 @@ function Stage(params) {
         delete entities[id];
     };
 
+    // Generate boundary dimensions
     self.resize = function () {
 
     };
@@ -66,4 +78,11 @@ function Stage(params) {
                 entities[entity].activate();
         }
     }
+
+    // Setting dimensions of the stage object
+    var bounds = $stage.getBoundingClientRect();
+    self.height = bounds.height;
+    self.width = bounds.width;
+    self.x = bounds.left;
+    self.y = bounds.top;
 }

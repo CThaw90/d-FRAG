@@ -12,8 +12,8 @@ function Game(config) {
 
         // We should probably put the stage inside an Html container
         // to control the position, spacing and size more seamlessly
-        id: 'currentStage-fullscreen',
         container: document.createElement('div'),
+        id: 'currentStage-fullscreen',
         screenType: 'full',
         background: {
             color: '#000000',
@@ -29,6 +29,7 @@ function Game(config) {
         isControllable: true,
         id: 'main-character',
         frameRate: 100,
+        cd: collision,
         position: {
             left: 100,
             top: 100

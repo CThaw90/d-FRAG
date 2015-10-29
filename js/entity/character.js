@@ -12,7 +12,8 @@
 function Character(charConfig, imageConfig) {
 
     // Save the Character object to the variable self
-    var self = this;
+    var self = this,
+        collision = charConfig.cd;
 
     // The Html Element container the character object will be held in
     self.$container = charConfig.container || document.createElement('canvas');
@@ -144,19 +145,23 @@ function Character(charConfig, imageConfig) {
             self.$container.height
         );
         // Store the character animation vector in a temporary object
-        var cav = imageConfig.animationVector['animate-moving'+facing];
-        if (self.isMoving()) {
+        var cav = imageConfig.animationVector['animate-moving'+facing],
+            position = {
+                x: facing === _const.faceRight ? (self.position.left + self.$container.width) : self.position.left,
+                y: facing === _const.faceDown ? (self.position.top + self.$container.height) : self.position.top
+            };
+        if (self.isMoving() /*&& !collision.check(position, facing, charConfig.speed) */) {
             self.animationIndex = self.animationIndex < cav.length - 1 ? self.animationIndex+1 : 0;
-            if (direction.down) {
+            if (direction.down && !collision.check(position, _const.faceDown, charConfig.speed)) {
                 self.position.top += charConfig.speed;
             }
-            if (direction.left) {
+            if (direction.left && !collision.check(position, _const.faceLeft, charConfig.speed)) {
                 self.position.left -= charConfig.speed;
             }
-            if (direction.up) {
+            if (direction.up && !collision.check(position, _const.faceUp, charConfig.speed)) {
                 self.position.top -= charConfig.speed;
             }
-            if (direction.right) {
+            if (direction.right && !collision.check(position, _const.faceRight, charConfig.speed)) {
                 self.position.left += charConfig.speed;
             }
         }
