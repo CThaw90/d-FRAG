@@ -42,7 +42,20 @@ function Stage(params) {
 
     } else if (params.background && params.background.image) {
         self.id = self.id ? self.id : 'currentStage-backgroundImage';
-        $stage.backgroundImage = params.background.image;
+
+        self.backgroundImage = new Image();
+        self.backgroundImage.src = params.background.image.src;
+        self.backgroundImage.onload = function() {
+            $stage.setAttribute('style', _util.jsonToCSS({
+                'background-image': 'url('+this.src+ ')',
+                height: this.height + 'px',
+                width: this.width + 'px',
+                position: 'absolute',
+                left: '0px',
+                top: '0px',
+            }));
+        };
+
         $stage.setAttribute('id', self.id);
     }
 

@@ -16,8 +16,11 @@ function Game(config) {
         id: 'currentStage-fullscreen',
         screenType: 'full',
         background: {
-            color: '#000000',
-            image: null
+        //    color: '#000000',
+            color: null,
+            image: {
+                src: 'img/stages/grass.png'
+            }
         }
 
     });

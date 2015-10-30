@@ -138,12 +138,18 @@ function Character(charConfig, imageConfig) {
     function _reloadObjectState() {
 
         // Clear Canvas
-        self.ctx.fillStyle = 'black';
-        self.ctx.fillRect(
+        self.ctx.clearRect(
             0, 0,
             self.$container.width,
             self.$container.height
         );
+        // self.ctx.fillStyle = 'rgba(0,0,0,.2))';
+        // self.ctx.fillStyle = 'black';
+        //self.ctx.fillRect(
+        //    0, 0,
+        //    self.$container.width,
+        //    self.$container.height
+        //);
         // Store the character animation vector in a temporary object
         var cav = imageConfig.animationVector['animate-moving'+facing],
             position = {
