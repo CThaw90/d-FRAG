@@ -33,7 +33,6 @@ function Collision() {
 
     // Adds a new collision object to the Collision Detection System
     self.add = function(object) {
-        console.log('Adding stage with id: '+object.id);
         CDSObj.objects[object.id] = object;
         CDSObj.events[object.id] = [];
         setVectorCoordinates(object);
@@ -59,7 +58,6 @@ function Collision() {
         var status = false, axis = null, tmp = range;
         pos.x = parseInt(pos.x);
         pos.y = parseInt(pos.y);
-
 
         while (tmp > 0 && !status) {
 

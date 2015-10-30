@@ -28,7 +28,7 @@ function Game(config) {
         container: document.createElement('canvas'),
         isControllable: true,
         id: 'main-character',
-        frameRate: 100,
+        frameRate: 50,
         cd: collision,
         position: {
             left: 100,

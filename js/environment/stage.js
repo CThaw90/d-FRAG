@@ -29,12 +29,12 @@ function Stage(params) {
         // $stage.setAttribute('class', 'full-screen');
         $stage.setAttribute('style', _util.jsonToCSS({
             'background-color': params.background.color,
-            position: 'absolute',
 
             /* Dynamically allocate these values based on how big
              * the client screen is to make edges remain consistent */
-            height: '99%',
-            width: '99%',
+            height: _util.getWindowHeight(),
+            width: _util.getWindowWidth(),
+            position: 'absolute',
             left: 0,
             top: 0
         }));

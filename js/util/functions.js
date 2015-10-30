@@ -22,13 +22,13 @@ var _util = {
     // Returns the full height of the gaming screen
     // This function may be deprecated
     getWindowHeight: function() {
-        return window.innerHeight;
+        return window.innerHeight + 'px';
     },
 
     // Returns the full width of the gaming screen
     // This function may be deprecated
     getWindowWidth: function() {
-        return window.innerWidth;
+        return window.innerWidth + 'px';
     },
 
     // Converts a set of css rules into JSON
