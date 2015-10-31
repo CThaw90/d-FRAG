@@ -15,6 +15,7 @@ function Game(config) {
         container: document.createElement('div'),
         id: 'currentStage-fullscreen',
         screenType: 'full',
+        cd: collision,
         background: {
         //    color: '#000000',
             color: null,
@@ -177,6 +178,7 @@ function Game(config) {
     });
 
     self.play = function () {
+        self.currentStage.lockOn('main-character');
         self.currentStage.activate();
     };
 
@@ -184,6 +186,6 @@ function Game(config) {
     self.currentStage.placeEntity({object: entities['main-character'], id: 'main-character'});
 
     // Setting up the boundaries
-    collision.add(self.currentStage);
+    // collision.add(self.currentStage);
 
 }

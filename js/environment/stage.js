@@ -15,7 +15,9 @@ function Stage(params) {
         entities = {},
 
         // Save the stage object to the variable self
-        self = this;
+        self = this,
+
+        screenLock;
 
     self.id = params.id;
     // If the stage container isn't the body element
@@ -51,9 +53,11 @@ function Stage(params) {
                 height: this.height + 'px',
                 width: this.width + 'px',
                 position: 'absolute',
-                left: '0px',
-                top: '0px',
+                left: '1px',
+                top: '1px'
             }));
+            self.resize();
+            params.cd.add(this);
         };
 
         $stage.setAttribute('id', self.id);
@@ -75,9 +79,30 @@ function Stage(params) {
         delete entities[id];
     };
 
+    /**
+     * @description locks the game screen on an object moving across the stage
+     * @param id - the id of the entity that is being tracked
+     */
+    self.lockOn = function(id) {
+        if (!entities[id]) return;
+
+        screenLock = setInterval(function() {
+
+        }, 1);
+    };
+
+    self.releaseLock = function() {
+        clearInterval(screenLock);
+    };
+
     // Generate boundary dimensions
     self.resize = function () {
-
+        self.gameScreen = {width: _util.getWindowWidth(), height: _util.getWindowHeight()};
+        var bounds = $stage.getBoundingClientRect();
+        self.height = bounds.height;
+        self.width = bounds.width;
+        self.x = bounds.left;
+        self.y = bounds.top;
     };
 
     self.activate = function() {
@@ -92,10 +117,5 @@ function Stage(params) {
         }
     }
 
-    // Setting dimensions of the stage object
-    var bounds = $stage.getBoundingClientRect();
-    self.height = bounds.height;
-    self.width = bounds.width;
-    self.x = bounds.left;
-    self.y = bounds.top;
+    self.resize();
 }
