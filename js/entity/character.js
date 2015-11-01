@@ -51,6 +51,9 @@ function Character(charConfig, imageConfig) {
     self.$container.style.top = self.position.top+'px';
     self.$container.style.position = 'absolute';
 
+    self.height = charConfig.height;
+    self.width = charConfig.width;
+
     // Initializes an image Object
     var charImage = new Image();
     charImage.ready = false;
@@ -143,13 +146,7 @@ function Character(charConfig, imageConfig) {
             self.$container.width,
             self.$container.height
         );
-        // self.ctx.fillStyle = 'rgba(0,0,0,.2))';
-        // self.ctx.fillStyle = 'black';
-        //self.ctx.fillRect(
-        //    0, 0,
-        //    self.$container.width,
-        //    self.$container.height
-        //);
+
         // Store the character animation vector in a temporary object
         var cav = imageConfig.animationVector['animate-moving'+facing],
             position = {
