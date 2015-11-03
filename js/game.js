@@ -32,7 +32,7 @@ function Game(config) {
         container: document.createElement('canvas'),
         isControllable: true,
         id: 'main-character',
-        frameRate: 50,
+        frameRate: 25,
         cd: collision,
         position: {
             left: 100,

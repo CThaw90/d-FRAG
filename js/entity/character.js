@@ -94,22 +94,21 @@ function Character(charConfig, imageConfig) {
     // Move a character in a certain direction
     self.move = function(event) {
         var keyPressed = (event.type === _const.keyDown);
+        if (self.isMoving() && keyPressed) return;
+
         if (event.keyCode === _const.arrowDown) {
             direction.down = keyPressed;
             facing = direction.down ? _const.faceDown : facing;
-
         }
-        if (event.keyCode === _const.arrowLeft) {
+        else if (event.keyCode === _const.arrowLeft) {
             direction.left = keyPressed;
             facing = direction.left ? _const.faceLeft : facing;
-
         }
-        if (event.keyCode === _const.arrowRight) {
+        else if (event.keyCode === _const.arrowRight) {
             direction.right = keyPressed;
             facing = direction.right ? _const.faceRight : facing;
-
         }
-        if (event.keyCode === _const.arrowUp) {
+        else if (event.keyCode === _const.arrowUp) {
             direction.up = keyPressed;
             facing = direction.up ? _const.faceUp : facing;
         }
@@ -158,13 +157,13 @@ function Character(charConfig, imageConfig) {
             if (direction.down && !collision.check(position, _const.faceDown, charConfig.speed)) {
                 self.position.top += charConfig.speed;
             }
-            if (direction.left && !collision.check(position, _const.faceLeft, charConfig.speed)) {
+            else if (direction.left && !collision.check(position, _const.faceLeft, charConfig.speed)) {
                 self.position.left -= charConfig.speed;
             }
-            if (direction.up && !collision.check(position, _const.faceUp, charConfig.speed)) {
+            else if (direction.up && !collision.check(position, _const.faceUp, charConfig.speed)) {
                 self.position.top -= charConfig.speed;
             }
-            if (direction.right && !collision.check(position, _const.faceRight, charConfig.speed)) {
+            else if (direction.right && !collision.check(position, _const.faceRight, charConfig.speed)) {
                 self.position.left += charConfig.speed;
             }
         }
