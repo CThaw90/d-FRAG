@@ -5,6 +5,7 @@
 function Game(config) {
 
     var collision = new Collision(),
+        http = new HttpRequest(),
         entities = {},
         self = this;
 
@@ -25,6 +26,8 @@ function Game(config) {
         }
 
     });
+
+    http.get("test", {agencyId: 9, advertiserId: 10, campaignId: 91});
 
     // Probably going to load all data for configurations from a server resource
     entities['main-character'] = new Character({
