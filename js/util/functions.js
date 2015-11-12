@@ -9,13 +9,13 @@ var _util = {
 
     // Checks if a variable is javascript object
     isObject: function(o) {
-        return o.toString() === '[object Object]'
+        return o && o.toString() === '[object Object]'
             && typeof o === 'object';
     },
 
     // Checks if a variable is an HtmlElement
     isHtmlElement: function(h) {
-        return h.toString().search(_const.htmlObjectRegex) !== -1
+        return h && h.toString().search(_const.htmlObjectRegex) !== -1
             && typeof o === 'object';
     },
 
