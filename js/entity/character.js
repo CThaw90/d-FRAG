@@ -5,67 +5,68 @@
 /**
  * @description A function that controls a character sprite and
  * represents a Character object on a playing stage
- * @param charConfig controls the basic configuration settings for the current Character object
- * @param imageConfig controls the sprite image configuration settings for the current Character
+ * @param config controls the basic configuration settings for the current Character object
+ * @param sprite controls the sprite image configuration settings for the current Character
  * @constructor
  */
-function Character(charConfig, imageConfig) {
+function Character(config) {
 
     // Save the Character object to the variable self
     var self = this,
-        collision = charConfig.cd;
+        collision = config.cd,
+        sprite;
 
     // The Html Element container the character object will be held in
-    self.$container = charConfig.container || document.createElement('canvas');
+    self.$container = config.container || document.createElement('canvas');
 
     // Captures the context of the character canvas
     self.ctx = self.$container.getContext('2d');
 
     self.animationIndex = 0;
 
-    imageConfig = _util.isObject(imageConfig) ? imageConfig : {};
-    charConfig = _util.isObject(charConfig) ? charConfig : {};
+    sprite = _util.isObject(config.sprite) ? config.sprite : {};
+    config = _util.isObject(config) ? config : {};
 
     // Determines if a character is allowed to be moved with arrow keys
-    self.isControllable = charConfig.isControllable || false;
+    self.isControllable = config.isControllable || false;
 
     // Default frame rate for a given character. Controls character speed
-    self.charFrameRate = charConfig.frameRate || _const.defaultFrameRate;
+    self.charFrameRate = config.frameRate || _const.defaultFrameRate;
 
     // The default sprite image for a character.
     // If no image is path is passed as an argument this image path is used
     var defaultCharImageSrc = '/img/spritesheet.png';
 
     // Specifies the dimensions of the character object
-    self.$container.height = charConfig.height || 200;
-    self.$container.width = charConfig.width || 200;
+    self.$container.height = config.height || 200;
+    self.$container.width = config.width || 200;
 
     // Sets an id for the character object container for arbitrary reference
-    self.$container.setAttribute('id', (charConfig.id || 'character-xzf'));
+    self.$container.setAttribute('id', (config.id || 'character-xzf'));
 
     // Sets the specified position of the character object
-    self.position = charConfig.position || {left: 0, top: 0};
+    self.position = config.position || {left: 0, top: 0};
 
     // Applies position coordinates to parent container
     self.$container.style.left = self.position.left+'px';
     self.$container.style.top = self.position.top+'px';
     self.$container.style.position = 'absolute';
 
-    self.height = charConfig.height;
-    self.width = charConfig.width;
+    self.height = config.height;
+    self.width = config.width;
 
     // Initializes an image Object
     var charImage = new Image();
     charImage.ready = false;
-    charImage.src = imageConfig.src || defaultCharImageSrc;
+    charImage.src = sprite.src || defaultCharImageSrc;
     charImage.height = 700;
     charImage.width = 700;
     charImage.onload = function() {
         self.ctx.drawImage(
             this, 0, 0,
-            imageConfig.sectionWidth, imageConfig.sectionHeight,
+            sprite.sectionWidth, sprite.sectionHeight,
             0, 0,
-            charConfig.width, charConfig.height
+            config.width, config.height
         );
     };
 
@@ -147,24 +148,24 @@ function Character(charConfig, imageConfig) {
         );
 
         // Store the character animation vector in a temporary object
-        var cav = imageConfig.animationVector['animate-moving'+facing],
+        var cav = sprite.animationVector['animate-moving'+facing],
             position = {
                 x: facing === _const.faceRight ? (self.position.left + self.$container.width) : self.position.left,
                 y: facing === _const.faceDown ? (self.position.top + self.$container.height) : self.position.top
             };
-        if (self.isMoving() /*&& !collision.check(position, facing, charConfig.speed) */) {
+        if (self.isMoving() /*&& !collision.check(position, facing, config.speed) */) {
             self.animationIndex = self.animationIndex < cav.length - 1 ? self.animationIndex+1 : 0;
-            if (direction.down && !collision.check(position, _const.faceDown, charConfig.speed)) {
-                self.position.top += charConfig.speed;
+            if (direction.down && !collision.check(position, _const.faceDown, config.speed)) {
+                self.position.top += config.speed;
             }
-            else if (direction.left && !collision.check(position, _const.faceLeft, charConfig.speed)) {
-                self.position.left -= charConfig.speed;
+            else if (direction.left && !collision.check(position, _const.faceLeft, config.speed)) {
+                self.position.left -= config.speed;
             }
-            else if (direction.up && !collision.check(position, _const.faceUp, charConfig.speed)) {
-                self.position.top -= charConfig.speed;
+            else if (direction.up && !collision.check(position, _const.faceUp, config.speed)) {
+                self.position.top -= config.speed;
             }
-            else if (direction.right && !collision.check(position, _const.faceRight, charConfig.speed)) {
-                self.position.left += charConfig.speed;
+            else if (direction.right && !collision.check(position, _const.faceRight, config.speed)) {
+                self.position.left += config.speed;
             }
         }
 
@@ -174,9 +175,9 @@ function Character(charConfig, imageConfig) {
         // Redraw the image unto the canvas
         self.ctx.drawImage(
             charImage, cav[self.animationIndex].x, cav[self.animationIndex].y,
-            imageConfig.sectionWidth, imageConfig.sectionHeight,
+            sprite.sectionWidth, sprite.sectionHeight,
             0, 0,
-            charConfig.width, charConfig.height
+            config.width, config.height
         );
     }
 }

@@ -2,11 +2,12 @@
  * Created by Chris on 10/8/2015.
  */
 
-function Game(config) {
+function Game() {
 
     var collision = new Collision(),
         http = new HttpRequest(),
         entities = {},
+        loading = {},
         self = this;
 
     self.currentStage = new Stage({
@@ -27,166 +28,68 @@ function Game(config) {
 
     });
 
-    http.get("test", {agencyId: 9, advertiserId: 10, campaignId: 91});
+    self.play = function () {
+        var finishLoading = setInterval(function() {
 
-    // Probably going to load all data for configurations from a server resource
-    entities['main-character'] = new Character({
+            if (self.finishedLoading()) {
+                self.currentStage.lockOn('main-character');
+                self.currentStage.activate();
+                clearInterval(finishLoading);
+            }
 
-        container: document.createElement('canvas'),
-        isControllable: true,
-        id: 'main-character',
-        frameRate: 25,
-        cd: collision,
-        position: {
-            left: 100,
-            top: 100
-        },
-        height: 100,
-        width: 72,
-        // Not sure whether to make speed a configurable attribute
-        // or fixed at a certain value for movement consistency
-        speed: 5
+        }, 100);
 
-    }, {
+    };
 
-        src: 'img/spritesheet.png',
-        sectionHeight: 100,
-        sectionWidth: 72,
-        // This is definitely gonna have to be moved into its own JSON file
-        // Animation Vector is responsible for all animations pertaining to a certain entity object
-        animationVector: {
-            'animate-movingUp': [
-                {
-                    description: 'Left foot forward animation walking up',
-                    height: 100,
-                    width: 72,
-                    x: 0,
-                    y: 0
-                },
-                {
-                    description: 'Standing animation looking up',
-                    height: 100,
-                    width: 72,
-                    x: 72,
-                    y: 0
-                },
-                {
-                    description: 'Right foot forward animation walking up',
-                    height: 100,
-                    width: 72,
-                    x: 144,
-                    y: 0
-                },
-                {
-                    description: 'Standing animation looking up',
-                    height: 100,
-                    width: 72,
-                    x: 144,
-                    y: 0
-                }
-            ],
-            'animate-movingRight' : [
-                {
-                    description: 'Right foot forward animation walking right',
-                    height: 100,
-                    width: 72,
-                    x: 0,
-                    y: 100
-                },
-                {
-                    description: 'Standing animation looking right',
-                    height: 100,
-                    width: 72,
-                    x: 72,
-                    y: 100
-                },
-                {
-                    description: 'Left foot forward animation walking right',
-                    height: 100,
-                    width: 72,
-                    x: 144,
-                    y: 100
-                },
-                {
-                    description: 'Standing animation looking right',
-                    height: 100,
-                    width: 72,
-                    x: 72,
-                    y: 100
-                }
-            ],
-            'animate-movingDown' : [
-                {
-                    description: 'Right foot forward animation walking down',
-                    height: 100,
-                    width: 72,
-                    x: 0,
-                    y: 200
-                },
-                {
-                    description: 'Standing animation looking down',
-                    height: 100,
-                    width: 72,
-                    x: 72,
-                    y: 200
-                },
-                {
-                    description: 'Left foot forward animation walking down',
-                    height: 100,
-                    width: 72,
-                    x: 144,
-                    y: 200
-                },
-                {
-                    description: 'Standing animation looking down',
-                    height: 100,
-                    width: 72,
-                    x: 72,
-                    y: 200
-                }
-            ],
-            'animate-movingLeft' : [
-                {
-                    description: 'Right foot forward animation walking left',
-                    height: 100,
-                    width: 72,
-                    x: 0,
-                    y: 300
+    self.load = function (config) {
 
-                },
-                {
-                    description: 'Standing animation looking left',
+        loading = {mainCharacter: false};
+
+        http.get({
+            url: '/defrag/json/sprites/main-character.json',
+            onSuccess: function(response) {
+                loading['mainCharacter'] = true;
+                entities['main-character'] = new Character({
+                    container: document.createElement('canvas'),
+                    sprite: JSON.parse(response),
+                    isControllable: true,
+                    id: 'main-character',
+                    frameRate: 50,
+                    cd: collision,
+                    position: {
+                        left: 100,
+                        top: 100
+                    },
                     height: 100,
                     width: 72,
-                    x: 72,
-                    y: 300
-                },
-                {
-                    description: 'Left foot forward animation walking left',
-                    height: 100,
-                    width: 72,
-                    x: 144,
-                    y: 300
-                },
-                {
-                    description: 'Standing animation looking left',
-                    height: 100,
-                    width: 72,
-                    x: 72,
-                    y: 300
-                }
-            ]
+                    speed: 5
+                });
+
+                self.currentStage.placeEntity({
+                    object: entities['main-character'],
+                    id: 'main-character'
+                });
+            },
+            onError: function(response) {
+                console.log('Something went wrong');
+                console.log(response);
+            },
+            headers: {},
+            params: {}
+        });
+    };
+
+    self.finishedLoading = function() {
+        var finished = true;
+        for (var entity in loading && finished) {
+            finished = (loading[entity] ? true : false);
         }
 
-    });
-
-    self.play = function () {
-        self.currentStage.lockOn('main-character');
-        self.currentStage.activate();
+        return finished;
     };
 
     // Initializing the Game
-    self.currentStage.placeEntity({object: entities['main-character'], id: 'main-character'});
+    // self.currentStage.placeEntity({object: entities['main-character'], id: 'main-character'});
 
     // Setting up the boundaries
     // collision.add(self.currentStage);

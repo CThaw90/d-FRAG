@@ -11,8 +11,10 @@
     // Initialize game
     var start = function(elem) {
         elem.parentNode.removeChild(elem);
-        new Game({}).play();
-    }, buttonElem;
+        game.play();
+    },
+        buttonElem,
+        game;
 
     // Start game play after document finishes loading
     var waitingForGameToLoad = setInterval(function(){
@@ -25,11 +27,11 @@
             buttonElem.innerText = 'Start Game';
             buttonElem.onclick = function () {
                 buttonElem.parentNode.removeChild(document.getElementById('start-game'));
-                new Game({}).play();
+                game = new Game();
+                game.load({});
+                game.play();
             };
             document.body.appendChild(buttonElem);
         }
     }, 500);
-
-
 })();

@@ -85,7 +85,7 @@ function Stage(params) {
      */
     self.lockOn = function(id) {
         if (!entities[id] || !entities[id].height || !entities[id].width) return;
-        console.log('Locking on to entity ' + id);
+
         screenLock = setInterval(function() {
             var scrollLimitX = self.width - parseInt(self.gameScreen.width),
                 scrollLimitY = self.height - parseInt(self.gameScreen.height),

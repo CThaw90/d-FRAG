@@ -3,18 +3,18 @@
  */
 function HttpRequest() {
 
-    var GET_METHOD = 'GET', POST_METHOD = 'POST', PUT_METHOD = 'PUT',
+    var GET_METHOD = 'GET', POST_METHOD = 'POST', PUT_METHOD = 'PUT', DELETE_METHOD = 'DELETE',
 
         api = this,
 
         request;
 
-    api.get = function (url, params) {
+    api.get = function (config) {
 
         request = new XMLHttpRequest();
-        request.open(GET_METHOD, formatURL(url, params));
-        setRequestHeaders(params.headers);
-        request.onreadystatechange = constructReadyStateChange(params);
+        request.open(GET_METHOD, formatURL(config.url, config.params));
+        setRequestHeaders(config.headers);
+        request.onreadystatechange = constructReadyStateChange(config);
         request.send();
     };
 
