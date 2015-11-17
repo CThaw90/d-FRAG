@@ -60,6 +60,7 @@ function Stage(params) {
                 }));
                 self.resize();
                 params.cd.add(this);
+
             };
         } else if (params.background.image.object) {
             self.backgroundImage = params.background.image.object;
@@ -71,10 +72,16 @@ function Stage(params) {
                 left: '1px',
                 top: '1px'
             }));
+            setTimeout(function() {
+                self.resize();
+                params.cd.add(self);
+            }, 10);
+
         }
     }
 
     $stage.setAttribute('id', self.id);
+
 
     self.placeEntity = function (params) {
 
@@ -132,6 +139,7 @@ function Stage(params) {
         self.width = bounds.width;
         self.x = bounds.left;
         self.y = bounds.top;
+        console.log('Resizing');
     };
 
     self.activate = function() {
