@@ -12,9 +12,7 @@
     var start = function(elem) {
         elem.parentNode.removeChild(elem);
         game.play();
-    },
-        buttonElem,
-        game;
+    }, buttonElem, game;
 
     // Start game play after document finishes loading
     var waitingForGameToLoad = setInterval(function(){
@@ -28,7 +26,17 @@
             buttonElem.onclick = function () {
                 buttonElem.parentNode.removeChild(document.getElementById('start-game'));
                 game = new Game();
-                game.load({});
+                game.load({
+                    mainCharacter: {
+                        sprite: 'http://localhost/defrag/json/sprites/main-character.json',
+                        id: 'main-character'
+                    },
+                    stage: {
+                        backgroundImage: 'http://localhost/defrag/img/stages/grass.png',
+                        id: 'main-stage',
+                        objects: []
+                    }
+                });
                 game.play();
             };
             document.body.appendChild(buttonElem);

@@ -10,50 +10,51 @@ function Game() {
         loading = {},
         self = this;
 
-    self.currentStage = new Stage({
-
-        // We should probably put the stage inside an Html container
-        // to control the position, spacing and size more seamlessly
-        container: document.createElement('div'),
-        id: 'currentStage-fullscreen',
-        screenType: 'full',
-        cd: collision,
-        background: {
-        //    color: '#000000',
-            color: null,
-            image: {
-                src: 'img/stages/grass.png'
-            }
-        }
-
-    });
-
     self.play = function () {
         var finishLoading = setInterval(function() {
 
             if (self.finishedLoading()) {
-                self.currentStage.lockOn('main-character');
+                self.currentStage.placeEntity({object: entities[self.config.mainCharacter.id], id: self.config.mainCharacter.id});
+                self.currentStage.lockOn(self.config.mainCharacter.id);
                 self.currentStage.activate();
                 clearInterval(finishLoading);
             }
 
         }, 100);
-
     };
 
     self.load = function (config) {
+        var mainCharacter = config.mainCharacter, stage = config.stage;
+        loading[mainCharacter.id] = false;
+        loading[stage.id] = false;
+        self.config = config;
 
-        loading = {mainCharacter: false};
+        var backgroundImage = new Image();
+        backgroundImage.src = stage.backgroundImage;
+        backgroundImage.onload = function() {
+            loading[stage.id] = true;
+            self.currentStage = new Stage({
+                container: document.createElement('div'),
+                screenType: 'full',
+                id: stage.id,
+                cd: collision,
+                background: {
+                    image: {
+                        object: backgroundImage
+                    }
+                }
+            });
+        };
 
         http.get({
-            url: '/defrag/json/sprites/main-character.json',
+            url: mainCharacter.sprite,
             onSuccess: function(response) {
-                loading['mainCharacter'] = true;
-                entities['main-character'] = new Character({
+                loading[config] = true;
+                entities[mainCharacter.id] = new Character({
                     container: document.createElement('canvas'),
                     sprite: JSON.parse(response),
                     isControllable: true,
-                    id: 'main-character',
+                    id: mainCharacter.id,
                     frameRate: 50,
                     cd: collision,
                     position: {
@@ -63,11 +64,6 @@ function Game() {
                     height: 100,
                     width: 72,
                     speed: 5
-                });
-
-                self.currentStage.placeEntity({
-                    object: entities['main-character'],
-                    id: 'main-character'
                 });
             },
             onError: function(response) {
@@ -87,11 +83,4 @@ function Game() {
 
         return finished;
     };
-
-    // Initializing the Game
-    // self.currentStage.placeEntity({object: entities['main-character'], id: 'main-character'});
-
-    // Setting up the boundaries
-    // collision.add(self.currentStage);
-
 }

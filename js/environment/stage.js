@@ -40,28 +40,41 @@ function Stage(params) {
             left: 0,
             top: 0
         }));
-        $stage.setAttribute('id', self.id);
 
     } else if (params.background && params.background.image) {
         self.id = self.id ? self.id : 'currentStage-backgroundImage';
 
-        self.backgroundImage = new Image();
-        self.backgroundImage.src = params.background.image.src;
-        self.backgroundImage.onload = function() {
+        // May make this conditional branch obsolete
+        // Enforce loading all stage image data before game finishes loading
+        if (params.background.image.src) {
+            self.backgroundImage = new Image();
+            self.backgroundImage.src = params.background.image.src;
+            self.backgroundImage.onload = function () {
+                $stage.setAttribute('style', _util.jsonToCSS({
+                    'background-image': 'url(' + this.src + ')',
+                    height: this.height + 'px',
+                    width: this.width + 'px',
+                    position: 'absolute',
+                    left: '1px',
+                    top: '1px'
+                }));
+                self.resize();
+                params.cd.add(this);
+            };
+        } else if (params.background.image.object) {
+            self.backgroundImage = params.background.image.object;
             $stage.setAttribute('style', _util.jsonToCSS({
-                'background-image': 'url('+this.src+ ')',
-                height: this.height + 'px',
-                width: this.width + 'px',
+                'background-image': 'url(' + self.backgroundImage.src + ')',
+                height: self.backgroundImage.height + 'px',
+                width: self.backgroundImage.width + 'px',
                 position: 'absolute',
                 left: '1px',
                 top: '1px'
             }));
-            self.resize();
-            params.cd.add(this);
-        };
-
-        $stage.setAttribute('id', self.id);
+        }
     }
+
+    $stage.setAttribute('id', self.id);
 
     self.placeEntity = function (params) {
 
