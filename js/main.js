@@ -34,7 +34,40 @@
                     stage: {
                         backgroundImage: 'http://localhost/defrag/img/stages/grass.png',
                         id: 'main-stage',
-                        objects: []
+                        objects: [
+                            {
+                                load: 'http://localhost/defrag/json/sprites/trees/tree_a.json',
+                                id: 'tree_a'
+                            },
+                            {
+                                load: 'http://localhost/defrag/json/sprites/trees/tree_b.json',
+                                id: 'tree_b'
+                            },
+                            {
+                                load: 'http://localhost/defrag/json/sprites/trees/tree_c.json',
+                                id: 'tree_c'
+                            },
+                            {
+                                load: 'http://localhost/defrag/json/sprites/trees/tree_d.json',
+                                id: 'tree_d'
+                            },
+                            {
+                                load: 'http://localhost/defrag/json/sprites/trees/tree_e.json',
+                                id: 'tree_e'
+                            },
+                            {
+                                load: 'http://localhost/defrag/json/sprites/trees/tree_f.json',
+                                id: 'tree_f'
+                            },
+                            {
+                                load: 'http://localhost/defrag/json/sprites/trees/tree_h.json',
+                                id: 'tree_h'
+                            },
+                            {
+                                load: 'http://localhost/defrag/json/sprites/tress/tree_i.json',
+                                id: 'tree_i'
+                            }
+                        ]
                     }
                 });
                 game.play();

@@ -58,7 +58,7 @@ function Stage(params) {
                     left: '1px',
                     top: '1px'
                 }));
-                self.resize();
+                resize();
                 params.cd.add(this);
 
             };
@@ -72,11 +72,8 @@ function Stage(params) {
                 left: '1px',
                 top: '1px'
             }));
-            setTimeout(function() {
-                self.resize();
-                params.cd.add(self);
-            }, 10);
-
+            resize();
+            params.cd.add(self);
         }
     }
 
@@ -133,14 +130,17 @@ function Stage(params) {
 
     // Generate boundary dimensions
     self.resize = function () {
-        self.gameScreen = {width: _util.getWindowWidth(), height: _util.getWindowHeight()};
+        resize();
+    };
+
+    function resize() {
+        self.gameScreen = {height: _util.getWindowHeight(), width: _util.getWindowWidth()};
         var bounds = $stage.getBoundingClientRect();
         self.height = bounds.height;
         self.width = bounds.width;
         self.x = bounds.left;
         self.y = bounds.top;
-        console.log('Resizing');
-    };
+    }
 
     self.activate = function() {
         activateEntities();

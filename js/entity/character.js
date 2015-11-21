@@ -31,11 +31,11 @@ function Character(config) {
     self.isControllable = config.isControllable || false;
 
     // Default frame rate for a given character. Controls character speed
-    self.charFrameRate = config.frameRate || _const.defaultFrameRate;
+    self.frameRate = config.frameRate || _const.defaultFrameRate;
 
     // The default sprite image for a character.
     // If no image is path is passed as an argument this image path is used
-    var defaultCharImageSrc = '/img/spritesheet.png';
+    // var defaultCharImageSrc = '/img/spritesheet.png';
 
     // Specifies the dimensions of the character object
     self.$container.height = config.height || 200;
@@ -58,7 +58,7 @@ function Character(config) {
     // Initializes an image Object
     var charImage = new Image();
     charImage.ready = false;
-    charImage.src = sprite.src || defaultCharImageSrc;
+    charImage.src = sprite.src;
     charImage.height = 700;
     charImage.width = 700;
     charImage.onload = function() {
@@ -123,7 +123,7 @@ function Character(config) {
     };
 
     self.activate = function () {
-        frameHandle = setInterval(_reloadObjectState, self.charFrameRate);
+        frameHandle = setInterval(_reloadObjectState, self.frameRate);
         self.enableControl();
     };
 

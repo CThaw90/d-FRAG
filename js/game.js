@@ -65,6 +65,21 @@ function Game() {
                     width: 72,
                     speed: 5
                 });
+                if (stage.objects) {
+
+                    for (var so=0; so < stage.objects.length; so++) {
+
+                        if (stage.objects[so].load) {
+                            //loading[stage.objects[so].id] = false;
+                            //http.get({
+                            //    url: stage.object[so].load,
+                            //    onSuccess: function(response) {
+                            //        entities[stage.objects[so].id] = new Object({});
+                            //    }
+                            //});
+                        }
+                    }
+                }
             },
             onError: function(response) {
                 console.log('Something went wrong');
