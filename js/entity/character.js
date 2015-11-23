@@ -37,6 +37,8 @@ function Character(config) {
     // If no image is path is passed as an argument this image path is used
     // var defaultCharImageSrc = '/img/spritesheet.png';
 
+    self.id = config.id;
+
     // Specifies the dimensions of the character object
     self.$container.height = config.height || 200;
     self.$container.width = config.width || 200;
@@ -56,19 +58,29 @@ function Character(config) {
     self.width = config.width;
 
     // Initializes an image Object
-    var charImage = new Image();
-    charImage.ready = false;
-    charImage.src = sprite.src;
-    charImage.height = 700;
-    charImage.width = 700;
-    charImage.onload = function() {
+    var charImage = null;
+    if (sprite.src) {
+        charImage = new Image();
+        charImage.src = sprite.src;
+        charImage.height = 700;
+        charImage.width = 700;
+        charImage.onload = function() {
+            self.ctx.drawImage(
+                this, 0, 0,
+                sprite['sectionWidth'], sprite['sectionHeight'],
+                0, 0,
+                config.width, config.height
+            );
+        };
+    } else if (sprite.object) {
+        charImage = sprite.object;
         self.ctx.drawImage(
-            this, 0, 0,
-            sprite.sectionWidth, sprite.sectionHeight,
+            charImage, 0, 0,
+            sprite['sectionWidth'], sprite['sectionHeight'],
             0, 0,
             config.width, config.height
         );
-    };
+    }
 
     // Binds the character image to the container canvas
     self.$container.appendChild(charImage);
@@ -148,23 +160,24 @@ function Character(config) {
         );
 
         // Store the character animation vector in a temporary object
-        var cav = sprite.animationVector['animate-moving'+facing],
+        var cav = sprite['animationVector']['animate-moving'+facing],
             position = {
                 x: facing === _const.faceRight ? (self.position.left + self.$container.width) : self.position.left,
                 y: facing === _const.faceDown ? (self.position.top + self.$container.height) : self.position.top
-            };
+            },
+            dimension = {height: self.height, width: self.width};
         if (self.isMoving() /*&& !collision.check(position, facing, config.speed) */) {
             self.animationIndex = self.animationIndex < cav.length - 1 ? self.animationIndex+1 : 0;
-            if (direction.down && !collision.check(position, _const.faceDown, config.speed)) {
+            if (direction.down && !collision.check(position, dimension, _const.faceDown, config.speed)) {
                 self.position.top += config.speed;
             }
-            else if (direction.left && !collision.check(position, _const.faceLeft, config.speed)) {
+            else if (direction.left && !collision.check(position, dimension, _const.faceLeft, config.speed)) {
                 self.position.left -= config.speed;
             }
-            else if (direction.up && !collision.check(position, _const.faceUp, config.speed)) {
+            else if (direction.up && !collision.check(position, dimension, _const.faceUp, config.speed)) {
                 self.position.top -= config.speed;
             }
-            else if (direction.right && !collision.check(position, _const.faceRight, config.speed)) {
+            else if (direction.right && !collision.check(position, dimension, _const.faceRight, config.speed)) {
                 self.position.left += config.speed;
             }
         }
@@ -173,11 +186,19 @@ function Character(config) {
         self.$container.style.top = self.position.top + 'px';
 
         // Redraw the image unto the canvas
-        self.ctx.drawImage(
-            charImage, cav[self.animationIndex].x, cav[self.animationIndex].y,
-            sprite.sectionWidth, sprite.sectionHeight,
-            0, 0,
-            config.width, config.height
-        );
+        //sprite.sectionHeight = cav[self.animationIndex]['height'];
+        //sprite.sectionWidth = cav[self.animationIndex]['width'];
+        self.$container.height = sprite['sectionHeight'];
+        self.$container.width = sprite['sectionWidth'];
+        if (sprite.hasOwnProperty('sectionWidth') && sprite.hasOwnProperty('sectionHeight')) {
+            self.ctx.drawImage(
+                charImage, cav[self.animationIndex].x, cav[self.animationIndex].y,
+                sprite['sectionWidth'], sprite['sectionHeight'],
+                0, 0,
+                self.$container.width, self.$container.height
+            );
+        } else {
+            console.error('[Character Object Error]: SectionWidth or SectionHeight property missing');
+        }
     }
 }

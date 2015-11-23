@@ -54,8 +54,10 @@ function Collision() {
      * @param dir - the direction in which an object entity is going to move
      * @param range - the movement space of an object entity per frameRate
      */
-    self.check = function(pos, dir, range) {
+    self.check = function(pos, dimen, dir, range) {
         var status = false, axis = null, tmp = range;
+        dimen.x = dimen.height;
+        dimen.y = dimen.width;
         pos.x = parseInt(pos.x);
         pos.y = parseInt(pos.y);
 
@@ -97,6 +99,12 @@ function Collision() {
                     status = {vector: pos[axis], collisionId: vector.id};
                     CDSObj.events[vector.id].push(new Date().getTime());
                 }
+                else if (vector.start < (pos[reverse(axis)] + dimen[axis]) && vector.end > (pos[reverse(axis)] + dimen[axis])) {
+                    // Might use logic to dynamically remove stale vector coordinates who's
+                    // object might have been removed prior to the collision event
+                    status = {vector: pos[axis], collisionId: vector.id};
+                    CDSObj.events[vector.id].push(new Date().getTime());
+                }
             }
 
             tmp--;
@@ -127,7 +135,7 @@ function Collision() {
 
         // The collision vector straight across : TOP_SIDE
         // CDSObj.vector.y = {bound: parseInt(object.y), start: parseInt(object.x), end: end};
-        CDSObj.vector.y[parseInt(object.y)] = {start: parseInt(object.y), end: end, id: object.id};
+        CDSObj.vector.y[parseInt(object.y)] = {start: parseInt(object.x), end: end, id: object.id};
 
         // The collision vector straight across : BOTTOM_SIDE
         // CDSObj.vector.y = {bound: (parseInt(object.y) + parseInt(object.height)), start: parseInt(object.x), end: end};

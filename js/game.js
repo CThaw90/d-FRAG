@@ -14,7 +14,8 @@ function Game() {
         var finishLoading = setInterval(function() {
 
             if (self.finishedLoading()) {
-                self.currentStage.placeEntity({object: entities[self.config.mainCharacter.id], id: self.config.mainCharacter.id});
+                // self.currentStage.placeEntity({object: entities[self.config.mainCharacter.id], id: self.config.mainCharacter.id});
+                self.currentStage.placeAll();
                 self.currentStage.lockOn(self.config.mainCharacter.id);
                 self.currentStage.activate();
                 clearInterval(finishLoading);
@@ -65,18 +66,56 @@ function Game() {
                     width: 72,
                     speed: 5
                 });
+
+                // Find a deferred utility algorithm to be put into the functions file
+                var stageFinishedLoading = setInterval(function() {
+                    if (loaded(stage.id)) {
+                        self.currentStage.queue(entities[mainCharacter.id]);
+                        clearInterval(stageFinishedLoading);
+                        loading[mainCharacter.id] = true;
+                    }
+                    //else {
+                    //    console.log("Stage hasn't loaded yet");
+                    //}
+                }, 100);
+
                 if (stage.objects) {
 
                     for (var so=0; so < stage.objects.length; so++) {
 
                         if (stage.objects[so].load) {
-                            //loading[stage.objects[so].id] = false;
-                            //http.get({
-                            //    url: stage.object[so].load,
-                            //    onSuccess: function(response) {
-                            //        entities[stage.objects[so].id] = new Object({});
-                            //    }
-                            //});
+                            loading[stage.objects[so].id] = false;
+                            http.get({
+                                id: stage.objects[so].id,
+                                url: stage.objects[so].load,
+                                onSuccess: function(response) {
+                                    var o = JSON.parse(response), objectId = this.id;
+                                    entities[objectId] = new Object({
+                                        canCollide: true,
+                                        cd: collision,
+                                        id: objectId,
+                                        position: {
+                                            left: o.left,
+                                            top: o.top
+                                        },
+                                        height: o.height,
+                                        width: o.width,
+                                        sprite: {
+                                            src: o.src
+                                        }
+                                    });
+                                    var finishedLoadingStage = setInterval(function() {
+                                        if (loaded(stage.id)) {
+                                            self.currentStage.queue(entities[objectId]);
+                                            loading[objectId] = true;
+                                            clearInterval(finishedLoadingStage);
+                                        }
+                                        //else {
+                                        //    console.log("Stage hasn't loaded yet");
+                                        //}
+                                    }, 100);
+                                }
+                            });
                         }
                     }
                 }
@@ -92,10 +131,16 @@ function Game() {
 
     self.finishedLoading = function() {
         var finished = true;
-        for (var entity in loading && finished) {
+        for (var entity in loading) {
             finished = (loading[entity] ? true : false);
+            if (!finished) break;
         }
 
         return finished;
     };
+
+    function loaded(id) {
+        return loading.hasOwnProperty(id) &&
+            loading[id] ? true : false;
+    }
 }

@@ -17,7 +17,10 @@ function Stage(params) {
         // Save the stage object to the variable self
         self = this,
 
-        screenLock;
+        screenLock,
+
+        // Queue of all objects waiting to be placed when placeAll is called
+        placeQueue = [];
 
     self.id = params.id;
     // If the stage container isn't the body element
@@ -55,8 +58,8 @@ function Stage(params) {
                     height: this.height + 'px',
                     width: this.width + 'px',
                     position: 'absolute',
-                    left: '1px',
-                    top: '1px'
+                    left: '0px',
+                    top: '0px'
                 }));
                 resize();
                 params.cd.add(this);
@@ -69,8 +72,8 @@ function Stage(params) {
                 height: self.backgroundImage.height + 'px',
                 width: self.backgroundImage.width + 'px',
                 position: 'absolute',
-                left: '1px',
-                top: '1px'
+                left: '0px',
+                top: '0px'
             }));
             resize();
             params.cd.add(self);
@@ -79,10 +82,25 @@ function Stage(params) {
 
     $stage.setAttribute('id', self.id);
 
+    self.queue = function(entity) {
+        placeQueue.push({
+            object: entity,
+            id: entity.id
+        });
+    };
+
+    self.placeAll = function() {
+        while (placeQueue.length > 0) {
+            self.placeEntity(placeQueue.pop());
+        }
+    };
 
     self.placeEntity = function (params) {
 
-        if (!params.id) return;
+        if (!params.id) {
+            console.log("No id for entity. Cannot place on stage");
+            return;
+        }
 
         $stage.appendChild(params.object.$container);
         entities[params.id] = params.object;

@@ -64,8 +64,16 @@
                                 id: 'tree_h'
                             },
                             {
-                                load: 'http://localhost/defrag/json/sprites/tress/tree_i.json',
+                                load: 'http://localhost/defrag/json/sprites/trees/tree_i.json',
                                 id: 'tree_i'
+                            },
+                            {
+                                load: 'http://localhost/defrag/json/sprites/walls/stone-walls_a.json',
+                                id: 'stone-walls_a'
+                            },
+                            {
+                                load: 'http://localhost/defrag/json/sprites/walls/stone-walls_b.json',
+                                id: 'stone-walls_b'
                             }
                         ]
                     }
