@@ -56,14 +56,14 @@ function Game() {
                     sprite: JSON.parse(response),
                     isControllable: true,
                     id: mainCharacter.id,
-                    frameRate: 50,
+                    frameRate: 5,
                     cd: collision,
                     position: {
                         left: 100,
                         top: 100
                     },
-                    height: 100,
-                    width: 72,
+                    // height: 100,
+                    // width: 72,
                     speed: 5
                 });
 

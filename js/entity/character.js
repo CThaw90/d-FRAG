@@ -40,8 +40,8 @@ function Character(config) {
     self.id = config.id;
 
     // Specifies the dimensions of the character object
-    self.$container.height = config.height || 200;
-    self.$container.width = config.width || 200;
+    self.$container.height = config.height || sprite['sectionHeight'];
+    self.$container.width = config.width || sprite['sectionWidth'];
 
     // Sets an id for the character object container for arbitrary reference
     self.$container.setAttribute('id', (config.id || 'character-xzf'));
@@ -54,8 +54,8 @@ function Character(config) {
     self.$container.style.top = self.position.top+'px';
     self.$container.style.position = 'absolute';
 
-    self.height = config.height;
-    self.width = config.width;
+    self.height = config.height || sprite['sectionHeight'];
+    self.width = config.width || sprite['sectionWidth'];
 
     // Initializes an image Object
     var charImage = null;

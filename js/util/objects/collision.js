@@ -100,6 +100,13 @@ function Collision() {
                     CDSObj.events[vector.id].push(new Date().getTime());
                 }
                 else if (vector.start < (pos[reverse(axis)] + dimen[axis]) && vector.end > (pos[reverse(axis)] + dimen[axis])) {
+                // else if (vector.start < (pos[axis] + dimen[axis]) && vector.end > (pos[axis] + dimen[axis])) {
+                    // Might use logic to dynamically remove stale vector coordinates who's
+                    // object might have been removed prior to the collision event
+                    status = {vector: pos[axis], collisionId: vector.id};
+                    CDSObj.events[vector.id].push(new Date().getTime());
+                }
+                else if (vector.start > (pos[reverse(axis)]) && vector.end < (pos[reverse(axis)] + dimen[axis])) {
                     // Might use logic to dynamically remove stale vector coordinates who's
                     // object might have been removed prior to the collision event
                     status = {vector: pos[axis], collisionId: vector.id};
@@ -125,6 +132,9 @@ function Collision() {
 
         // The collision vector straight down : LEFT_SIDE
         // CDSObj.vector.x = {bound: parseInt(object.x), start: parseInt(object.y), end: end};
+        if (CDSObj.vector.x[parseInt(object.x)]) {
+            console.log('Duplicate coordinate at vector x: ' + object.x);
+        }
         CDSObj.vector.x[parseInt(object.x)] = {start: parseInt(object.y), end: end, id: object.id};
 
         // The collision vector straight down : RIGHT_SIDE
@@ -135,6 +145,9 @@ function Collision() {
 
         // The collision vector straight across : TOP_SIDE
         // CDSObj.vector.y = {bound: parseInt(object.y), start: parseInt(object.x), end: end};
+        if (CDSObj.vector.y[parseInt(object.y)]) {
+            console.log('Duplicate coordinate at vector y: ' + object.y);
+        }
         CDSObj.vector.y[parseInt(object.y)] = {start: parseInt(object.x), end: end, id: object.id};
 
         // The collision vector straight across : BOTTOM_SIDE

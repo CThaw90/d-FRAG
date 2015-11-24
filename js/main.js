@@ -28,51 +28,51 @@
                 game = new Game();
                 game.load({
                     mainCharacter: {
-                        sprite: 'http://localhost/defrag/json/sprites/main-character.json',
+                        sprite: _const.basePath + '/json/sprites/main-character.json',
                         id: 'main-character'
                     },
                     stage: {
-                        backgroundImage: 'http://localhost/defrag/img/stages/grass.png',
+                        backgroundImage: _const.basePath + '/img/stages/grass.png',
                         id: 'main-stage',
                         objects: [
                             {
-                                load: 'http://localhost/defrag/json/sprites/trees/tree_a.json',
+                                load: _const.basePath + '/json/sprites/trees/tree_a.json',
                                 id: 'tree_a'
                             },
                             {
-                                load: 'http://localhost/defrag/json/sprites/trees/tree_b.json',
+                                load: _const.basePath + '/json/sprites/trees/tree_b.json',
                                 id: 'tree_b'
                             },
                             {
-                                load: 'http://localhost/defrag/json/sprites/trees/tree_c.json',
+                                load: _const.basePath + '/json/sprites/trees/tree_c.json',
                                 id: 'tree_c'
                             },
                             {
-                                load: 'http://localhost/defrag/json/sprites/trees/tree_d.json',
+                                load: _const.basePath + '/json/sprites/trees/tree_d.json',
                                 id: 'tree_d'
                             },
                             {
-                                load: 'http://localhost/defrag/json/sprites/trees/tree_e.json',
+                                load: _const.basePath + '/json/sprites/trees/tree_e.json',
                                 id: 'tree_e'
                             },
                             {
-                                load: 'http://localhost/defrag/json/sprites/trees/tree_f.json',
+                                load: _const.basePath + '/json/sprites/trees/tree_f.json',
                                 id: 'tree_f'
                             },
                             {
-                                load: 'http://localhost/defrag/json/sprites/trees/tree_h.json',
+                                load: _const.basePath + '/json/sprites/trees/tree_h.json',
                                 id: 'tree_h'
                             },
                             {
-                                load: 'http://localhost/defrag/json/sprites/trees/tree_i.json',
+                                load: _const.basePath + '/json/sprites/trees/tree_i.json',
                                 id: 'tree_i'
                             },
                             {
-                                load: 'http://localhost/defrag/json/sprites/walls/stone-walls_a.json',
+                                load: _const.basePath + '/json/sprites/walls/stone-walls_a.json',
                                 id: 'stone-walls_a'
                             },
                             {
-                                load: 'http://localhost/defrag/json/sprites/walls/stone-walls_b.json',
+                                load: _const.basePath + '/json/sprites/walls/stone-walls_b.json',
                                 id: 'stone-walls_b'
                             }
                         ]

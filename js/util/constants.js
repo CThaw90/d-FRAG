@@ -4,6 +4,7 @@
 
 var _const = {
 
+    basePath: 'http://' + location.hostname + location.pathname,
     keyDown: 'keydown',
     keyUp: 'keyup',
     arrowLeft: 37,
