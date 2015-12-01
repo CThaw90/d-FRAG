@@ -18,6 +18,8 @@ var _const = {
     faceUp: 'Up',
 
     defaultFrameRate: 100,
+    defaultInterval: 10,
+    maxLimit: 1000,
 
     stageHeight: window.innerHeight,
     stageWidth: window.innerWidth,

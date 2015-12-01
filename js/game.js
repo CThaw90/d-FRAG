@@ -14,7 +14,6 @@ function Game() {
         var finishLoading = setInterval(function() {
 
             if (self.finishedLoading()) {
-                // self.currentStage.placeEntity({object: entities[self.config.mainCharacter.id], id: self.config.mainCharacter.id});
                 self.currentStage.placeAll();
                 self.currentStage.lockOn(self.config.mainCharacter.id);
                 self.currentStage.activate();
@@ -68,16 +67,10 @@ function Game() {
                 });
 
                 // Find a deferred utility algorithm to be put into the functions file
-                var stageFinishedLoading = setInterval(function() {
-                    if (loaded(stage.id)) {
-                        self.currentStage.queue(entities[mainCharacter.id]);
-                        clearInterval(stageFinishedLoading);
-                        loading[mainCharacter.id] = true;
-                    }
-                    //else {
-                    //    console.log("Stage hasn't loaded yet");
-                    //}
-                }, 100);
+                _util.waitUntil(loaded, [stage.id], function() {
+                    self.currentStage.queue(entities[mainCharacter.id]);
+                    loading[mainCharacter.id] = true;
+                }, []);
 
                 if (stage.objects) {
 
@@ -104,16 +97,11 @@ function Game() {
                                             src: o.src
                                         }
                                     });
-                                    var finishedLoadingStage = setInterval(function() {
-                                        if (loaded(stage.id)) {
-                                            self.currentStage.queue(entities[objectId]);
-                                            loading[objectId] = true;
-                                            clearInterval(finishedLoadingStage);
-                                        }
-                                        //else {
-                                        //    console.log("Stage hasn't loaded yet");
-                                        //}
-                                    }, 100);
+
+                                    _util.waitUntil(loaded, [stage.id], function() {
+                                        self.currentStage.queue(entities[objectId]);
+                                        loading[objectId] = true;
+                                    }, []);
                                 }
                             });
                         }

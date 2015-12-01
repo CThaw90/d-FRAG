@@ -13,6 +13,17 @@ var _util = {
             && typeof o === 'object';
     },
 
+    // Checks if a variable is a javascript array
+    isArray: function(a) {
+        return a && a.hasOwnProperty('length') && a.toString() === ''
+            && typeof a === 'object';
+    },
+
+    // Checks if a variable is javascript function
+    isFunction: function(f) {
+        return f && typeof f === 'function';
+    },
+
     // Checks if a variable is an HtmlElement
     isHtmlElement: function(h) {
         return h && h.toString().search(_const.htmlObjectRegex) !== -1
@@ -58,5 +69,47 @@ var _util = {
         }
 
         return css;
+    },
+
+    // A modified deferred function that waits until an input function returns true
+    // before executing a given output function
+    waitUntil: function (thisReturnsTrue, withArgs0, toExecute, withArgs1, config) {
+
+        if (!this.isFunction(thisReturnsTrue) || !this.isFunction(toExecute)) return;
+        if (!config) config = {interval: _const.defaultInterval, limit: _const.maxLimit};
+
+        var returnFunction = this.buildFunctionFromArray('thisReturnsTrue', withArgs0),
+            executeFunction = this.buildFunctionFromArray('toExecute', withArgs1),
+            iteration = 0;
+
+        var wait = setInterval(function() {
+            if (iteration > limit) {
+                clearInterval(wait);
+                return;
+            } else if (eval(returnFunction)) {
+                eval(executeFunction);
+                clearInterval(wait);
+            }
+            iteration++;
+
+        }, (config.interval ? config.interval : 10)), limit = (!isNaN(config.limit) ? config.limit : _const.maxLimit);
+    },
+
+    // Builds a function call with a given name and arguments provided by an array
+    buildFunctionFromArray: function(name, args) {
+
+        var buildFunction = name + '(', a = 0;
+        while (a < args.length) {
+            if (typeof args[a] === 'string') {
+                buildFunction += ('"' + args[a++] + '"');
+            }
+            else if (typeof args[a] === 'number') {
+                buildFunction += args[a++];
+            }
+            if (a < args.length)
+                buildFunction += ',';
+        }
+
+        return buildFunction + ')';
     }
 };
