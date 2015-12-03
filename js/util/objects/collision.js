@@ -55,7 +55,7 @@ function Collision() {
      * @param range - the movement space of an object entity per frameRate
      */
     self.check = function(pos, dimen, dir, range) {
-        var status = false, axis = null, tmp = range;
+        var status = false, axis = null, tmp = range + 1;
         dimen.x = dimen.height;
         dimen.y = dimen.width;
         pos.x = parseInt(pos.x);
@@ -71,20 +71,6 @@ function Collision() {
                 case _const.faceLeft:
                 case _const.faceRight:
                     axis = 'x';
-                    break;
-                default:
-                    console.log('Huge Error');
-                    return;
-            }
-
-            switch (dir) {
-                case _const.faceDown:
-                case _const.faceRight:
-                    pos[axis]++;
-                    break;
-                case _const.faceUp:
-                case _const.faceLeft:
-                    pos[axis]--;
                     break;
                 default:
                     console.log('Huge Error');
@@ -112,6 +98,20 @@ function Collision() {
                     status = {vector: pos[axis], collisionId: vector.id};
                     CDSObj.events[vector.id].push(new Date().getTime());
                 }
+            }
+
+            switch (dir) {
+                case _const.faceDown:
+                case _const.faceRight:
+                    pos[axis]++;
+                    break;
+                case _const.faceUp:
+                case _const.faceLeft:
+                    pos[axis]--;
+                    break;
+                default:
+                    console.log('Huge Error');
+                    return;
             }
 
             tmp--;
