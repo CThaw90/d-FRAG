@@ -4,7 +4,8 @@
 
 function Game() {
 
-    var collision = new Collision(),
+    var interaction = new Interactivity(),
+        collision = new Collision(),
         http = new HttpRequest(),
         entities = {},
         loading = {},
@@ -25,6 +26,8 @@ function Game() {
 
     self.load = function (config) {
         var mainCharacter = config.mainCharacter, stage = config.stage;
+        interaction.detector(collision);
+
         loading[mainCharacter.id] = false;
         loading[stage.id] = false;
         self.config = config;
