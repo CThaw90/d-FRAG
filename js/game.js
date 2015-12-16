@@ -11,17 +11,13 @@ function Game() {
         loading = {},
         self = this;
 
-    self.play = function () {
-        var finishLoading = setInterval(function() {
-
-            if (self.finishedLoading()) {
-                self.currentStage.placeAll();
-                self.currentStage.lockOn(self.config.mainCharacter.id);
-                self.currentStage.activate();
-                clearInterval(finishLoading);
-            }
-
-        }, 100);
+    self.play = function (withInteractions) {
+        console.log(withInteractions);
+        _util.waitUntil(self.finishedLoading, [], function() {
+            self.currentStage.placeAll();
+            self.currentStage.lockOn(self.config.mainCharacter.id);
+            self.currentStage.activate();
+        }, []);
     };
 
     self.load = function (config) {

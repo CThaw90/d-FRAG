@@ -111,5 +111,10 @@ var _util = {
         }
 
         return buildFunction + ')';
+    },
+
+    // Returns true when all of the Browser DOM elements has finished loading
+    domLoaded: function() {
+        return document.readyState === 'complete';
     }
 };

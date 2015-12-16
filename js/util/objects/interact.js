@@ -12,7 +12,10 @@ function Interactivity() {
             mTrigger: {},
 
             // Triggered by a keypress
-            kTrigger: {}
+            kTrigger: {},
+
+            // Information on all trigger configurations
+            info: {}
         },
 
         cd = null;
@@ -38,6 +41,15 @@ function Interactivity() {
     self.detector = function(collision) {
         cd = collision;
     };
+
+
+    function delegate(event) {
+
+    }
+
+    function search(interation) {
+
+    }
 
     document.addEventListener(_const.keyPress, function(event) {
         console.log(event);
