@@ -76,7 +76,68 @@
                     ]
                 }
             });
-            game.play({});
+            game.play([
+                {
+                    id: 'interact_with_tree_a',
+                    object: 'tree_a',
+                    trigger: 'main-character',
+                    type: 'movement',
+                    config: {all: 10},
+                    does: function(object, trigger) {
+                        console.log('Triggered interaction ' + this.id + ' of Object ' + object.id);
+                        console.log('Trigger Object - - - - - - -');
+                        console.log(trigger);
+                    }
+                },
+                {
+                    id: 'interact_with_tree_c',
+                    object: 'tree_c',
+                    trigger: 'main-character',
+                    type: 'movement',
+                    config: {all: 10},
+                    does: function(object, trigger) {
+                        console.log('Triggered interaction '+ this.id +' of Object ' + object.id);
+                        console.log('Trigger Object - - - - - - -');
+                        console.log(trigger);
+                    }
+                },
+                {
+                    id: 'interact_with_tree_e',
+                    object: 'tree_e',
+                    trigger: 'main-character',
+                    type: 'movement',
+                    config: {all: 10},
+                    does: function(object, trigger) {
+                        console.log('Triggered interaction '+ this.id +' of Object ' + object.id);
+                        console.log('Trigger Object - - - - - - -');
+                        console.log(trigger);
+                    }
+                },
+                {
+                    id: 'interact_with_tree_h',
+                    object: 'tree_h',
+                    trigger: 'main-character',
+                    type: 'movement',
+                    config: {all: 10},
+                    does: function(object, trigger) {
+                        console.log('Triggered interaction '+ this.id +' of Object ' + object.id);
+                        console.log('Trigger Object - - - - - - -');
+                        console.log(trigger);
+                    }
+                },
+                {
+                    id: 'interact_with_stone-walls_a',
+                    object: 'stone-walls_a',
+                    trigger: 'main-character',
+                    type: 'movement',
+                    config: {all: 10},
+                    does: function(object, trigger) {
+                        console.log('Triggered interaction ' + this.id + ' of Object ' + object.id);
+                        console.log('Trigger Object - - - - - - -');
+                        console.log(trigger);
+                    }
+                }
+            ]);
         };
         document.body.appendChild(buttonElem);
     }, []);

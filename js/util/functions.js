@@ -15,7 +15,7 @@ var _util = {
 
     // Checks if a variable is a javascript array
     isArray: function(a) {
-        return a && a.hasOwnProperty('length') && a.toString() === ''
+        return a && a.hasOwnProperty('length') && a.toString() !== '[object Object]'
             && typeof a === 'object';
     },
 

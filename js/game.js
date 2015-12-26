@@ -17,6 +17,21 @@ function Game() {
             self.currentStage.placeAll();
             self.currentStage.lockOn(self.config.mainCharacter.id);
             self.currentStage.activate();
+
+            if (_util.isArray(withInteractions)) {
+                for (var index = 0; index < withInteractions.length; index++) {
+                    var interact = withInteractions[index];
+                    interaction.add({
+                        id: interact.id,
+                        object: entities[interact.object],
+                        trigger: entities[interact.trigger],
+                        type: interact.type,
+                        config: interact.config,
+                        does: interact.does
+                    });
+                }
+            }
+
         }, []);
     };
 
@@ -124,6 +139,10 @@ function Game() {
         }
 
         return finished;
+    };
+
+    self.getEntityById = function(id) {
+        return entities.hasOwnProperty(id) ? entities[id] : {};
     };
 
     function loaded(id) {

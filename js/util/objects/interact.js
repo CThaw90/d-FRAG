@@ -21,7 +21,12 @@ function Interactivity() {
         cd = null;
 
     self.add = function(interaction) {
-        if (!interaction.id) return;
+        if (!interaction.id) {
+            console.log('Cannot add interaction. No interaction id specified');
+            return;
+        }
+
+        console.log('Adding interaction with id ' + interaction.id);
 
         //interactions[interaction.id]
     };
