@@ -47,12 +47,18 @@ function Character(config) {
     self.$container.setAttribute('id', (config.id || 'character-xzf'));
 
     // Sets the specified position of the character object
+    // Deprecating self.position and using convention x and y
     self.position = config.position || {left: 0, top: 0};
 
+    self.x = config.position.x || config.position.left || 0;
+    self.y = config.position.y || config.position.top || 0;
+
     // Applies position coordinates to parent container
-    self.$container.style.left = self.position.left+'px';
-    self.$container.style.top = self.position.top+'px';
+    // self.$container.style.left = self.position.left+'px';
+    // self.$container.style.top = self.position.top+'px';
     self.$container.style.position = 'absolute';
+    self.$container.style.left = self.x;
+    self.$container.style.top = self.y;
 
     self.height = config.height || sprite['sectionHeight'];
     self.width = config.width || sprite['sectionWidth'];
@@ -134,6 +140,10 @@ function Character(config) {
             direction.down;
     };
 
+    self.trajecting = function() {
+        return facing;
+    };
+
     self.activate = function () {
         frameHandle = setInterval(_reloadObjectState, self.frameRate);
         self.enableControl();
@@ -162,28 +172,28 @@ function Character(config) {
         // Store the character animation vector in a temporary object
         var cav = sprite['animationVector']['animate-moving'+facing],
             position = {
-                x: facing === _const.faceRight ? (self.position.left + self.$container.width) : self.position.left,
-                y: facing === _const.faceDown ? (self.position.top + self.$container.height) : self.position.top
+                x: facing === _const.faceRight ? (/* self.position.left */ self.x + self.$container.width) : /* self.position.left */ self.x,
+                y: facing === _const.faceDown ? (/*self.position.top*/ self.y + self.$container.height) : /*self.position.top*/ self.y
             },
             dimension = {height: self.height, width: self.width};
         if (self.isMoving() /*&& !collision.check(position, facing, config.speed) */) {
             self.animationIndex = self.animationIndex < cav.length - 1 ? self.animationIndex+1 : 0;
             if (direction.down && !collision.check(position, dimension, _const.faceDown, config.speed)) {
-                self.position.top += config.speed;
+                self.y += config.speed;
             }
             else if (direction.left && !collision.check(position, dimension, _const.faceLeft, config.speed)) {
-                self.position.left -= config.speed;
+                self.x -= config.speed;
             }
             else if (direction.up && !collision.check(position, dimension, _const.faceUp, config.speed)) {
-                self.position.top -= config.speed;
+                self.y -= config.speed;
             }
             else if (direction.right && !collision.check(position, dimension, _const.faceRight, config.speed)) {
-                self.position.left += config.speed;
+                self.x += config.speed;
             }
         }
 
-        self.$container.style.left = self.position.left + 'px';
-        self.$container.style.top = self.position.top + 'px';
+        self.$container.style.left = self.x + 'px';
+        self.$container.style.top = self.y + 'px';
 
         // Redraw the image unto the canvas
         //sprite.sectionHeight = cav[self.animationIndex]['height'];

@@ -124,8 +124,8 @@ function Stage(params) {
         screenLock = setInterval(function() {
             var scrollLimitX = self.width - parseInt(self.gameScreen.width),
                 scrollLimitY = self.height - parseInt(self.gameScreen.height),
-                locationX = entities[id].position.left + (entities[id].width / 2),
-                locationY = entities[id].position.top + (entities[id].height / 2),
+                locationX = entities[id].x + (entities[id].width / 2),
+                locationY = entities[id].y + (entities[id].height / 2),
                 adjustPointX,
                 adjustPointY;
 

@@ -81,60 +81,76 @@
                     id: 'interact_with_tree_a',
                     object: 'tree_a',
                     trigger: 'main-character',
-                    type: 'movement',
+                    type: _const.movement,
                     config: {all: 10},
-                    does: function(object, trigger) {
-                        console.log('Triggered interaction ' + this.id + ' of Object ' + object.id);
-                        console.log('Trigger Object - - - - - - -');
-                        console.log(trigger);
+                    does: function(object, trigger, collision) {
+                        //console.log('Triggered interaction ' + this.id + ' of Object ' + object.id);
+                        //console.log('Trigger Object - - - - - - -');
+                        //console.log(trigger);
                     }
                 },
                 {
                     id: 'interact_with_tree_c',
                     object: 'tree_c',
                     trigger: 'main-character',
-                    type: 'movement',
+                    type: _const.movement,
                     config: {all: 10},
-                    does: function(object, trigger) {
-                        console.log('Triggered interaction '+ this.id +' of Object ' + object.id);
-                        console.log('Trigger Object - - - - - - -');
-                        console.log(trigger);
+                    does: function(object, trigger, collision) {
+                        //console.log('Triggered interaction '+ this.id +' of Object ' + object.id);
+                        //console.log('Trigger Object - - - - - - -');
+                        //console.log(trigger);
                     }
                 },
                 {
                     id: 'interact_with_tree_e',
                     object: 'tree_e',
                     trigger: 'main-character',
-                    type: 'movement',
+                    type: _const.movement,
                     config: {all: 10},
-                    does: function(object, trigger) {
-                        console.log('Triggered interaction '+ this.id +' of Object ' + object.id);
-                        console.log('Trigger Object - - - - - - -');
-                        console.log(trigger);
+                    does: function(object, trigger, collision) {
+                        //console.log('Triggered interaction '+ this.id +' of Object ' + object.id);
+                        //console.log('Trigger Object - - - - - - -');
+                        //console.log(trigger);
                     }
                 },
                 {
                     id: 'interact_with_tree_h',
                     object: 'tree_h',
                     trigger: 'main-character',
-                    type: 'movement',
+                    type: _const.movement,
                     config: {all: 10},
-                    does: function(object, trigger) {
-                        console.log('Triggered interaction '+ this.id +' of Object ' + object.id);
-                        console.log('Trigger Object - - - - - - -');
-                        console.log(trigger);
+                    does: function(object, trigger, collision) {
+                        var collided = null;
+                        if (collision.exists(object.id)) {
+                            var position = {
+                                x: trigger.trajecting() === _const.faceRight ? trigger.x + trigger.width : trigger.x,
+                                y: trigger.trajecting() === _const.faceDown ? trigger.y + trigger.height : trigger.y
+                            }, dimension = {height: trigger.height, width: trigger.width},
+                                direction = trigger.trajecting(),
+                                range = this.config.all;
+
+                            collided = collision.check(position, dimension, direction, range);
+                            if (collided && collided.collisionId === object.id) {
+                                console.log(collided);
+                            }
+
+                        } else {
+                            // Do some manual collision checking to determine
+                            // if the object will be triggered
+                        }
+
                     }
                 },
                 {
                     id: 'interact_with_stone-walls_a',
                     object: 'stone-walls_a',
                     trigger: 'main-character',
-                    type: 'movement',
+                    type: _const.movement,
                     config: {all: 10},
-                    does: function(object, trigger) {
-                        console.log('Triggered interaction ' + this.id + ' of Object ' + object.id);
-                        console.log('Trigger Object - - - - - - -');
-                        console.log(trigger);
+                    does: function(object, trigger, collision) {
+                        //console.log('Triggered interaction ' + this.id + ' of Object ' + object.id);
+                        //console.log('Trigger Object - - - - - - -');
+                        //console.log(trigger);
                     }
                 }
             ]);

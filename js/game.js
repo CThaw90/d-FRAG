@@ -9,10 +9,12 @@ function Game() {
         http = new HttpRequest(),
         entities = {},
         loading = {},
+
+        // May pass in the game object so every
+        // entity has high level access to the game
         self = this;
 
     self.play = function (withInteractions) {
-        console.log(withInteractions);
         _util.waitUntil(self.finishedLoading, [], function() {
             self.currentStage.placeAll();
             self.currentStage.lockOn(self.config.mainCharacter.id);
@@ -75,8 +77,6 @@ function Game() {
                         left: 100,
                         top: 100
                     },
-                    // height: 100,
-                    // width: 72,
                     speed: 5
                 });
 

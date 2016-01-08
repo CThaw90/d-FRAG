@@ -116,5 +116,10 @@ var _util = {
     // Returns true when all of the Browser DOM elements has finished loading
     domLoaded: function() {
         return document.readyState === 'complete';
+    },
+
+    // Makes call to adding a new event Listener a bit more cleaner
+    addListener: function(event, func) {
+        document.addEventListener(event, func);
     }
 };

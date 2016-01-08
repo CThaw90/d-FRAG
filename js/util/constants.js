@@ -27,6 +27,9 @@ var _const = {
 
     screenOffset: 16,
 
+    movement: 'movement',
+    movementCheckInterval: 1,
+
     // Regular Expression objects
     // ----------------------------------
 

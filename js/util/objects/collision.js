@@ -120,6 +120,10 @@ function Collision() {
         return status;
     };
 
+    self.exists = function(id) {
+        return _util.isObject(CDSObj.objects[id]);
+    };
+
     function setVectorCoordinates(object) {
 
         // Damn Javascript returns null as a number. Have to figure out a clean work around
