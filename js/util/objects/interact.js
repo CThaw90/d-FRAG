@@ -48,7 +48,7 @@ function Interactivity() {
      */
     self.add = function(interaction) {
         if (!interaction.id || !interaction.object || !interaction.trigger) {
-            console.log('Cannot add interaction. No interaction id specified');
+            console.error('Cannot add interaction. Incomplete interaction configuration');
             return;
         }
 

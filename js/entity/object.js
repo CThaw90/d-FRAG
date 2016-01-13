@@ -26,7 +26,9 @@ function Object(config) {
 
     // Captures the context of the object canvas
     self.ctx = self.$container.getContext('2d');
+    self.animation = config.animation;
     self.animationIndex = 0;
+
 
     self.$container.setAttribute('id', config.id);
     self.id = config.id;
@@ -34,6 +36,10 @@ function Object(config) {
     sprite = _util.isObject(config.sprite) ? config.sprite : {};
 
     self.frameRate = config.frameRate || _const.defaultFrameRate;
+
+    self.setAnimation = function(animation) {
+        self.animation = animation;
+    };
 
     self.activate = function() {
         if (config.canCollide) {
@@ -44,11 +50,15 @@ function Object(config) {
 
     function _reloadObjectState() {
 
+        // Clear Canvas
         self.ctx.clearRect(
             0, 0,
             self.$container.width,
             self.$container.height
         );
+
+        // Store the object animation vector in a temporary object
+        var cav = sprite['animationVector'][self.animation];
     }
 
     function resize() {
