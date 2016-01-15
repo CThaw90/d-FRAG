@@ -5,7 +5,7 @@ function Object(config) {
 
     var self = this,
         collision = config.cd,
-        sprite;
+        sprite, frameHandle, image;
 
     // The container holding the object sprite or reference point
     self.$container = document.createElement('canvas');
@@ -35,30 +35,85 @@ function Object(config) {
 
     sprite = _util.isObject(config.sprite) ? config.sprite : {};
 
+    if (sprite.src) {
+        image = new Image();
+        image.src = sprite.src;
+        image.height = config.height;
+        image.width = config.width;
+        image.onload = function() {
+            self.ctx.drawImage(
+                this, 0, 0,
+                sprite['sectionWidth'], sprite['sectionHeight'],
+                0, 0,
+                config.width, config.height
+            );
+        }
+    } else if (sprite.object) {
+        image = sprite.object;
+        self.ctx.drawImage(
+            image, 0, 0,
+            sprite['sectionWidth'], sprite['sectionHeight'],
+            0, 0,
+            config.width, config.height
+        );
+    }
+
+    // Binds the image to the container canvas
+    self.$container.appendChild(image);
+
     self.frameRate = config.frameRate || _const.defaultFrameRate;
 
-    self.setAnimation = function(animation) {
+    self.animate = function(animation) {
         self.animation = animation;
+        self.animationIndex = 0;
     };
 
     self.activate = function() {
+        frameHandle = setInterval(_reloadObjectState, self.frameRate);
         if (config.canCollide) {
-            resize();
             collision.add(this);
         }
+
+        resize();
     };
 
+    self.deactivate = function (timeout) {
+        clearInterval(frameHandle);
+        if (timeout) {
+            setTimeout(function() {
+                self.activate();
+            }, timeout);
+        }
+    };
     function _reloadObjectState() {
 
-        // Clear Canvas
-        self.ctx.clearRect(
-            0, 0,
-            self.$container.width,
-            self.$container.height
-        );
+        if (_util.isObject(self.animation)) {
 
-        // Store the object animation vector in a temporary object
-        var cav = sprite['animationVector'][self.animation];
+            // Clear Canvas
+            self.ctx.clearRect(
+                0, 0,
+                self.$container.width,
+                self.$container.height
+            );
+
+            // Store the object animation vector in a temporary object
+            var oav = sprite['animationVector'][self.animation.name];
+
+            self.$container.style.left = self.x + 'px';
+            self.$container.style.top = self.y + 'px';
+
+            // Redraw the image unto the canvas
+            self.$container.height = sprite['sectionHeight'];
+            self.$container.width = sprite['sectionWidth'];
+            if (sprite.hasOwnProperty('sectionWidth') && sprite.hasOwnProperty('sectionHeight')) {
+                self.ctx.drawImage(
+                    image, oav[self.animationIndex].x, oav[self.animationIndex].y,
+                    sprite['sectionWidth'], sprite['sectionHeight'],
+                    0, 0,
+                    self.$container.width, self.$container.height
+                );
+            }
+        }
     }
 
     function resize() {

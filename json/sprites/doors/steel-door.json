@@ -1,13 +1,17 @@
 {
   "src" : "img/objects/moderndoor.png",
-  "sectionHeight" : 0,
-  "sectionWidth" : 0,
+  "sectionHeight" : 256,
+  "sectionWidth" : 200,
+  "height" : 256,
+  "width" : 200,
+  "left" : 200,
+  "top" : 0,
   "animationVector" : {
     "animateOpen" : [
       {
         "description" : "Completely closed door",
-        "height" : 0,
-        "width" : 0,
+        "height" : 50,
+        "width" : 128,
         "x" : 0,
         "y" : 0
       },

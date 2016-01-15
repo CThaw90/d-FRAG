@@ -107,9 +107,7 @@ function Game() {
                                         },
                                         height: o.height,
                                         width: o.width,
-                                        sprite: {
-                                            src: o.src
-                                        }
+                                        sprite: o
                                     });
 
                                     _util.waitUntil(loaded, [stage.id], function() {
