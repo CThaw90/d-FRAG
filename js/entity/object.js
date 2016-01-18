@@ -43,7 +43,7 @@ function Object(config) {
         image.onload = function() {
             self.ctx.drawImage(
                 this, 0, 0,
-                sprite['sectionWidth'], sprite['sectionHeight'],
+                sprite['width'], sprite['height'],
                 0, 0,
                 config.width, config.height
             );
@@ -52,7 +52,7 @@ function Object(config) {
         image = sprite.object;
         self.ctx.drawImage(
             image, 0, 0,
-            sprite['sectionWidth'], sprite['sectionHeight'],
+            sprite['width'], sprite['height'],
             0, 0,
             config.width, config.height
         );
@@ -61,7 +61,7 @@ function Object(config) {
     // Binds the image to the container canvas
     self.$container.appendChild(image);
 
-    self.frameRate = config.frameRate || _const.defaultFrameRate;
+    self.frameRate = 100;// config.frameRate || _const.defaultFrameRate;
 
     self.animate = function(animation) {
         self.animation = animation;
@@ -70,11 +70,11 @@ function Object(config) {
 
     self.activate = function() {
         frameHandle = setInterval(_reloadObjectState, self.frameRate);
+        resize();
+
         if (config.canCollide) {
             collision.add(this);
         }
-
-        resize();
     };
 
     self.deactivate = function (timeout) {
@@ -103,15 +103,27 @@ function Object(config) {
             self.$container.style.top = self.y + 'px';
 
             // Redraw the image unto the canvas
-            self.$container.height = sprite['sectionHeight'];
-            self.$container.width = sprite['sectionWidth'];
-            if (sprite.hasOwnProperty('sectionWidth') && sprite.hasOwnProperty('sectionHeight')) {
+            self.$container.height = sprite['height'];
+            self.$container.width = sprite['width'];
+            if (sprite.hasOwnProperty('width') && sprite.hasOwnProperty('height')) {
                 self.ctx.drawImage(
                     image, oav[self.animationIndex].x, oav[self.animationIndex].y,
-                    sprite['sectionWidth'], sprite['sectionHeight'],
+                    sprite['width'], sprite['height'],
                     0, 0,
                     self.$container.width, self.$container.height
                 );
+            }
+
+            if (self.animation.type === 'iterate') {
+
+                if (self.animationIndex + 1 < oav.length) {
+                    self.animationIndex++;
+                } else {
+                    self.animation = undefined;
+                }
+
+            } else if (self.animation.type === 'loop') {
+
             }
         }
     }
