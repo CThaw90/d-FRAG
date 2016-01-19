@@ -66,10 +66,15 @@ function Interactivity() {
                 // run the function
                 setInterval(function() {
 
-                    if (objectInfo['snapshot'].x !== objectInfo['trigger'].x || objectInfo['snapshot'].y !== objectInfo['trigger'].y) {
+                    if (objectInfo['snapshot'].x !== objectInfo['trigger'].x || objectInfo['snapshot'].y !== objectInfo['trigger'].y
+                        || objectInfo['snapshot'].trajecting !== objectInfo['trigger'].trajecting()) {
+
                         interaction.does(objectInfo['object'], objectInfo['trigger'], cd);
+
+                        objectInfo['snapshot'].trajecting = objectInfo['trigger'].trajecting();
                         objectInfo['snapshot'].x = objectInfo['trigger'].x;
                         objectInfo['snapshot'].y = objectInfo['trigger'].y;
+
                     }
 
                 }, _const.movementCheckInterval);

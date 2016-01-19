@@ -64,6 +64,7 @@ function Object(config) {
     self.frameRate = 100;// config.frameRate || _const.defaultFrameRate;
 
     self.animate = function(animation) {
+        self.block = animation.block;
         self.animation = animation;
         self.animationIndex = 0;
     };
@@ -99,6 +100,7 @@ function Object(config) {
             // Store the object animation vector in a temporary object
             var oav = sprite['animationVector'][self.animation.name];
 
+
             self.$container.style.left = self.x + 'px';
             self.$container.style.top = self.y + 'px';
 
@@ -119,7 +121,9 @@ function Object(config) {
                 if (self.animationIndex + 1 < oav.length) {
                     self.animationIndex++;
                 } else {
+                    self.flag = self.animation.flag;
                     self.animation = undefined;
+                    self.block = false;
                 }
 
             } else if (self.animation.type === 'loop') {

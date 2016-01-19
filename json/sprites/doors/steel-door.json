@@ -45,21 +45,21 @@
         "height" : 0,
         "width" : 0,
         "x" : 0,
-        "y" : 0
+        "y" : 195
       },
       {
         "description" : "Door first stage is closing",
         "height" : 0,
         "width" : 0,
         "x" : 0,
-        "y" : 0
+        "y" : 130
       },
       {
         "description" : "Door second stage is closing",
         "height" : 0,
         "width" : 0,
         "x" : 0,
-        "y" : 0
+        "y" : 65
       },
       {
         "description" : "Door is completely closed",

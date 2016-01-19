@@ -34,7 +34,23 @@ var withInteractions = [
         // Use Photo shop to make pictures bigger without losing pixel
         // quality to match the size of the character sprite
         does: function(object, trigger, collision) {
-            object['animate']({name: 'animateOpen', type: 'iterate'});
+            var collided = null;
+            if (collision.exists(object.id)) {
+                var position = {
+                    x: trigger.trajecting() === _const.faceRight ? trigger.x + trigger.width : trigger.x,
+                    y: trigger.trajecting() === _const.faceDown ? trigger.y + trigger.height : trigger.y
+                }, dimension = {height: trigger.height, width: trigger.width},
+                    direction = trigger.trajecting(),
+                    range = this.config.all;
+
+                collided = collision.check(position, dimension, direction, range);
+                if (collided && collided.collisionId === object.id && (!object.flag || object.flag === 'closed') && !object.block) {
+                    object['animate']({name: 'animateOpen', type: 'iterate', flag: 'open', block: true});
+                }
+                else if (object.flag === 'open' && !object.block) {
+                    object['animate']({name: 'animateClosed', type: 'iterate', flag: 'closed', block: true});
+                }
+            }
         }
     }
 ];
