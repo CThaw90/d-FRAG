@@ -28,13 +28,6 @@ function Interactivity() {
      * @attribute type - the type of action that triggers an interaction or interaction check
      * @attribute config - Extra configurations used to determine where this interaction is allowed to happen
      *
-     *      @param config : for movement type
-     *      @attribute all: N - Interaction is triggered on all spaces N pixels away from the interacting object
-     *      @attribute up: N - Interaction is triggered over top and within N pixels away from the interacting object
-     *      @attribute down: N - Interaction is triggered under and within N pixels away from the interacting object
-     *      @attribute left: N - Interaction is triggered to the left and within N pixels away from the interacting object
-     *      @attribute right: N - Interaction is triggered to the right and within N pixels away from the interacting object
-     *
      *      @param config : for keypress type
      *      @attribute keys: [] - An array of key codes that are valid for the interaction
      *      @attribute all: Interaction is triggered for all keys. Can be configured down to a specific subset
@@ -47,19 +40,19 @@ function Interactivity() {
      * @attribute does - A function that determines what happens when an interaction has been triggered
      */
     self.add = function(interaction) {
+        var objectInfo = null;
         if (!interaction.id || !interaction.object || !interaction.trigger) {
             console.error('Cannot add interaction. Incomplete interaction configuration');
             return;
         }
 
-        interactions.mTrigger[interaction.id] = {
-            trigger: interaction.trigger,
-            object: interaction.object
-        };
         switch (interaction.type) {
 
             case _const.movement:
-                var objectInfo = interactions.mTrigger[interaction.id];
+
+                interactions.mTrigger[interaction.id] = {trigger: interaction.trigger, object: interaction.object};
+
+                objectInfo = interactions.mTrigger[interaction.id];
                 objectInfo['snapshot'] = { x: objectInfo['trigger'].x,  y: objectInfo['trigger'].y };
                 // Set an interval loop that checks whether the coordinates of the
                 // object has changed. If it has the object has moved therefore
@@ -81,10 +74,20 @@ function Interactivity() {
                 break;
 
             case _const.keyPress:
+                interactions.kTrigger[interaction.id] = {trigger: interaction.trigger, object: interaction.object};
+
+                objectInfo = interactions.kTrigger[interaction.id];
                 // Add a listener that listens for the key press and the buttons
                 // associated with that action
-                addEventListener(_const.keyPress, function() {
-
+                addEventListener(_const.keyDown, function(event) {
+                    if (keyPressed(event.keyCode, interaction.config.keys)) {
+                        interaction.does(objectInfo['object'], objectInfo['trigger'], cd, event);
+                    }
+                });
+                addEventListener(_const.keyUp, function(event) {
+                    if (keyPressed(event.keyCode, interaction.config.keys)) {
+                        interaction.does(objectInfo['object'], objectInfo['trigger'], cd, event);
+                    }
                 });
                 break;
 
@@ -110,12 +113,14 @@ function Interactivity() {
         cd = collision;
     };
 
+    function keyPressed(key, keys) {
+        var i = 0, keyFound = false;
+        if (_util.isArray(keys)) {
+            for (i = 0; i < keys.length && !keyFound; i++) {
+                keyFound = (_util.isString ? _const.keyMap[keys[i]] === key : false);
+            }
+        }
 
-    function delegate(event) {
-
-    }
-
-    function search(interation) {
-
+        return keyFound;
     }
 }

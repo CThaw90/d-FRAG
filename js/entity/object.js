@@ -42,7 +42,7 @@ function Object(config) {
         image.width = config.width;
         image.onload = function() {
             self.ctx.drawImage(
-                this, 0, 0,
+                this, sprite.x || 0, sprite.y || 0,
                 sprite['width'], sprite['height'],
                 0, 0,
                 config.width, config.height
@@ -51,7 +51,7 @@ function Object(config) {
     } else if (sprite.object) {
         image = sprite.object;
         self.ctx.drawImage(
-            image, 0, 0,
+            image, sprite.x || 0, sprite.y || 0,
             sprite['width'], sprite['height'],
             0, 0,
             config.width, config.height

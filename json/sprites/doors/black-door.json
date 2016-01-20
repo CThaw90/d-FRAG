@@ -4,70 +4,69 @@
   "sectionWidth" : 85,
   "height" : 65,
   "width" : 65,
-  "left" : 200,
-  "top" : 2,
-  "x" : 0,
+  "left" : 400,
+  "top" : 3,
+  "x" : 63,
   "y" : 0,
   "animationVector" : {
     "animateOpen" : [
       {
         "description" : "Completely closed door",
-        "oldHeight" : 50,
-        "oldWidth" : 128,
         "height" : 125,
         "width" : 175,
-        "x" : 0,
+        "x" : 63,
         "y" : 0
       },
       {
         "description" : "Door first stage is opening",
         "height" : 125,
         "width" : 175,
-        "x" : 0,
+        "x" : 63,
         "y" : 65
       },
       {
         "description" : "Door second stage is opening",
-        "height" : 0,
-        "width" : 0,
-        "x" : 0,
+        "height" : 125,
+        "width" : 175,
+        "x" : 63,
         "y" : 130
       },
       {
         "description" : "Completely open",
-        "height" : 0,
-        "width" : 0,
-        "x" : 0,
+        "height" : 125,
+        "width" : 175,
+        "x" : 63,
         "y" : 195
+
       }
     ],
     "animateClosed" : [
       {
         "description" : "Completely open",
-        "height" : 0,
-        "width" : 0,
-        "x" : 0,
+        "height" : 125,
+        "width" : 175,
+        "x" : 63,
         "y" : 195
       },
       {
         "description" : "Door first stage is closing",
-        "height" : 0,
-        "width" : 0,
-        "x" : 0,
+        "height" : 125,
+        "width" : 175,
+        "x" : 63,
         "y" : 130
       },
       {
         "description" : "Door second stage is closing",
-        "height" : 0,
-        "width" : 0,
-        "x" : 0,
+        "height" : 125,
+        "width" : 175,
+        "x" : 63,
         "y" : 65
       },
       {
         "description" : "Door is completely closed",
-        "height" : 0,
-        "width" : 0,
-        "x" : 0,
+        "height" : 125,
+        "width" : 175,
+        "x" : 63,
         "y" : 0
       }
     ]

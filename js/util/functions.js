@@ -7,16 +7,24 @@
 
 var _util = {
 
+    // Checks if a variable is a javascript number
+    isNumber: function(n) {
+        return typeof n === 'number';
+    },
+
+    // Checks if a variable is a javascript string
+    isString: function(s) {
+        return typeof s === 'string';
+    },
+
     // Checks if a variable is javascript object
     isObject: function(o) {
-        return o && o.toString() === '[object Object]'
-            && typeof o === 'object';
+        return o && !this.isArray(o) && typeof o === 'object';
     },
 
     // Checks if a variable is a javascript array
     isArray: function(a) {
-        return a && a.hasOwnProperty('length') && a.toString() !== '[object Object]'
-            && typeof a === 'object';
+        return Array.isArray(a);
     },
 
     // Checks if a variable is javascript function
