@@ -5,7 +5,8 @@ function Object(config) {
 
     var self = this,
         collision = config.cd,
-        sprite, frameHandle, image;
+        sprite, frameHandle, image,
+        direction = {left: false, right: false, up: false, down: false};
 
     // The container holding the object sprite or reference point
     self.$container = document.createElement('canvas');
@@ -64,9 +65,9 @@ function Object(config) {
     self.frameRate = 100;// config.frameRate || _const.defaultFrameRate;
 
     self.animate = function(animation) {
+        self.animationIndex = animation.type === 'loop' ? self.animationIndex : 0;
         self.block = animation.block;
         self.animation = animation;
-        self.animationIndex = 0;
     };
 
     self.activate = function() {
@@ -111,14 +112,29 @@ function Object(config) {
                 break;
         }
 
-        if (!self.animation) {
-            self.ctx.drawImage(
-                image, sprite.x || 0, sprite.y || 0,
-                sprite['width'], sprite['height'],
-                0, 0,
-                config.width, config.height
-            );
-        }
+        self.$container.style.left = self.x + 'px';
+        self.$container.style.top = self.y + 'px';
+    };
+
+    self.traject = function(direction, frameRate) {
+        self
+    };
+
+    self.stop = function () {
+        direction = {
+            left: false, right: false,
+            down: false, up: false
+        };
+    };
+
+    self.isMoving = function() {
+        return direction.right || direction.left
+            || direction.down || direction.up;
+    };
+
+    self.stopAnimation = function() {
+        self.animation = undefined;
+        self.animationIndex = 0;
     };
 
     function _reloadObjectState() {
@@ -134,10 +150,6 @@ function Object(config) {
 
             // Store the object animation vector in a temporary object
             var oav = sprite['animationVector'][self.animation.name];
-
-
-            self.$container.style.left = self.x + 'px';
-            self.$container.style.top = self.y + 'px';
 
             // Redraw the image unto the canvas
             self.$container.height = sprite['height'];
@@ -163,6 +175,11 @@ function Object(config) {
 
             } else if (self.animation.type === 'loop') {
 
+                if (self.animationIndex + 1 < oav.length) {
+                    self.animationIndex++;
+                } else {
+                    self.animationIndex = 0;
+                }
             }
         }
     }

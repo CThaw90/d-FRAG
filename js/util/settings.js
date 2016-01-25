@@ -89,7 +89,19 @@ var withInteractions = [
             keys: ['w', 'a', 's', 'd']
         },
         does: function(object, trigger, collision, key) {
-            console.log('Interaction!' + key.which + ' ?= ' + _const.keyMap['d']);
+
+            if (key.type === _const.keyDown) {
+
+                if (key.which === _const.keyMap['d'] && !object.block) {
+                    object['animate']({name: 'animate-movingRight', type: 'loop', block: true});
+                }
+            }
+            else if (key.type === _const.keyUp) {
+
+                if (key.which === _const.keyMap['d'] && object.block) {
+                    object['stopAnimation']();
+                }
+            }
 
             if (key.which === _const.keyMap['d']) {
                 object.move(_const.right, 5);
