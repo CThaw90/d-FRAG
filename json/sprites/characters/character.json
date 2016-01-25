@@ -4,8 +4,10 @@
   "sectionWidth": 50,
   "height" : 80,
   "width" : 50,
-  "x" : 100,
-  "y" : 100,
+  "left" : 100,
+  "top" : 300,
+  "x" : 10,
+  "y" : 210,
   "animationVector": {
     "animate-movingUp": [
       {

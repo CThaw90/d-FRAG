@@ -64,12 +64,12 @@ function Collision() {
         while (tmp > 0 && !status) {
 
             switch (dir) {
-                case _const.faceDown:
-                case _const.faceUp:
+                case _const.down:
+                case _const.up:
                     axis = 'y';
                     break;
-                case _const.faceLeft:
-                case _const.faceRight:
+                case _const.left:
+                case _const.right:
                     axis = 'x';
                     break;
                 default:
@@ -104,16 +104,25 @@ function Collision() {
                         // Fix collision events..i think collision events are broken
                         CDSObj.events[vector[i].id].push(new Date().getTime());
                     }
+
+                    else if (vector[i].start === (pos[reverse(axis)]) && vector[i].end === (pos[reverse(axis)] + dimen[axis])) {
+                        // Might use logic to dynamically remove stale vector coordinates who's
+                        // object might have been removed prior to the collision event
+                        status = {vector: pos[axis], collisionId: vector.id};
+
+                        // Fix collision events..i think collision events are broken
+                        CDSObj.events[vector[i].id].push(new Date().getTime());
+                    }
                 }
             }
 
             switch (dir) {
-                case _const.faceDown:
-                case _const.faceRight:
+                case _const.down:
+                case _const.right:
                     pos[axis]++;
                     break;
-                case _const.faceUp:
-                case _const.faceLeft:
+                case _const.up:
+                case _const.left:
                     pos[axis]--;
                     break;
                 default:

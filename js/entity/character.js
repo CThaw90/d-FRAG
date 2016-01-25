@@ -92,7 +92,7 @@ function Character(config) {
     self.$container.appendChild(charImage);
 
     // Character Facing Direction
-    var facing = _const.faceLeft,
+    var facing = _const.left,
 
         direction = {left: false, right: false, up: false, down: false},
 
@@ -117,19 +117,19 @@ function Character(config) {
 
         if (event.keyCode === _const.arrowDown) {
             direction.down = keyPressed;
-            facing = direction.down ? _const.faceDown : facing;
+            facing = direction.down ? _const.down : facing;
         }
         else if (event.keyCode === _const.arrowLeft) {
             direction.left = keyPressed;
-            facing = direction.left ? _const.faceLeft : facing;
+            facing = direction.left ? _const.left : facing;
         }
         else if (event.keyCode === _const.arrowRight) {
             direction.right = keyPressed;
-            facing = direction.right ? _const.faceRight : facing;
+            facing = direction.right ? _const.right : facing;
         }
         else if (event.keyCode === _const.arrowUp) {
             direction.up = keyPressed;
-            facing = direction.up ? _const.faceUp : facing;
+            facing = direction.up ? _const.up : facing;
         }
     };
 
@@ -172,22 +172,22 @@ function Character(config) {
         // Store the character animation vector in a temporary object
         var cav = sprite['animationVector']['animate-moving'+facing],
             position = {
-                x: facing === _const.faceRight ? (/* self.position.left */ self.x + self.$container.width) : /* self.position.left */ self.x,
-                y: facing === _const.faceDown ? (/*self.position.top*/ self.y + self.$container.height) : /*self.position.top*/ self.y
+                x: facing === _const.right ? (/* self.position.left */ self.x + self.$container.width) : /* self.position.left */ self.x,
+                y: facing === _const.down ? (/*self.position.top*/ self.y + self.$container.height) : /*self.position.top*/ self.y
             },
             dimension = {height: self.height, width: self.width};
         if (self.isMoving() /*&& !collision.check(position, facing, config.speed) */) {
             self.animationIndex = self.animationIndex < cav.length - 1 ? self.animationIndex+1 : 0;
-            if (direction.down && !collision.check(position, dimension, _const.faceDown, config.speed)) {
+            if (direction.down && !collision.check(position, dimension, _const.down, config.speed)) {
                 self.y += config.speed;
             }
-            else if (direction.left && !collision.check(position, dimension, _const.faceLeft, config.speed)) {
+            else if (direction.left && !collision.check(position, dimension, _const.left, config.speed)) {
                 self.x -= config.speed;
             }
-            else if (direction.up && !collision.check(position, dimension, _const.faceUp, config.speed)) {
+            else if (direction.up && !collision.check(position, dimension, _const.up, config.speed)) {
                 self.y -= config.speed;
             }
-            else if (direction.right && !collision.check(position, dimension, _const.faceRight, config.speed)) {
+            else if (direction.right && !collision.check(position, dimension, _const.right, config.speed)) {
                 self.x += config.speed;
             }
         }

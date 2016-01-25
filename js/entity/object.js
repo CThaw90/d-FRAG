@@ -86,6 +86,41 @@ function Object(config) {
             }, timeout);
         }
     };
+
+    self.move = function (direction, range) {
+
+        switch (direction) {
+
+            case _const.right:
+                self.x += range;
+                break;
+
+            case _const.down:
+                self.y += range;
+                break;
+
+            case _const.left:
+                self.y -= range;
+                break;
+
+            case _const.up:
+                self.x -= range;
+                break;
+
+            default:
+                break;
+        }
+
+        if (!self.animation) {
+            self.ctx.drawImage(
+                image, sprite.x || 0, sprite.y || 0,
+                sprite['width'], sprite['height'],
+                0, 0,
+                config.width, config.height
+            );
+        }
+    };
+
     function _reloadObjectState() {
 
         if (_util.isObject(self.animation)) {

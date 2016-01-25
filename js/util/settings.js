@@ -11,8 +11,8 @@ var withInteractions = [
             var collided = null;
             if (collision.exists(object.id)) {
                 var position = {
-                    x: trigger.trajecting() === _const.faceRight ? trigger.x + trigger.width : trigger.x,
-                    y: trigger.trajecting() === _const.faceDown ? trigger.y + trigger.height : trigger.y
+                    x: trigger.trajecting() === _const.right ? trigger.x + trigger.width : trigger.x,
+                    y: trigger.trajecting() === _const.down ? trigger.y + trigger.height : trigger.y
                 }, dimension = {height: trigger.height, width: trigger.width},
                     direction = trigger.trajecting(),
                     range = 5;
@@ -36,8 +36,8 @@ var withInteractions = [
             var collided = null;
             if (collision.exists(object.id)) {
                 var position = {
-                    x: trigger.trajecting() === _const.faceRight ? trigger.x + trigger.width : trigger.x,
-                    y: trigger.trajecting() === _const.faceDown ? trigger.y + trigger.height : trigger.y
+                    x: trigger.trajecting() === _const.right ? trigger.x + trigger.width : trigger.x,
+                    y: trigger.trajecting() === _const.down ? trigger.y + trigger.height : trigger.y
                 }, dimension = {height: trigger.height, width: trigger.width},
                     direction = trigger.trajecting(),
                     range = 5;
@@ -64,8 +64,8 @@ var withInteractions = [
             var collided = null;
             if (collision.exists(object.id)) {
                 var position = {
-                    x: trigger.trajecting() === _const.faceRight ? trigger.x + trigger.width : trigger.x,
-                    y: trigger.trajecting() === _const.faceDown ? trigger.x + trigger.height : trigger.y
+                    x: trigger.trajecting() === _const.right ? trigger.x + trigger.width : trigger.x,
+                    y: trigger.trajecting() === _const.down ? trigger.x + trigger.height : trigger.y
                 }, dimension = {height: trigger.height, width: trigger.width},
                     direction = trigger.trajecting(),
                     range = 5;
@@ -74,9 +74,34 @@ var withInteractions = [
                 if (collided && collided.collisionId === object.id && (!object.flag || object.flag === 'closed') && !object.block) {
                     object['animate']({name: 'animateOpen', type: 'iterate', flag: 'open', block: true});
                 }
-                else if (object.flag === 'open' && !object.block) {
+                else if (collided && collided.collisionId === object.id && object.flag === 'open' && !object.block) {
                     object['animate']({name: 'animateClosed', type: 'iterate', flag: 'closed', block: true});
                 }
+            }
+        }
+    },
+    {
+        id: 'interact_with_character',
+        object: 'character',
+        trigger: 'character',
+        type: _const.keyPress,
+        config: {
+            keys: ['w', 'a', 's', 'd']
+        },
+        does: function(object, trigger, collision, key) {
+            console.log('Interaction!' + key.which + ' ?= ' + _const.keyMap['d']);
+
+            if (key.which === _const.keyMap['d']) {
+                object.move(_const.right, 5);
+            }
+            else if (key.which === _const.keyMap['w']) {
+
+            }
+            else if (key.which === _const.keyMap['s']) {
+
+            }
+            else if (key.which === _const.keyMap['a']) {
+
             }
         }
     }
@@ -101,7 +126,8 @@ var withObjects = {
             {load: _const.basePath + 'json/sprites/walls/stone-walls_a.json', id: 'stone-walls_a'},
             {load: _const.basePath + 'json/sprites/walls/stone-walls_b.json', id: 'stone-walls_b'},
             {load: _const.basePath + 'json/sprites/doors/steel-door.json', id: 'steel-door'},
-            {load: _const.basePath + 'json/sprites/doors/black-door.json', id: 'black-door'}
+            {load: _const.basePath + 'json/sprites/doors/black-door.json', id: 'black-door'},
+            {load: _const.basePath + 'json/sprites/characters/character.json', id: 'character'}
         ]
     }
 };

@@ -13,10 +13,10 @@ var _const = {
     arrowRight: 39,
     arrowDown: 40,
 
-    faceRight: 'Right',
-    faceLeft: 'Left',
-    faceDown: 'Down',
-    faceUp: 'Up',
+    right: 'Right',
+    left: 'Left',
+    down: 'Down',
+    up: 'Up',
 
     defaultFrameRate: 100,
     defaultInterval: 10,
