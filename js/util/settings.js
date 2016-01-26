@@ -55,14 +55,14 @@ var withInteractions = [
     {
         id: 'interact_with_black-door',
         object: 'black-door',
-        trigger: 'character',
+        trigger: 'player-two',
         type: _const.keyPress,
         config: {
-            keys: ['shift']
+            keys: ['space']
         },
         does: function(object, trigger, collision, key) {
             var collided = null;
-            if (collision.exists(object.id)) {
+            if (collision.exists(object.id) && key.type === _const.keyDown) {
                 var position = {
                     x: trigger.trajecting() === _const.right ? trigger.x + trigger.width : trigger.x,
                     y: trigger.trajecting() === _const.down ? trigger.x + trigger.height : trigger.y
@@ -86,7 +86,7 @@ var withInteractions = [
         trigger: 'character',
         type: _const.keyPress,
         config: {
-            keys: ['w', 'a', 's', 'd', 'space']
+            keys: ['w', 'a', 's', 'd']
         },
         does: function(object, trigger, collision, key) {
 
@@ -130,6 +130,53 @@ var withInteractions = [
                 }
             }
         }
+    },
+    {
+        id: 'interact_with_player-two',
+        object: 'player-two',
+        trigger: 'player-two',
+        type: _const.keyPress,
+        config: {
+            keys: ['leftArrow', 'upArrow', 'rightArrow', 'downArrow']
+        },
+        does: function(object, trigger, collision, key) {
+
+            if (key.type === _const.keyDown && !object.block) {
+
+                switch (key.which) {
+                    case _const.keyMap['rightArrow']:
+                        object['animate']({name: 'animate-movingRight', type: 'loop', block: true});
+                        object['traject'](_const.right, 5, true);
+                        break;
+
+                    case _const.keyMap['upArrow']:
+                        object['animate']({name: 'animate-movingUp', type: 'loop', block: true});
+                        object['traject'](_const.up, 5, true);
+                        break;
+
+                    case _const.keyMap['leftArrow']:
+                        object['animate']({name: 'animate-movingLeft', type: 'loop', block: true});
+                        object['traject'](_const.left, 5, true);
+                        break;
+                    case _const.keyMap['downArrow']:
+                        object['animate']({name: 'animate-movingDown', type: 'loop', block: true});
+                        object['traject'](_const.down, 5, true);
+                        break;
+                }
+            }
+            else if (key.type === _const.keyUp && object.block) {
+
+                switch (key.which) {
+                    case _const.keyMap['leftArrow']:
+                    case _const.keyMap['upArrow']:
+                    case _const.keyMap['rightArrow']:
+                    case _const.keyMap['downArrow']:
+                        object['stopAnimation']();
+                        object['stop']();
+                        break;
+                }
+            }
+        }
     }
 ];
 var withObjects = {
@@ -153,7 +200,8 @@ var withObjects = {
             {load: _const.basePath + 'json/sprites/walls/stone-walls_b.json', id: 'stone-walls_b'},
             {load: _const.basePath + 'json/sprites/doors/steel-door.json', id: 'steel-door'},
             {load: _const.basePath + 'json/sprites/doors/black-door.json', id: 'black-door'},
-            {load: _const.basePath + 'json/sprites/characters/character.json', id: 'character'}
+            {load: _const.basePath + 'json/sprites/characters/character.json', id: 'character'},
+            {load: _const.basePath + 'json/sprites/characters/player-two.json', id: 'player-two'}
         ]
     }
 };

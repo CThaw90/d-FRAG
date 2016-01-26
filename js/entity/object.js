@@ -191,31 +191,32 @@ function Object(config) {
                 }
             }
         }
+        if (self.isMoving()) {
+            var pos = {
+                    x: facing === _const.right ? (self.x + self.$container.width) : self.x,
+                    y: facing === _const.down ? (self.y + self.$container.height) : self.y
+                },
+                dimension = {height: self.height, width: self.width},
+                collided = collide && collision.check(pos, dimension, facing, self.range, self);
+            if (collided) {
+                self.event = {type: 'collision', data: collided};
+            }
+            else if (direction.up) {
+                self.y -= self.range;
+            }
+            else if (direction.right) {
+                self.x += self.range;
+            }
+            else if (direction.down) {
+                self.y += self.range;
+            }
+            else if (direction.left) {
+                self.x -= self.range;
+            }
 
-        var pos = {
-            x: facing === _const.right ? (self.x + self.$container.width) : self.x,
-            y: facing === _const.left ? (self.y + self.$container.height) : self.y
-        },
-        dimension = {height: self.height, width: self.width},
-            collided = collide && collision.check(pos, dimension, facing,self.frameRate, self);
-        if (collided) {
-            self.event = {type: 'collision', data: collided};
+            self.$container.style.left = self.x + 'px';
+            self.$container.style.top = self.y + 'px';
         }
-        else if (direction.up) {
-            self.y -= self.range;
-        }
-        else if (direction.right) {
-            self.x += self.range;
-        }
-        else if (direction.down) {
-            self.y += self.range;
-        }
-        else if (direction.left) {
-            self.x -= self.range;
-        }
-
-        self.$container.style.left = self.x + 'px';
-        self.$container.style.top = self.y + 'px';
     }
 
     function resize() {

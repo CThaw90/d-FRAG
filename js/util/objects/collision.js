@@ -133,7 +133,6 @@ function Collision() {
             tmp--;
         }
 
-        console.log(status);
         return status;
     };
 
