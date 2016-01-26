@@ -40,10 +40,16 @@ function Collision() {
 
     // Removes a collision object from the Collision Detection System
     self.remove = function(id) {
-        delete CDSObj.objects[id];
-        delete CDSObj.events[id];
-        // Need to figure out proper logic to remove all vector coordinates
-        // associated with the id from the vector table
+        var object = CDSObj.objects[id];
+        if (object) {
+            // Need to figure out proper logic to remove all vector coordinates
+            // associated with the id from the vector table
+            remove(id, object.x, object.y, object.width, object.height);
+            delete CDSObj.objects[id];
+            delete CDSObj.events[id];
+
+        }
+
     };
 
     /**
@@ -193,5 +199,34 @@ function Collision() {
     function reverse(axis) {
         var invert = {x: 'y', y: 'x'};
         return invert[axis];
+    }
+
+    function remove(id, x, y, width, height) {
+        var lVector = CDSObj.vector.x[x], tVector = CDSObj.vector.y[y],
+            rVector = CDSObj.vector.x[x + width], bVector = CDSObj.vector.y[y + height], i;
+
+        for (i = 0; lVector.length && i < lVector.length; i++) {
+            if (lVector[i].id === id) {
+                lVector.splice(i, 1);
+            }
+        }
+
+        for (i = 0; tVector.length && i < tVector.length; i++) {
+            if (tVector[i].id === id) {
+                tVector.splice(i, 1);
+            }
+        }
+
+        for (i = 0; rVector.length && i < rVector.length; i++) {
+            if (rVector[i].id === id) {
+                rVector.splice(i, 1);
+            }
+        }
+
+        for (i = 0; bVector.length && i < bVector.length; i++) {
+            if (bVector[i].id === id) {
+                bVector.splice(i, 1);
+            }
+        }
     }
 }

@@ -202,16 +202,24 @@ function Object(config) {
                 self.event = {type: 'collision', data: collided};
             }
             else if (direction.up) {
+                collision.remove(self.id);
                 self.y -= self.range;
+                collision.add(self);
             }
             else if (direction.right) {
+                collision.remove(self.id);
                 self.x += self.range;
+                collision.add(self);
             }
             else if (direction.down) {
+                collision.remove(self.id);
                 self.y += self.range;
+                collision.add(self);
             }
             else if (direction.left) {
+                collision.remove(self.id);
                 self.x -= self.range;
+                collision.add(self);
             }
 
             self.$container.style.left = self.x + 'px';
