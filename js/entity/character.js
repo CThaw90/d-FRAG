@@ -172,8 +172,8 @@ function Character(config) {
         // Store the character animation vector in a temporary object
         var cav = sprite['animationVector']['animate-moving'+facing],
             position = {
-                x: facing === _const.right ? (/* self.position.left */ self.x + self.$container.width) : /* self.position.left */ self.x,
-                y: facing === _const.down ? (/*self.position.top*/ self.y + self.$container.height) : /*self.position.top*/ self.y
+                x: facing === _const.right ? (self.x + self.$container.width) : self.x,
+                y: facing === _const.down ? (self.y + self.$container.height) : self.y
             },
             dimension = {height: self.height, width: self.width};
         if (self.isMoving() /*&& !collision.check(position, facing, config.speed) */) {

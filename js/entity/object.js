@@ -6,7 +6,8 @@ function Object(config) {
     var self = this,
         collision = config.cd,
         sprite, frameHandle, image,
-        direction = {left: false, right: false, up: false, down: false};
+        direction = {left: false, right: false, up: false, down: false},
+        facing, collide;
 
     // The container holding the object sprite or reference point
     self.$container = document.createElement('canvas');
@@ -62,7 +63,7 @@ function Object(config) {
     // Binds the image to the container canvas
     self.$container.appendChild(image);
 
-    self.frameRate = 100;// config.frameRate || _const.defaultFrameRate;
+    self.frameRate = 10;// config.frameRate || _const.defaultFrameRate;
 
     self.animate = function(animation) {
         self.animationIndex = animation.type === 'loop' ? self.animationIndex : 0;
@@ -116,8 +117,15 @@ function Object(config) {
         self.$container.style.top = self.y + 'px';
     };
 
-    self.traject = function(direction, frameRate) {
-        self
+    self.trajecting = function() {
+        return facing;
+    };
+
+    self.traject = function(dir, fr, c) {
+        direction[dir] = true;
+        self.range = fr;
+        facing = dir;
+        collide = c;
     };
 
     self.stop = function () {
@@ -135,6 +143,7 @@ function Object(config) {
     self.stopAnimation = function() {
         self.animation = undefined;
         self.animationIndex = 0;
+        self.block = false;
     };
 
     function _reloadObjectState() {
@@ -182,6 +191,31 @@ function Object(config) {
                 }
             }
         }
+
+        var pos = {
+            x: facing === _const.right ? (self.x + self.$container.width) : self.x,
+            y: facing === _const.left ? (self.y + self.$container.height) : self.y
+        },
+        dimension = {height: self.height, width: self.width},
+            collided = collide && collision.check(pos, dimension, facing,self.frameRate, self);
+        if (collided) {
+            self.event = {type: 'collision', data: collided};
+        }
+        else if (direction.up) {
+            self.y -= self.range;
+        }
+        else if (direction.right) {
+            self.x += self.range;
+        }
+        else if (direction.down) {
+            self.y += self.range;
+        }
+        else if (direction.left) {
+            self.x -= self.range;
+        }
+
+        self.$container.style.left = self.x + 'px';
+        self.$container.style.top = self.y + 'px';
     }
 
     function resize() {

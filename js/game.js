@@ -17,7 +17,7 @@ function Game() {
     self.play = function (withInteractions) {
         _util.waitUntil(self.finishedLoading, [], function() {
             self.currentStage.placeAll();
-            self.currentStage.lockOn(self.config.mainCharacter.id);
+            self.currentStage.lockOn(entities['character']);
             self.currentStage.activate();
 
             if (_util.isArray(withInteractions)) {
@@ -38,10 +38,10 @@ function Game() {
     };
 
     self.load = function (config) {
-        var mainCharacter = config.mainCharacter, stage = config.stage;
+        var /* mainCharacter = config.mainCharacter, */ stage = config.stage;
         interaction.detector(collision);
 
-        loading[mainCharacter.id] = false;
+        // loading[mainCharacter.id] = false;
         loading[stage.id] = false;
         self.config = config;
 
@@ -61,72 +61,39 @@ function Game() {
                 }
             });
         };
+        if (stage.objects) {
 
-        http.get({
-            url: mainCharacter.sprite,
-            onSuccess: function(response) {
-                loading[config] = true;
-                entities[mainCharacter.id] = new Character({
-                    container: document.createElement('canvas'),
-                    sprite: JSON.parse(response),
-                    isControllable: true,
-                    id: mainCharacter.id,
-                    frameRate: 50,
-                    cd: collision,
-                    position: {
-                        left: 100,
-                        top: 100
-                    },
-                    speed: 5
-                });
+            for (var so=0; so < stage.objects.length; so++) {
 
-                // Find a deferred utility algorithm to be put into the functions file
-                _util.waitUntil(loaded, [stage.id], function() {
-                    self.currentStage.queue(entities[mainCharacter.id]);
-                    loading[mainCharacter.id] = true;
-                }, []);
-
-                if (stage.objects) {
-
-                    for (var so=0; so < stage.objects.length; so++) {
-
-                        if (stage.objects[so].load) {
-                            loading[stage.objects[so].id] = false;
-                            http.get({
-                                id: stage.objects[so].id,
-                                url: stage.objects[so].load,
-                                onSuccess: function(response) {
-                                    var o = JSON.parse(response), objectId = this.id;
-                                    entities[objectId] = new Object({
-                                        canCollide: true,
-                                        cd: collision,
-                                        id: objectId,
-                                        position: {
-                                            left: o.left,
-                                            top: o.top
-                                        },
-                                        height: o.height,
-                                        width: o.width,
-                                        sprite: o
-                                    });
-
-                                    _util.waitUntil(loaded, [stage.id], function() {
-                                        self.currentStage.queue(entities[objectId]);
-                                        loading[objectId] = true;
-                                    }, []);
-                                }
+                if (stage.objects[so].load) {
+                    loading[stage.objects[so].id] = false;
+                    http.get({
+                        id: stage.objects[so].id,
+                        url: stage.objects[so].load,
+                        onSuccess: function(response) {
+                            var o = JSON.parse(response), objectId = this.id;
+                            entities[objectId] = new Object({
+                               canCollide: true,
+                                cd: collision,
+                                id: objectId,
+                                position: {
+                                    left: o.left,
+                                    top: o.top
+                                },
+                                height: o.height,
+                                width: o.width,
+                                sprite: o
                             });
+
+                            _util.waitUntil(loaded, [stage.id], function() {
+                                self.currentStage.queue(entities[objectId]);
+                                loading[objectId] = true;
+                            }, []);
                         }
-                    }
+                    });
                 }
-            },
-            onError: function(response) {
-                console.log('Something went wrong');
-                console.log(response);
-            },
-            headers: {},
-            params: {}
-        });
+            }
+        }
     };
 
     self.finishedLoading = function() {

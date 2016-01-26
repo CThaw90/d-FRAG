@@ -5,7 +5,7 @@ var withInteractions = [
     {
         id: 'interact_with_tree_a',
         object: 'tree_a',
-        trigger: 'main-character',
+        trigger: 'character',
         type: _const.movement,
         does: function(object, trigger, collision) {
             var collided = null;
@@ -17,7 +17,7 @@ var withInteractions = [
                     direction = trigger.trajecting(),
                     range = 5;
 
-                collided = collision.check(position, dimension, direction, range);
+                collided = collision.check(position, dimension, direction, range, trigger);
                 if (collided && collided.collisionId === object.id) {
                     console.log(collided);
                 }
@@ -27,7 +27,7 @@ var withInteractions = [
     {
         id: 'interact_with_steel-door',
         object: 'steel-door',
-        trigger: 'main-character',
+        trigger: 'character',
         type: _const.movement,
         config: {},
         // Use Photo shop to make pictures bigger without losing pixel
@@ -42,7 +42,7 @@ var withInteractions = [
                     direction = trigger.trajecting(),
                     range = 5;
 
-                collided = collision.check(position, dimension, direction, range);
+                collided = collision.check(position, dimension, direction, range, trigger);
                 if (collided && collided.collisionId === object.id && (!object.flag || object.flag === 'closed') && !object.block) {
                     object['animate']({name: 'animateOpen', type: 'iterate', flag: 'open', block: true});
                 }
@@ -55,7 +55,7 @@ var withInteractions = [
     {
         id: 'interact_with_black-door',
         object: 'black-door',
-        trigger: 'main-character',
+        trigger: 'character',
         type: _const.keyPress,
         config: {
             keys: ['shift']
@@ -70,7 +70,7 @@ var withInteractions = [
                     direction = trigger.trajecting(),
                     range = 5;
 
-                collided = collision.check(position, dimension, direction, range);
+                collided = collision.check(position, dimension, direction, range, trigger);
                 if (collided && collided.collisionId === object.id && (!object.flag || object.flag === 'closed') && !object.block) {
                     object['animate']({name: 'animateOpen', type: 'iterate', flag: 'open', block: true});
                 }
@@ -86,7 +86,7 @@ var withInteractions = [
         trigger: 'character',
         type: _const.keyPress,
         config: {
-            keys: ['w', 'a', 's', 'd']
+            keys: ['w', 'a', 's', 'd', 'space']
         },
         does: function(object, trigger, collision, key) {
 
@@ -94,26 +94,40 @@ var withInteractions = [
 
                 if (key.which === _const.keyMap['d'] && !object.block) {
                     object['animate']({name: 'animate-movingRight', type: 'loop', block: true});
+                    object['traject'](_const.right, 5, true);
+                }
+                else if (key.which === _const.keyMap['w'] && !object.block) {
+                    object['animate']({name: 'animate-movingUp', type: 'loop', block: true});
+                    object['traject'](_const.up, 5, true);
+                }
+                else if (key.which === _const.keyMap['a'] && !object.block) {
+                    object['animate']({name: 'animate-movingLeft', type: 'loop', block: true});
+                    object['traject'](_const.left, 5, true);
+                }
+                else if (key.which === _const.keyMap['s'] && !object.block) {
+                    object['animate']({name: 'animate-movingDown', type: 'loop', block: true});
+                    object['traject'](_const.down, 5, true);
+                }
+                else if (key.which === _const.keyMap['space']) {
+                    if (!object.block) {
+                        object['animate']({name: 'animate-movingDown', type: 'loop', block: true});
+                    } else {
+                        object['stopAnimation']();
+                    }
+
                 }
             }
-            else if (key.type === _const.keyUp) {
+            else if (key.type === _const.keyUp && object.block) {
 
-                if (key.which === _const.keyMap['d'] && object.block) {
-                    object['stopAnimation']();
+                switch (key.which) {
+                    case _const.keyMap['d']:
+                    case _const.keyMap['w']:
+                    case _const.keyMap['a']:
+                    case _const.keyMap['s']:
+                        object['stopAnimation']();
+                        object['stop']();
+                        break;
                 }
-            }
-
-            if (key.which === _const.keyMap['d']) {
-                object.move(_const.right, 5);
-            }
-            else if (key.which === _const.keyMap['w']) {
-
-            }
-            else if (key.which === _const.keyMap['s']) {
-
-            }
-            else if (key.which === _const.keyMap['a']) {
-
             }
         }
     }

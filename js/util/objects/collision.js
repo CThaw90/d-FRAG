@@ -54,7 +54,7 @@ function Collision() {
      * @param dir - the direction in which an object entity is going to move
      * @param range - the movement space of an object entity per frameRate
      */
-    self.check = function(pos, dimen, dir, range) {
+    self.check = function(pos, dimen, dir, range, obj) {
         var status = false, axis = null, tmp = range + 1;
         dimen.x = dimen.height;
         dimen.y = dimen.width;
@@ -80,7 +80,7 @@ function Collision() {
             if (CDSObj.vector[axis][pos[axis]]) {
                 var vector = CDSObj.vector[axis][pos[axis]], i = 0;
                 for (; i < vector.length && !status; i++ ) {
-                    if (vector[i].start < pos[reverse(axis)] && vector[i].end > pos[reverse(axis)]) {
+                    if (vector[i].start < pos[reverse(axis)] && vector[i].end > pos[reverse(axis)] && obj.id !== vector[i].id) {
                         // Might use logic to dynamically remove stale vector coordinates who's
                         // object might have been removed prior to the collision event
                         status = {vector: pos[axis], collisionId: vector[i].id};
@@ -88,7 +88,7 @@ function Collision() {
                         // TODO: Fix collision events..i think collision events are broken
                         CDSObj.events[vector[i].id].push(new Date().getTime());
                     }
-                    else if (vector[i].start < (pos[reverse(axis)] + dimen[axis]) && vector[i].end > (pos[reverse(axis)] + dimen[axis])) {
+                    else if (vector[i].start < (pos[reverse(axis)] + dimen[axis]) && vector[i].end > (pos[reverse(axis)] + dimen[axis]) && obj.id !== vector[i].id) {
                         // Might use logic to dynamically remove stale vector coordinates who's
                         // object might have been removed prior to the collision event
                         status = {vector: pos[axis], collisionId: vector[i].id};
@@ -96,19 +96,19 @@ function Collision() {
                         // Fix collision events..i think collision events are broken
                         CDSObj.events[vector[i].id].push(new Date().getTime());
                     }
-                    else if (vector[i].start > (pos[reverse(axis)]) && vector[i].end < (pos[reverse(axis)] + dimen[axis])) {
+                    else if (vector[i].start > (pos[reverse(axis)]) && vector[i].end < (pos[reverse(axis)] + dimen[axis]) && obj.id !== vector[i].id) {
                         // Might use logic to dynamically remove stale vector coordinates who's
                         // object might have been removed prior to the collision event
-                        status = {vector: pos[axis], collisionId: vector.id};
+                        status = {vector: pos[axis], collisionId: vector[i].id};
 
                         // Fix collision events..i think collision events are broken
                         CDSObj.events[vector[i].id].push(new Date().getTime());
                     }
 
-                    else if (vector[i].start === (pos[reverse(axis)]) && vector[i].end === (pos[reverse(axis)] + dimen[axis])) {
+                    else if (vector[i].start === (pos[reverse(axis)]) && vector[i].end === (pos[reverse(axis)] + dimen[axis]) && obj.id !== vector[i].id) {
                         // Might use logic to dynamically remove stale vector coordinates who's
                         // object might have been removed prior to the collision event
-                        status = {vector: pos[axis], collisionId: vector.id};
+                        status = {vector: pos[axis], collisionId: vector[i].id};
 
                         // Fix collision events..i think collision events are broken
                         CDSObj.events[vector[i].id].push(new Date().getTime());
@@ -133,6 +133,7 @@ function Collision() {
             tmp--;
         }
 
+        console.log(status);
         return status;
     };
 
@@ -156,7 +157,6 @@ function Collision() {
         // LEFT_SIDE = parseInt(object.x);
         if (CDSObj.vector.x[LEFT_SIDE]) {
             CDSObj.vector.x[LEFT_SIDE].push({start: TOP_SIDE, end: BOTTOM_SIDE, id: object.id});
-            console.log('Duplicate coordinate at vector x: ' + LEFT_SIDE);
 
         } else {
             CDSObj.vector.x[LEFT_SIDE] = [{start: TOP_SIDE, end: BOTTOM_SIDE, id: object.id}];
@@ -167,7 +167,6 @@ function Collision() {
         // RIGHT_SIDE = parseInt(object.x) + parseInt(object.width);
         if (CDSObj.vector.x[RIGHT_SIDE]) {
             CDSObj.vector.x[RIGHT_SIDE].push({start: TOP_SIDE, end: BOTTOM_SIDE, id: object.id});
-            console.log('Duplicate coordinate at vector x: ' + parse)
 
         } else {
             CDSObj.vector.x[RIGHT_SIDE] = [{start: TOP_SIDE, end: BOTTOM_SIDE, id: object.id}];
@@ -177,7 +176,6 @@ function Collision() {
         // CDSObj.vector.y[parseInt(object.y)] = {start: parseInt(object.x), end: end, id: object.id};
         if (CDSObj.vector.y[TOP_SIDE]) {
             CDSObj.vector.y[TOP_SIDE].push({start: LEFT_SIDE, end: RIGHT_SIDE, id: object.id});
-            console.log('Duplicate coordinate at vector y: ' + object.y);
 
         } else {
             CDSObj.vector.y[TOP_SIDE] = [{start: LEFT_SIDE, end: RIGHT_SIDE, id: object.id}];
@@ -187,7 +185,6 @@ function Collision() {
         // CDSObj.vector.y[(parseInt(object.y) + parseInt(object.height))] = {start: parseInt(object.x), end: end, id: object.id};
         if (CDSObj.vector.y[BOTTOM_SIDE]) {
             CDSObj.vector.y[BOTTOM_SIDE].push({start: LEFT_SIDE, end: RIGHT_SIDE, id: object.id});
-            console.log('Duplicate coordinate at vector y: ' + BOTTOM_SIDE);
 
         } else {
             CDSObj.vector.y[BOTTOM_SIDE] = [{start: LEFT_SIDE, end: RIGHT_SIDE, id: object.id}]
