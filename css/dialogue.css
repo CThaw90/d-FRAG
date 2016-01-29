@@ -1,0 +1,19 @@
+/* Stylesheet rules for dialogue box */
+div.dialogue-arrow {
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    border-bottom: 10px solid black;
+    height: 0;
+    width: 0;
+}
+
+div.dialogue-box {
+    background-color: #000000;
+    display: inline-block;
+    overflow-y: scroll;
+    text-align: center;
+    max-height: 70%;
+    max-width: 30%;
+    color: #FFFFFF;
+    padding: 10px;
+}

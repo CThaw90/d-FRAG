@@ -3,11 +3,15 @@
  */
 function Object(config) {
 
+    if (config.id === 'tree_a') {
+        console.log('Stop');
+    }
+
     var self = this,
         collision = config.cd,
-        sprite, frameHandle, image,
         direction = {left: false, right: false, up: false, down: false},
-        facing, collide;
+        sprite = _util.isObject(config.sprite) ? config.sprite : {},
+        frameHandle, image, facing, collide, dialogue;
 
     // The container holding the object sprite or reference point
     self.$container = document.createElement('canvas');
@@ -16,15 +20,15 @@ function Object(config) {
     self.position = config.position || {left: 0, top: 0};
 
     // Applies position coordinates to parent container
-    self.$container.style.left = self.position.left+'px';
-    self.$container.style.top = self.position.top+'px';
+    self.$container.style.left = ( sprite.left || self.position.left ) + 'px';
+    self.$container.style.top = ( sprite.top || self.position.top ) + 'px';
     self.$container.style.position = 'absolute';
 
-    self.$container.height = config.height;
-    self.$container.width = config.width;
+    self.$container.height = config.height || sprite.height;
+    self.$container.width = config.width || sprite.width;
 
-    self.height = config.height;
-    self.width = config.width;
+    self.height = config.height || sprite.height;
+    self.width = config.width || sprite.width;
 
     // Captures the context of the object canvas
     self.ctx = self.$container.getContext('2d');
@@ -58,6 +62,10 @@ function Object(config) {
             0, 0,
             config.width, config.height
         );
+    }
+
+    if (config.canDialogue) {
+        dialogue = new DialogueBox();
     }
 
     // Binds the image to the container canvas

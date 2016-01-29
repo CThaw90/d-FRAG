@@ -1,4 +1,13 @@
 {
+  "canCollide" : true,
+  "canDialogue" : true,
+  "sprite" : {
+    "imageSrc" : "img/filters/blank.png",
+    "height" : 200,
+    "width" : 240,
+    "left" : 392,
+    "top" : 170
+  },
   "src": "img/fillers/blank.png",
   "oldHeight" : 250,
   "height" : 200,

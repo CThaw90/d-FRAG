@@ -177,6 +177,19 @@ var withInteractions = [
                 }
             }
         }
+    },
+    {
+        id: 'interaction_between_character_and_tree',
+        object: 'character',
+        trigger: 'tree_a',
+        objects: [], // TODO: Make an array of objects accessible to the does function
+        type: _const.keyPress,
+        config: {
+            keys: ['space']
+        },
+        does: function(object, trigger, collision, key) {
+
+        }
     }
 ];
 var withObjects = {

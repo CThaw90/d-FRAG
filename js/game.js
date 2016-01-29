@@ -73,15 +73,10 @@ function Game() {
                         onSuccess: function(response) {
                             var o = JSON.parse(response), objectId = this.id;
                             entities[objectId] = new Object({
-                               canCollide: true,
+                                canDialogue: o.canDialogue,
+                                canCollide: o.canCollide,
                                 cd: collision,
                                 id: objectId,
-                                position: {
-                                    left: o.left,
-                                    top: o.top
-                                },
-                                height: o.height,
-                                width: o.width,
                                 sprite: o
                             });
 
