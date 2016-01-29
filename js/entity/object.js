@@ -3,10 +3,6 @@
  */
 function Object(config) {
 
-    if (config.id === 'tree_a') {
-        console.log('Stop');
-    }
-
     var self = this,
         collision = config.cd,
         direction = {left: false, right: false, up: false, down: false},
@@ -41,17 +37,17 @@ function Object(config) {
 
     sprite = _util.isObject(config.sprite) ? config.sprite : {};
 
-    if (sprite.src) {
+    if (sprite.src || sprite['imageSrc']) {
         image = new Image();
-        image.src = sprite.src;
-        image.height = config.height;
-        image.width = config.width;
+        image.src = sprite.src || sprite['imageSrc'];
+        image.height = config.height || sprite.height;
+        image.width = config.width || sprite.width;
         image.onload = function() {
             self.ctx.drawImage(
                 this, sprite.x || 0, sprite.y || 0,
-                sprite['width'], sprite['height'],
+                sprite.width, sprite.height,
                 0, 0,
-                config.width, config.height
+                sprite.width, sprite.height
             );
         }
     } else if (sprite.object) {

@@ -1,7 +1,10 @@
 {
-  "src" : "img/fillers/blank.png",
-  "height" : 200,
-  "width" : 235,
-  "left" : 850,
-  "top" : 1
+  "canCollide": true,
+  "sprite" : {
+    "imageSrc" : "img/fillers/blank.png",
+    "height" : 200,
+    "width" : 235,
+    "left" : 850,
+    "top" : 0
+  }
 }

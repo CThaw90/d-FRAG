@@ -75,9 +75,9 @@ function Game() {
                             entities[objectId] = new Object({
                                 canDialogue: o.canDialogue,
                                 canCollide: o.canCollide,
+                                sprite: o.sprite,
                                 cd: collision,
-                                id: objectId,
-                                sprite: o
+                                id: objectId
                             });
 
                             _util.waitUntil(loaded, [stage.id], function() {

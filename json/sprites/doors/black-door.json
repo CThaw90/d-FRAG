@@ -1,74 +1,74 @@
 {
-  "src" : "img/objects/moderndoor.png",
-  "sectionHeight" : 75,
-  "sectionWidth" : 85,
-  "height" : 65,
-  "width" : 65,
-  "left" : 400,
-  "top" : 0,
-  "x" : 63,
-  "y" : 0,
-  "animationVector" : {
-    "animateOpen" : [
-      {
-        "description" : "Completely closed door",
-        "height" : 125,
-        "width" : 175,
-        "x" : 63,
-        "y" : 0
-      },
-      {
-        "description" : "Door first stage is opening",
-        "height" : 125,
-        "width" : 175,
-        "x" : 63,
-        "y" : 65
-      },
-      {
-        "description" : "Door second stage is opening",
-        "height" : 125,
-        "width" : 175,
-        "x" : 63,
-        "y" : 130
-      },
-      {
-        "description" : "Completely open",
-        "height" : 125,
-        "width" : 175,
-        "x" : 63,
-        "y" : 195
-
-      }
-    ],
-    "animateClosed" : [
-      {
-        "description" : "Completely open",
-        "height" : 125,
-        "width" : 175,
-        "x" : 63,
-        "y" : 195
-      },
-      {
-        "description" : "Door first stage is closing",
-        "height" : 125,
-        "width" : 175,
-        "x" : 63,
-        "y" : 130
-      },
-      {
-        "description" : "Door second stage is closing",
-        "height" : 125,
-        "width" : 175,
-        "x" : 63,
-        "y" : 65
-      },
-      {
-        "description" : "Door is completely closed",
-        "height" : 125,
-        "width" : 175,
-        "x" : 63,
-        "y" : 0
-      }
-    ]
+  "canCollide" : true,
+  "sprite" : {
+    "imageSrc" : "img/objects/moderndoor.png",
+    "height" : 65,
+    "width" : 65,
+    "left" : 400,
+    "top" : 0,
+    "x" : 63,
+    "y" : 0,
+    "animationVector" : {
+      "animateOpen": [
+        {
+          "description": "Completely closed door",
+          "height": 125,
+          "width": 175,
+          "x": 63,
+          "y": 0
+        },
+        {
+          "description": "Door first stage is opening",
+          "height": 125,
+          "width": 175,
+          "x": 63,
+          "y": 65
+        },
+        {
+          "description": "Door second stage is opening",
+          "height": 125,
+          "width": 175,
+          "x": 63,
+          "y": 130
+        },
+        {
+          "description": "Completely open",
+          "height": 125,
+          "width": 175,
+          "x": 63,
+          "y": 195
+        }
+      ],
+      "animateClosed": [
+        {
+          "description": "Completely open",
+          "height": 125,
+          "width": 175,
+          "x": 63,
+          "y": 195
+        },
+        {
+          "description": "Door first stage is closing",
+          "height": 125,
+          "width": 175,
+          "x": 63,
+          "y": 130
+        },
+        {
+          "description": "Door second stage is closing",
+          "height": 125,
+          "width": 175,
+          "x": 63,
+          "y": 65
+        },
+        {
+          "description": "Door is completely closed",
+          "height": 125,
+          "width": 175,
+          "x": 63,
+          "y": 0
+        }
+      ]
+    }
   }
 }
