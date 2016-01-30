@@ -6,17 +6,24 @@
  * between objects and other game entities.
  *
  * */
-function DialogueBox() {
+function DialogueBox(entity) {
 
-    var self = this, $arrow, displayed = false;
+    var self = this, $arrow, displayed = false, entity = entity;
 
-    self.show = function(entity, text) {
-
+    self.show = function(text) {
+        console.log(entity.id + ' says: ' + text);
+        self.$container.style.top = entity.y + 'px';
+        self.$container.style.left = entity.x + 'px';
+        // TODO: Put this in functions to make a consistent call across all browsers
+        self.$container.innerText = text;
+        self.$container.textContent = text;
+        entity.$container.parentNode.appendChild(self.$container);
         displayed = true;
     };
 
     self.remove = function() {
-
+        console.log(entity.id + ' stopped talking');
+        entity.$container.parentNode.removeChild(self.$container);
         displayed = false;
     };
 

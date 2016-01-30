@@ -1,6 +1,7 @@
 {
   "canCollide" : true,
   "canDialogue" : true,
+  "facing": "down",
   "sprite" : {
     "imageSrc" : "img/characters/spritesheet.png",
     "height" : 80,

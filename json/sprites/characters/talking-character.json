@@ -1,14 +1,15 @@
 {
   "canCollide" : true,
   "canDialogue" : true,
+  "facing": "left",
   "sprite" : {
     "imageSrc" : "img/characters/spritesheet.png",
     "height" : 80,
     "width" : 50,
-    "left" : 100,
-    "top" : 50,
-    "y" : 210,
-    "x" : 10,
+    "left" : 3515,
+    "top" : 455,
+    "y" : 310,
+    "x" : 82,
     "animationVector": {
       "animate-movingUp": [
         {

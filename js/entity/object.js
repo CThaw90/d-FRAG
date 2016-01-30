@@ -7,7 +7,8 @@ function Object(config) {
         collision = config.cd,
         direction = {left: false, right: false, up: false, down: false},
         sprite = _util.isObject(config.sprite) ? config.sprite : {},
-        frameHandle, image, facing, collide, dialogue;
+        dialogue = config.canDialogue ? new DialogueBox(this) : false,
+        facing = config.facing, frameHandle, image, collide;
 
     // The container holding the object sprite or reference point
     self.$container = document.createElement('canvas');
@@ -58,10 +59,6 @@ function Object(config) {
             0, 0,
             config.width, config.height
         );
-    }
-
-    if (config.canDialogue) {
-        dialogue = new DialogueBox();
     }
 
     // Binds the image to the container canvas
@@ -148,6 +145,21 @@ function Object(config) {
         self.animation = undefined;
         self.animationIndex = 0;
         self.block = false;
+    };
+
+    self.talk = function(message) {
+        if (dialogue) {
+            dialogue.show(message);
+        }
+    };
+
+    self.quiet = function() {
+        if (dialogue) {
+            dialogue.remove();
+        }
+    };
+    self.isTalking = function() {
+        return dialogue && dialogue.isDisplayed();
     };
 
     function _reloadObjectState() {

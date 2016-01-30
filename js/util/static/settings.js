@@ -3,28 +3,6 @@
  */
 var withInteractions = [
     {
-        id: 'interact_with_tree_a',
-        object: 'tree_a',
-        trigger: 'character',
-        type: _const.movement,
-        does: function(object, trigger, collision) {
-            var collided = null;
-            if (collision.exists(object.id)) {
-                var position = {
-                    x: trigger.trajecting() === _const.right ? trigger.x + trigger.width : trigger.x,
-                    y: trigger.trajecting() === _const.down ? trigger.y + trigger.height : trigger.y
-                }, dimension = {height: trigger.height, width: trigger.width},
-                    direction = trigger.trajecting(),
-                    range = 5;
-
-                collided = collision.check(position, dimension, direction, range, trigger);
-                if (collided && collided.collisionId === object.id) {
-                    console.log(collided);
-                }
-            }
-        }
-    },
-    {
         id: 'interact_with_steel-door',
         object: 'steel-door',
         trigger: 'character',
@@ -81,9 +59,9 @@ var withInteractions = [
         }
     },
     {
-        id: 'interact_with_character',
-        object: 'character',
-        trigger: 'character',
+        id: 'interact_with_player-two',
+        object: 'player-two',
+        trigger: 'player-two',
         type: _const.keyPress,
         config: {
             keys: ['w', 'a', 's', 'd']
@@ -132,9 +110,9 @@ var withInteractions = [
         }
     },
     {
-        id: 'interact_with_player-two',
-        object: 'player-two',
-        trigger: 'player-two',
+        id: 'interact_with_character',
+        object: 'character',
+        trigger: 'character',
         type: _const.keyPress,
         config: {
             keys: ['leftArrow', 'upArrow', 'rightArrow', 'downArrow']
@@ -179,24 +157,36 @@ var withInteractions = [
         }
     },
     {
-        id: 'interaction_between_character_and_tree',
-        object: 'character',
-        trigger: 'tree_a',
+        id: 'interaction_between_character_and_talking-character',
+        object: 'talking-character',
+        trigger: 'character',
         objects: [], // TODO: Make an array of objects accessible to the does function
         type: _const.keyPress,
         config: {
             keys: ['space']
         },
         does: function(object, trigger, collision, key) {
+            var collided = null;
+            if (collision.exists(object.id) && key.type === _const.keyDown) {
+                var position = {
+                        x: trigger.trajecting() === _const.right ? trigger.x + trigger.width : trigger.x,
+                        y: trigger.trajecting() === _const.down ? trigger.x + trigger.height : trigger.y
+                    }, dimension = {height: trigger.height, width: trigger.width},
+                    direction = trigger.trajecting(),
+                    range = 5;
 
+                collided = collision.check(position, dimension, direction, range, trigger);
+                if (collided && collided.collisionId === object.id && !object['isTalking']()) {
+                    object['talk']('Hello, there! I have learned to Talk!');
+                }
+                else if (collided && collided.collisionId === object.id && object['isTalking']()) {
+                    object['quiet']();
+                }
+            }
         }
     }
 ];
 var withObjects = {
-    mainCharacter: {
-        sprite: _const.basePath + 'json/sprites/main-character.json',
-        id: 'main-character'
-    },
     stage: {
         backgroundImage: _const.basePath + 'img/stages/grass.png',
         id: 'main-stage',
@@ -214,7 +204,8 @@ var withObjects = {
             {load: _const.basePath + 'json/sprites/doors/steel-door.json', id: 'steel-door'},
             {load: _const.basePath + 'json/sprites/doors/black-door.json', id: 'black-door'},
             {load: _const.basePath + 'json/sprites/characters/character.json', id: 'character'},
-            {load: _const.basePath + 'json/sprites/characters/player-two.json', id: 'player-two'}
+            {load: _const.basePath + 'json/sprites/characters/player-two.json', id: 'player-two'},
+            {load: _const.basePath + 'json/sprites/characters/talking-character.json', id: 'talking-character'}
         ]
     }
 };

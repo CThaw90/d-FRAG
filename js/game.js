@@ -17,7 +17,7 @@ function Game() {
     self.play = function (withInteractions) {
         _util.waitUntil(self.finishedLoading, [], function() {
             self.currentStage.placeAll();
-            self.currentStage.lockOn(entities['character']);
+            self.currentStage.lockOn('character');
             self.currentStage.activate();
 
             if (_util.isArray(withInteractions)) {
@@ -75,6 +75,7 @@ function Game() {
                             entities[objectId] = new Object({
                                 canDialogue: o.canDialogue,
                                 canCollide: o.canCollide,
+                                facing: o.facing,
                                 sprite: o.sprite,
                                 cd: collision,
                                 id: objectId
