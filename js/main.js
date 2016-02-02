@@ -17,6 +17,7 @@
     // Start game play after document finishes loading
     _util.waitUntil(_util.domLoaded, [], function() {
 
+        scrollTo(0, 0);
         buttonElem = document.createElement('button');
         buttonElem.setAttribute('id', 'start-game');
         buttonElem.textContent = 'Start Game'; // Firefox support API
