@@ -40,8 +40,8 @@ function Interactivity() {
      * @attribute does - A function that determines what happens when an interaction has been triggered
      */
     self.add = function(interaction) {
-        var objectInfo = null;
-        if (!interaction.id || !interaction.object || !interaction.trigger) {
+        var objectInfo = {}, objects = [];
+        if (!interaction.id) {
             console.error('Cannot add interaction. Incomplete interaction configuration');
             return;
         }
@@ -50,9 +50,13 @@ function Interactivity() {
 
             case _const.movement:
 
-                interactions.mTrigger[interaction.id] = {trigger: interaction.trigger, object: interaction.object};
+                interactions.mTrigger[interaction.id] = interaction.objects;
+                // TODO: Place useful information about the interaction event. Store handle object
+                interactions.info[interaction.id] = {};
 
-                objectInfo = interactions.mTrigger[interaction.id];
+                objects = interactions.mTrigger[interaction.id];
+
+                objectInfo['trigger'] = interaction.trigger;
                 objectInfo['snapshot'] = { x: objectInfo['trigger'].x,  y: objectInfo['trigger'].y };
                 // Set an interval loop that checks whether the coordinates of the
                 // object has changed. If it has the object has moved therefore
@@ -62,7 +66,7 @@ function Interactivity() {
                     if (objectInfo['snapshot'].x !== objectInfo['trigger'].x || objectInfo['snapshot'].y !== objectInfo['trigger'].y
                         || objectInfo['snapshot'].trajecting !== objectInfo['trigger'].trajecting()) {
 
-                        interaction.does(objectInfo['object'], objectInfo['trigger'], cd);
+                        interaction.does(self, objectInfo['trigger'], objects, cd);
 
                         objectInfo['snapshot'].trajecting = objectInfo['trigger'].trajecting();
                         objectInfo['snapshot'].x = objectInfo['trigger'].x;
@@ -74,19 +78,21 @@ function Interactivity() {
                 break;
 
             case _const.keyPress:
-                interactions.kTrigger[interaction.id] = {trigger: interaction.trigger, object: interaction.object};
+                interactions.kTrigger[interaction.id] = interaction.objects;
+                // TODO: Place useful information about the interaction event. Store handle object
+                interactions.info[interaction.id] = {};
 
-                objectInfo = interactions.kTrigger[interaction.id];
+                objects = interactions.kTrigger[interaction.id];
                 // Add a listener that listens for the key press and the buttons
                 // associated with that action
-                addEventListener(_const.keyDown, function(event) {
+                interactions.info[interaction.id]['listener'] = addEventListener(_const.keyDown, function(event) {
                     if (keyPressed(event.keyCode, interaction.config.keys)) {
-                        interaction.does(objectInfo['object'], objectInfo['trigger'], cd, event);
+                        interaction.does(self, objects, cd, event);
                     }
                 });
-                addEventListener(_const.keyUp, function(event) {
+                interactions.info[interaction.id]['listener'] = addEventListener(_const.keyUp, function(event) {
                     if (keyPressed(event.keyCode, interaction.config.keys)) {
-                        interaction.does(objectInfo['object'], objectInfo['trigger'], cd, event);
+                        interaction.does(self, objects, cd, event);
                     }
                 });
                 break;
@@ -95,6 +101,10 @@ function Interactivity() {
                 console.error('Invalid interaction type : ' + interaction.type);
                 break;
         }
+    };
+
+    self.info = function(id) {
+        return interactions.info[id];
     };
 
     self.remove = function(id) {

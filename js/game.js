@@ -25,7 +25,7 @@ function Game() {
                     var interact = withInteractions[index];
                     interaction.add({
                         id: interact.id,
-                        object: entities[interact.object],
+                        objects: populateObjects(interact.objects),
                         trigger: entities[interact.trigger],
                         type: interact.type,
                         config: interact.config,
@@ -105,6 +105,16 @@ function Game() {
     self.getEntityById = function(id) {
         return entities.hasOwnProperty(id) ? entities[id] : {};
     };
+
+    function populateObjects(objects) {
+        var o = {};
+        if (objects && _util.isArray(objects)) {
+            for (var i = 0; i < objects.length; i++) {
+                o[objects[i]] = entities[objects[i]];
+            }
+        }
+        return o;
+    }
 
     function loaded(id) {
         return loading.hasOwnProperty(id) &&

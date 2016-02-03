@@ -4,27 +4,26 @@
 var withInteractions = [
     {
         id: 'interact_with_steel-door',
-        object: 'steel-door',
+        objects: ['steel-door', 'character'],
         trigger: 'character',
         type: _const.movement,
-        config: {},
         // Use Photo shop to make pictures bigger without losing pixel
         // quality to match the size of the character sprite
-        does: function(object, trigger, collision) {
-            var collided = null;
-            if (collision.exists(object.id)) {
+        does: function(interact, trigger, objects, collision) {
+            console.log('Moved');
+            var collided = null, object = objects['steel-door'];
+            if (collision.exists('steel-door')) {
                 var position = {
                     x: trigger.trajecting() === _const.right ? trigger.x + trigger.width : trigger.x,
                     y: trigger.trajecting() === _const.down ? trigger.y + trigger.height : trigger.y
                 }, dimension = {height: trigger.height, width: trigger.width},
-                    direction = trigger.trajecting(),
-                    range = 5;
+                    direction = trigger.trajecting(), range = 5;
 
                 collided = collision.check(position, dimension, direction, range, trigger);
-                if (collided && collided.collisionId === object.id && (!object.flag || object.flag === 'closed') && !object.block) {
+                if (collided && collided.collisionId === object.id && (!object['flag'] || object['flag'] === 'closed') && !object.block) {
                     object['animate']({name: 'animateOpen', type: 'iterate', flag: 'open', block: true});
                 }
-                else if (object.flag === 'open' && !object.block) {
+                else if (object['flag'] === 'open' && !object.block) {
                     object['animate']({name: 'animateClosed', type: 'iterate', flag: 'closed', block: true});
                 }
             }
@@ -32,21 +31,19 @@ var withInteractions = [
     },
     {
         id: 'interact_with_black-door',
-        object: 'black-door',
-        trigger: 'player-two',
+        objects: ['black-door', 'player-two'],
         type: _const.keyPress,
         config: {
             keys: ['space']
         },
-        does: function(object, trigger, collision, key) {
-            var collided = null;
+        does: function(interact, objects, collision, key) {
+            var collided = null, object = objects['black-door'], trigger = objects['player-two'];
             if (collision.exists(object.id) && key.type === _const.keyDown) {
                 var position = {
                     x: trigger.trajecting() === _const.right ? trigger.x + trigger.width : trigger.x,
                     y: trigger.trajecting() === _const.down ? trigger.x + trigger.height : trigger.y
                 }, dimension = {height: trigger.height, width: trigger.width},
-                    direction = trigger.trajecting(),
-                    range = 5;
+                    direction = trigger.trajecting(), range = 5;
 
                 collided = collision.check(position, dimension, direction, range, trigger);
                 if (collided && collided.collisionId === object.id && (!object.flag || object.flag === 'closed') && !object.block) {
@@ -59,66 +56,14 @@ var withInteractions = [
         }
     },
     {
-        id: 'interact_with_player-two',
-        object: 'player-two',
-        trigger: 'player-two',
-        type: _const.keyPress,
-        config: {
-            keys: ['w', 'a', 's', 'd']
-        },
-        does: function(object, trigger, collision, key) {
-
-            if (key.type === _const.keyDown) {
-
-                if (key.which === _const.keyMap['d'] && !object.block) {
-                    object['animate']({name: 'animate-movingRight', type: 'loop', block: true});
-                    object['traject'](_const.right, 5, true);
-                }
-                else if (key.which === _const.keyMap['w'] && !object.block) {
-                    object['animate']({name: 'animate-movingUp', type: 'loop', block: true});
-                    object['traject'](_const.up, 5, true);
-                }
-                else if (key.which === _const.keyMap['a'] && !object.block) {
-                    object['animate']({name: 'animate-movingLeft', type: 'loop', block: true});
-                    object['traject'](_const.left, 5, true);
-                }
-                else if (key.which === _const.keyMap['s'] && !object.block) {
-                    object['animate']({name: 'animate-movingDown', type: 'loop', block: true});
-                    object['traject'](_const.down, 5, true);
-                }
-                else if (key.which === _const.keyMap['space']) {
-                    if (!object.block) {
-                        object['animate']({name: 'animate-movingDown', type: 'loop', block: true});
-                    } else {
-                        object['stopAnimation']();
-                    }
-
-                }
-            }
-            else if (key.type === _const.keyUp && object.block) {
-
-                switch (key.which) {
-                    case _const.keyMap['d']:
-                    case _const.keyMap['w']:
-                    case _const.keyMap['a']:
-                    case _const.keyMap['s']:
-                        object['stopAnimation']();
-                        object['stop']();
-                        break;
-                }
-            }
-        }
-    },
-    {
         id: 'interact_with_character',
-        object: 'character',
-        trigger: 'character',
+        objects: ['character'],
         type: _const.keyPress,
         config: {
             keys: ['leftArrow', 'upArrow', 'rightArrow', 'downArrow']
         },
-        does: function(object, trigger, collision, key) {
-
+        does: function(interact, objects, collision, key) {
+            var object = objects['character'];
             if (key.type === _const.keyDown && !object.block) {
 
                 switch (key.which) {
@@ -136,6 +81,7 @@ var withInteractions = [
                         object['animate']({name: 'animate-movingLeft', type: 'loop', block: true});
                         object['traject'](_const.left, 5, true);
                         break;
+
                     case _const.keyMap['downArrow']:
                         object['animate']({name: 'animate-movingDown', type: 'loop', block: true});
                         object['traject'](_const.down, 5, true);
@@ -157,16 +103,61 @@ var withInteractions = [
         }
     },
     {
+        id: 'interact_with_player-two',
+        objects: ['player-two'],
+        type: _const.keyPress,
+        config: {
+            keys: ['w', 'a', 's', 'd']
+        },
+        does: function(interact, objects, collision, key) {
+            var object = objects['player-two'];
+            if (key.type === _const.keyDown && !object.block) {
+
+                switch (key.which) {
+                    case _const.keyMap['d']:
+                        object['animate']({name: 'animate-movingRight', type: 'loop', block: true});
+                        object['traject'](_const.right, 5, true);
+                        break;
+
+                    case _const.keyMap['w']:
+                        object['animate']({name: 'animate-movingUp', type: 'loop', block: true});
+                        object['traject'](_const.up, 5, true);
+                        break;
+
+                    case _const.keyMap['a']:
+                        object['animate']({name: 'animate-movingLeft', type: 'loop', block: true});
+                        object['traject'](_const.left, 5, true);
+                        break;
+
+                    case _const.keyMap['s']:
+                        object['animate']({name: 'animate-movingDown', type: 'loop', block: true});
+                        object['traject'](_const.down, 5, true);
+                        break;
+                }
+            }
+            else if (key.type === _const.keyUp && object.block) {
+
+                switch (key.which) {
+                    case _const.keyMap['d']:
+                    case _const.keyMap['w']:
+                    case _const.keyMap['a']:
+                    case _const.keyMap['s']:
+                        object['stopAnimation']();
+                        object['stop']();
+                        break;
+                }
+            }
+        }
+    },
+    {
         id: 'interaction_between_character_and_talking-character',
-        object: 'talking-character',
-        trigger: 'character',
-        objects: [], // TODO: Make an array of objects accessible to the does function
+        objects: ['character','talking-character'],
         type: _const.keyPress,
         config: {
             keys: ['space']
         },
-        does: function(object, trigger, collision, key) {
-            var collided = null;
+        does: function(interact, objects, collision, key) {
+            var collided = null, object = objects['talking-character'], trigger = objects['character'];
             if (collision.exists(object.id) && key.type === _const.keyDown) {
                 var position = {
                         x: trigger.trajecting() === _const.right ? trigger.x + trigger.width : trigger.x,
