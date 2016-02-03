@@ -31,14 +31,14 @@ var withInteractions = [
     },
     {
         id: 'interact_with_black-door',
-        objects: ['black-door', 'player-two'],
+        objects: ['black-door', 'harold'],
         type: _const.keyPress,
         active: true,
         config: {
             keys: ['space']
         },
         does: function(interact, objects, collision, key) {
-            var collided = null, object = objects['black-door'], trigger = objects['player-two'];
+            var collided = null, object = objects['black-door'], trigger = objects['harold'];
             if (collision.exists(object.id) && key.type === _const.keyDown) {
                 var position = {
                     x: trigger.trajecting() === _const.right ? trigger.x + trigger.width : trigger.x,
@@ -105,15 +105,15 @@ var withInteractions = [
         }
     },
     {
-        id: 'interact_with_player-two',
-        objects: ['player-two'],
+        id: 'interact_with_harold',
+        objects: ['harold'],
         type: _const.keyPress,
         active: true,
         config: {
             keys: ['w', 'a', 's', 'd']
         },
         does: function(interact, objects, collision, key) {
-            var object = objects['player-two'];
+            var object = objects['harold'];
             if (key.type === _const.keyDown && !object.block) {
 
                 switch (key.which) {
@@ -154,14 +154,14 @@ var withInteractions = [
     },
     {
         id: 'interaction_between_character_and_talking-character',
-        objects: ['character','talking-character'],
+        objects: ['character','mr-ree'],
         type: _const.keyPress,
         active: true,
         config: {
             keys: ['space']
         },
         does: function(interact, objects, collision, key) {
-            var collided = null, object = objects['talking-character'], trigger = objects['character'];
+            var collided = null, object = objects['mr-ree'], trigger = objects['character'];
             if (collision.exists(object.id) && key.type === _const.keyDown) {
                 var position = {
                         x: trigger.trajecting() === _const.right ? trigger.x + trigger.width : trigger.x,
@@ -201,8 +201,11 @@ var withObjects = {
             {load: _const.basePath + 'json/sprites/doors/steel-door.json', id: 'steel-door'},
             {load: _const.basePath + 'json/sprites/doors/black-door.json', id: 'black-door'},
             {load: _const.basePath + 'json/sprites/characters/character.json', id: 'character'},
-            {load: _const.basePath + 'json/sprites/characters/player-two.json', id: 'player-two'},
-            {load: _const.basePath + 'json/sprites/characters/talking-character.json', id: 'talking-character'}
+            {load: _const.basePath + 'json/sprites/characters/harold.json', id: 'harold'},
+            // {load: _const.basePath + 'json/sprites/characters/player-two.json', id: 'player-two'},
+            // {load: _const.basePath + 'json/sprites/characters/talking-character.json', id: 'talking-character'},
+            {load: _const.basePath + 'json/sprites/characters/mr-lorenzo.json', id: 'mr-lorenzo'},
+            {load: _const.basePath + 'json/sprites/characters/mr-ree.json', id: 'mr-ree'}
         ]
     }
 };
