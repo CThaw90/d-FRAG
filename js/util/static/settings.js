@@ -7,10 +7,10 @@ var withInteractions = [
         objects: ['steel-door', 'character'],
         trigger: 'character',
         type: _const.movement,
+        active: true,
         // Use Photo shop to make pictures bigger without losing pixel
         // quality to match the size of the character sprite
         does: function(interact, trigger, objects, collision) {
-            console.log('Moved');
             var collided = null, object = objects['steel-door'];
             if (collision.exists('steel-door')) {
                 var position = {
@@ -33,6 +33,7 @@ var withInteractions = [
         id: 'interact_with_black-door',
         objects: ['black-door', 'player-two'],
         type: _const.keyPress,
+        active: true,
         config: {
             keys: ['space']
         },
@@ -41,7 +42,7 @@ var withInteractions = [
             if (collision.exists(object.id) && key.type === _const.keyDown) {
                 var position = {
                     x: trigger.trajecting() === _const.right ? trigger.x + trigger.width : trigger.x,
-                    y: trigger.trajecting() === _const.down ? trigger.x + trigger.height : trigger.y
+                    y: trigger.trajecting() === _const.down ? trigger.y + trigger.height : trigger.y
                 }, dimension = {height: trigger.height, width: trigger.width},
                     direction = trigger.trajecting(), range = 5;
 
@@ -59,6 +60,7 @@ var withInteractions = [
         id: 'interact_with_character',
         objects: ['character'],
         type: _const.keyPress,
+        active: true,
         config: {
             keys: ['leftArrow', 'upArrow', 'rightArrow', 'downArrow']
         },
@@ -106,6 +108,7 @@ var withInteractions = [
         id: 'interact_with_player-two',
         objects: ['player-two'],
         type: _const.keyPress,
+        active: true,
         config: {
             keys: ['w', 'a', 's', 'd']
         },
@@ -153,6 +156,7 @@ var withInteractions = [
         id: 'interaction_between_character_and_talking-character',
         objects: ['character','talking-character'],
         type: _const.keyPress,
+        active: true,
         config: {
             keys: ['space']
         },
@@ -161,7 +165,7 @@ var withInteractions = [
             if (collision.exists(object.id) && key.type === _const.keyDown) {
                 var position = {
                         x: trigger.trajecting() === _const.right ? trigger.x + trigger.width : trigger.x,
-                        y: trigger.trajecting() === _const.down ? trigger.x + trigger.height : trigger.y
+                        y: trigger.trajecting() === _const.down ? trigger.y + trigger.height : trigger.y
                     }, dimension = {height: trigger.height, width: trigger.width},
                     direction = trigger.trajecting(),
                     range = 5;
@@ -169,8 +173,10 @@ var withInteractions = [
                 collided = collision.check(position, dimension, direction, range, trigger);
                 if (collided && collided.collisionId === object.id && !object['isTalking']()) {
                     object['talk']('Hello, there! I have learned to Talk!');
+                    interact.whiteListDisable('interaction_between_character_and_talking-character');
                 }
                 else if (collided && collided.collisionId === object.id && object['isTalking']()) {
+                    interact.enableAll();
                     object['quiet']();
                 }
             }

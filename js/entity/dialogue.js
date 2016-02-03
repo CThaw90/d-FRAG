@@ -18,7 +18,6 @@ function DialogueBox(entity) {
         self.$container.style.left = (entity.x + (entity.width / 2) - (containerRect.width /2)) + 'px';
         self.$container.style.top = (entity.y + entity.height + 15) + 'px';
 
-
         entity.$container.parentNode.appendChild($arrow);
         var arrowRect = $arrow.getBoundingClientRect();
         $arrow.style.left = (entity.x + (entity.width / 2) - (arrowRect.width / 2)) + 'px';

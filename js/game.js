@@ -27,6 +27,7 @@ function Game() {
                         id: interact.id,
                         objects: populateObjects(interact.objects),
                         trigger: entities[interact.trigger],
+                        active: interact.active,
                         type: interact.type,
                         config: interact.config,
                         does: interact.does

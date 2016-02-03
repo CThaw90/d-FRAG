@@ -50,6 +50,18 @@ var _util = {
         return window.innerWidth + 'px';
     },
 
+    // Converts an array to an object with given value
+    arrayToObject: function(array, value) {
+        var object = {};
+        if (this.isArray(array)) {
+            for (var i=0; i < array.length; i++) {
+                object[array[i]] = value;
+            }
+        }
+
+        return object;
+    },
+
     // Converts a set of css rules into JSON
     cssToJSON: function(css) {
         var rules = css.split(';'),

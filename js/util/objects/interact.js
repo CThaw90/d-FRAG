@@ -52,7 +52,7 @@ function Interactivity() {
 
                 interactions.mTrigger[interaction.id] = interaction.objects;
                 // TODO: Place useful information about the interaction event. Store handle object
-                interactions.info[interaction.id] = {};
+                interactions.info[interaction.id] = {active: interaction.active ? true : false};
 
                 objects = interactions.mTrigger[interaction.id];
 
@@ -63,8 +63,8 @@ function Interactivity() {
                 // run the function
                 setInterval(function() {
 
-                    if (objectInfo['snapshot'].x !== objectInfo['trigger'].x || objectInfo['snapshot'].y !== objectInfo['trigger'].y
-                        || objectInfo['snapshot'].trajecting !== objectInfo['trigger'].trajecting()) {
+                    if ((objectInfo['snapshot'].x !== objectInfo['trigger'].x || objectInfo['snapshot'].y !== objectInfo['trigger'].y
+                        || objectInfo['snapshot'].trajecting !== objectInfo['trigger'].trajecting()) && interactions.info[interaction.id].active) {
 
                         interaction.does(self, objectInfo['trigger'], objects, cd);
 
@@ -80,13 +80,13 @@ function Interactivity() {
             case _const.keyPress:
                 interactions.kTrigger[interaction.id] = interaction.objects;
                 // TODO: Place useful information about the interaction event. Store handle object
-                interactions.info[interaction.id] = {};
+                interactions.info[interaction.id] = {active: interaction.active ? true : false};
 
                 objects = interactions.kTrigger[interaction.id];
                 // Add a listener that listens for the key press and the buttons
                 // associated with that action
                 interactions.info[interaction.id]['listener'] = addEventListener(_const.keyDown, function(event) {
-                    if (keyPressed(event.keyCode, interaction.config.keys)) {
+                    if (keyPressed(event.keyCode, interaction.config.keys) && interactions.info[interaction.id].active) {
                         interaction.does(self, objects, cd, event);
                     }
                 });
@@ -112,11 +112,56 @@ function Interactivity() {
     };
 
     self.disable = function(id) {
+        if (_util.isObject(interactions.info[id])) {
+            interactions.info[id].active = false;
+        } else if (_util.isArray(id)) {
+            var i = 0;
+            for (; i < id.length; i++) {
+                self.disable(id[i]);
+            }
+        }
+    };
 
+    self.whiteListDisable = function(ids) {
+
+        if (_util.isObject(ids)) {
+            for (var key in interactions.info) {
+                if (!ids[key]) {
+                    self.disable(key);
+                }
+            }
+        }
+        else if (_util.isArray(ids)) {
+            self.whiteListDisable(_util.arrayToObject(ids, true));
+        }
+        else if (_util.isString(ids)) {
+            var o = {};
+            o[ids] = true;
+            self.whiteListDisable(o);
+        }
+    };
+
+    self.disableAll = function() {
+        for (var key in interactions.info) {
+            if (interactions.info.hasOwnProperty(key)) {
+                self.disable(key);
+            }
+        }
     };
 
     self.enable = function(id) {
+        if (_util.isObject(interactions.info[id])) {
+            interactions.info[id].active = true;
+        }
+    };
 
+    self.enableAll = function() {
+        for (var key in interactions.info) {
+            if (interactions.info.hasOwnProperty(key)) {
+                self.enable(key);
+            }
+
+        }
     };
 
     self.detector = function(collision) {
