@@ -28,6 +28,8 @@ function DialogueBox(entity) {
     };
 
     self.remove = function() {
+        if (!displayed) return;
+
         entity.$container.parentNode.removeChild(self.$container);
         entity.$container.parentNode.removeChild($arrow);
         displayed = false;

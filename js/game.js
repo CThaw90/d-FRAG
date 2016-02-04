@@ -111,9 +111,15 @@ function Game() {
         var o = {};
         if (objects && _util.isArray(objects)) {
             for (var i = 0; i < objects.length; i++) {
-                o[objects[i]] = entities[objects[i]];
+                if (_util.isString(objects[i])) {
+                    o[objects[i]] = entities[objects[i]];
+                }
+                else if (_util.isObject(objects[i]) && objects[i].id && _util.isObject(objects[i].object)) {
+                    o[objects[i].id] = objects[i].object;
+                }
             }
         }
+
         return o;
     }
 

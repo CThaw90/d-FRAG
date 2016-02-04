@@ -55,7 +55,12 @@ var _util = {
         var object = {};
         if (this.isArray(array)) {
             for (var i=0; i < array.length; i++) {
-                object[array[i]] = value;
+                if (this.isObject(array[i])) {
+                    object[array[i].id || array[i].key || array] = value || array[i];
+                }
+                else if (this.isString(array[i])) {
+                    object[array[i]] = value || array[i];
+                }
             }
         }
 

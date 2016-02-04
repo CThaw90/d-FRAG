@@ -52,7 +52,7 @@ function Interactivity() {
 
                 interactions.mTrigger[interaction.id] = interaction.objects;
                 // TODO: Place useful information about the interaction event. Store handle object
-                interactions.info[interaction.id] = {active: interaction.active ? true : false};
+                interactions.info[interaction.id] = {active: interaction.active || false};
 
                 objects = interactions.mTrigger[interaction.id];
 
@@ -81,7 +81,7 @@ function Interactivity() {
             case _const.keyPress:
                 interactions.kTrigger[interaction.id] = interaction.objects;
                 // TODO: Place useful information about the interaction event. Store handle object
-                interactions.info[interaction.id] = {active: interaction.active ? true : false};
+                interactions.info[interaction.id] = {active: interaction.active || false};
 
                 objects = interactions.kTrigger[interaction.id];
                 // Add a listener that listens for the key press and the buttons
@@ -162,6 +162,25 @@ function Interactivity() {
     self.enable = function(id) {
         if (_util.isObject(interactions.info[id])) {
             interactions.info[id].active = true;
+        }
+    };
+
+    self.blackListEnable = function(ids) {
+
+        if (_util.isObject(ids)) {
+            for (var key in interactions.info) {
+                if (!ids[key]) {
+                    self.enable(key);
+                }
+            }
+        }
+        else if (_util.isArray(ids)) {
+            self.blackListEnable(_util.arrayToObject(ids, false));
+        }
+        else if (_util.isString(ids)) {
+            var o = {};
+            o[ids] = true;
+            self.blackListEnable(o);
         }
     };
 

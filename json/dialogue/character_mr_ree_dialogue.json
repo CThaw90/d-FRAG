@@ -1,0 +1,37 @@
+{
+  "id": "conversation_between_character_and_mr_reed",
+  "conversation": [
+    {
+      "objectId": "mr-ree",
+      "text":"Hello, there! I have learned to talk."
+    },
+    {
+      "objectId": "character",
+      "text": "As have I. How art thou, Mr. Ree?"
+    },
+    {
+      "objectId": "mr-ree",
+      "text": "I fare well. Thank you."
+    },
+    {
+      "objectId": "mr-ree",
+      "text": "Wither thus thou go?"
+    },
+    {
+      "objectId": "character",
+      "text": "I am heading to the ends of the earth and beyond"
+    },
+    {
+      "objectId": "mr-ree",
+      "text": "Ah. You'd be wise to head south"
+    },
+    {
+      "objectId": "character",
+      "text": "Much obliged and much gratitude to you"
+    },
+    {
+      "objectId": "mr-ree",
+      "text": "Do not mention it young lad."
+    }
+  ]
+}
