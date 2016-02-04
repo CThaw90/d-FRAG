@@ -61,7 +61,8 @@ function Interactivity() {
                 // Set an interval loop that checks whether the coordinates of the
                 // object has changed. If it has the object has moved therefore
                 // run the function
-                setInterval(function() {
+                interactions.info[interaction.id]['type'] = _const.movement;
+                interactions.info[interaction.id]['interval'] = setInterval(function() {
 
                     if ((objectInfo['snapshot'].x !== objectInfo['trigger'].x || objectInfo['snapshot'].y !== objectInfo['trigger'].y
                         || objectInfo['snapshot'].trajecting !== objectInfo['trigger'].trajecting()) && interactions.info[interaction.id].active) {
@@ -85,16 +86,14 @@ function Interactivity() {
                 objects = interactions.kTrigger[interaction.id];
                 // Add a listener that listens for the key press and the buttons
                 // associated with that action
-                interactions.info[interaction.id]['listener'] = addEventListener(_const.keyDown, function(event) {
+                interactions.info[interaction.id]['type'] = _const.keyPress;
+                interactions.info[interaction.id]['listener'] = function(event) {
                     if (keyPressed(event.keyCode, interaction.config.keys) && interactions.info[interaction.id].active) {
                         interaction.does(self, objects, cd, event);
                     }
-                });
-                interactions.info[interaction.id]['listener'] = addEventListener(_const.keyUp, function(event) {
-                    if (keyPressed(event.keyCode, interaction.config.keys)) {
-                        interaction.does(self, objects, cd, event);
-                    }
-                });
+                };
+                addEventListener(_const.keyDown, interactions.info[interaction.id]['listener'], false);
+                addEventListener(_const.keyUp, interactions.info[interaction.id]['listener'], false);
                 break;
 
             default:
@@ -108,7 +107,18 @@ function Interactivity() {
     };
 
     self.remove = function(id) {
+        if (!interactions.info[id]) return;
+        if (interactions.info[id].type === _const.movement) {
+            clearInterval(interactions.info[id].interval);
+            delete interactions.mTrigger[id];
+            delete interactions.info[id];
 
+        } else if (interactions.info[id].type === _const.keyPress) {
+            removeEventListener(_const.keyDown, interactions.info[id]['listener'], false);
+            removeEventListener(_const.keyUp, interactions.info[id]['listener'], false);
+            delete interactions.kTrigger[id];
+            delete interactions.info[id];
+        }
     };
 
     self.disable = function(id) {
