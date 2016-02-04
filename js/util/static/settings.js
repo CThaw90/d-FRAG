@@ -172,8 +172,8 @@ var withInteractions = [
 
                 collided = collision.check(position, dimension, direction, range, trigger);
                 if (collided && collided.collisionId === object.id && !object['isTalking']()) {
-                    object['talk']('Hello, there! I have learned to Talk!');
                     interact.whiteListDisable('interaction_between_character_and_talking-character');
+                    object['talk']('Hello, there! I have learned to Talk!');
                 }
                 else if (collided && collided.collisionId === object.id && object['isTalking']()) {
                     interact.enableAll();
