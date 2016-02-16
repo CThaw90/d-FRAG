@@ -68,7 +68,6 @@ function AI (config) {
 
         iFunction = function() {
 
-            console.log('Started AI for configuration ' + config.id);
             var instructions = config['instructions'], evaluation = [];
             for (var i = 0; i < instructions.length; i++) {
 
@@ -106,13 +105,12 @@ function AI (config) {
             var random = Math.floor(Math.random() * (evaluation.length * 10)) % evaluation.length;
             var evaluate = evaluation[random];
 
-            console.log('Executing ' + evaluate.name);
             for (var e = 0; e < evaluate.execute.length; e++) {
                 eval(evaluate.execute[e]);
             }
 
             if (config['intervals'] && _util.isArray(config['intervals'])) {
-
+                
                 setTimeout(function() {
 
                     var intervalLength = config['intervals'].length, e = [];
@@ -143,7 +141,7 @@ function AI (config) {
                         }
 
 
-                        for (var val = 0; val < e; val++) {
+                        for (var val = 0; val < e.length; val++) {
                             eval(e[val]);
                         }
 
