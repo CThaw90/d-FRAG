@@ -76,6 +76,7 @@ function Game() {
                             entities[objectId] = new Object({
                                 canDialogue: o.canDialogue,
                                 canCollide: o.canCollide,
+                                frameRate: o.frameRate,
                                 facing: o.facing,
                                 sprite: o.sprite,
                                 cd: collision,
@@ -93,11 +94,11 @@ function Game() {
                                     url: o['aiLogic'],
                                     onSuccess: function(response) {
                                         var ai = JSON.parse(response);
-                                        entities[objectId].loadAI(ai);
-                                        entities[objectId].startAI();
 
                                         _util.waitUntil(loaded, [stage.id], function() {
                                             loading[objectId + 'aiLogic'] = true;
+                                            entities[objectId].loadAI(ai);
+                                            entities[objectId].startAI();
                                         }, []);
                                     }
                                 });

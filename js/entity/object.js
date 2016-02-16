@@ -64,7 +64,7 @@ function Object(config) {
     // Binds the image to the container canvas
     self.$container.appendChild(image);
 
-    self.frameRate = 10;// config.frameRate || _const.defaultFrameRate;
+    self.frameRate =  config.frameRate || _const.defaultFrameRate;
 
     self.animate = function(animation) {
         self.animationIndex = animation.type === 'loop' ? self.animationIndex : 0;
@@ -123,6 +123,8 @@ function Object(config) {
     };
 
     self.traject = function(dir, fr, c) {
+        self.stop();
+
         direction[dir] = true;
         self.range = fr;
         facing = dir;

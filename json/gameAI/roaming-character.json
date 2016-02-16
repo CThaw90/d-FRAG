@@ -1,7 +1,7 @@
 {
   "id" : "artificial_intelligence_for_roaming_character",
   "type" : "AI_RANDOM_CONFIG",
-  "interval" : 5000,
+  "interval" : 1000,
   "instructions" : [
     {
       "name" : "rightMovement",
