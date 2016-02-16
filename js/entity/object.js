@@ -8,7 +8,7 @@ function Object(config) {
         direction = {left: false, right: false, up: false, down: false},
         sprite = _util.isObject(config.sprite) ? config.sprite : {},
         facing = config.facing, frameHandle, image, collide,
-        dialogue = false;
+        dialogue = false, ai = false;
 
     // The container holding the object sprite or reference point
     self.$container = document.createElement('canvas');
@@ -160,6 +160,26 @@ function Object(config) {
     };
     self.isTalking = function() {
         return dialogue && dialogue.isDisplayed();
+    };
+
+    self.loadAI = function(config) {
+        config['object'] = self;
+        ai = new AI(config);
+    };
+
+    self.startAI = function() {
+        if (!ai) return;
+        ai.start();
+    };
+
+    self.stopAI = function() {
+        if (!ai) return;
+        ai.stop();
+    };
+
+    self.removeAI = function() {
+        self.stopAI();
+        ai = false;
     };
 
     if (config.canDialogue) {

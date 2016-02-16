@@ -1,6 +1,7 @@
 {
   "canCollide" : true,
   "canDialogue" : true,
+  "aiLogic" : "json/gameAI/roaming-character.json",
   "facing": "down",
   "sprite" : {
     "imageSrc" : "img/characters/Harold.png",

@@ -19,7 +19,7 @@ var _const = {
     up: 'up',
 
     defaultFrameRate: 100,
-    defaultInterval: 10,
+    defaultAiInterval: 5000,
     maxLimit: 1000,
 
     stageHeight: window.innerHeight,
@@ -67,5 +67,12 @@ var _const = {
         f12: 123,
 
         numLock: 144,   scrollLock: 145
-    }
+    },
+
+    // Artificial Intelligence Configuration Types
+    // ----------------------------------------------------------------
+    aiRandom: 'AI_RANDOM_CONFIG',
+    aiManual: 'AI_MANUAL_CONFIG',
+    aiFollow: 'AI_FOLLOW_CONFIG',
+    aiTarget: 'AI_TARGET_CONFIG'
 };

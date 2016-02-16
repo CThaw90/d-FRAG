@@ -86,6 +86,22 @@ function Game() {
                                 self.currentStage.queue(entities[objectId]);
                                 loading[objectId] = true;
                             }, []);
+
+                            if (o.hasOwnProperty('aiLogic')) {
+                                loading[objectId + 'aiLogic'] = false;
+                                http.get({
+                                    url: o['aiLogic'],
+                                    onSuccess: function(response) {
+                                        var ai = JSON.parse(response);
+                                        entities[objectId].loadAI(ai);
+                                        entities[objectId].startAI();
+
+                                        _util.waitUntil(loaded, [stage.id], function() {
+                                            loading[objectId + 'aiLogic'] = true;
+                                        }, []);
+                                    }
+                                });
+                            }
                         }
                     });
                 }

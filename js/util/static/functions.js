@@ -12,6 +12,11 @@ var _util = {
         return typeof n === 'number';
     },
 
+    // Checks if a variable is a javascript boolean
+    isBoolean: function(b) {
+        return typeof b === 'boolean';
+    },
+
     // Checks if a variable is a javascript string
     isString: function(s) {
         return typeof s === 'string';
@@ -36,6 +41,11 @@ var _util = {
     isHtmlElement: function(h) {
         return h && h.toString().search(_const.htmlObjectRegex) !== -1
             && typeof o === 'object';
+    },
+
+    // Escapes all single quotes with backslashes
+    escape: function(s) {
+        return this.isString(s) ? s.replace(/'/g, "\\'") : s;
     },
 
     // Returns the full height of the gaming screen
@@ -101,7 +111,7 @@ var _util = {
     waitUntil: function (thisReturnsTrue, withArgs0, toExecute, withArgs1, config) {
 
         if (!this.isFunction(thisReturnsTrue) || !this.isFunction(toExecute)) return;
-        if (!config) config = {interval: _const.defaultInterval, limit: _const.maxLimit};
+        if (!config) config = {interval: 1, limit: _const.maxLimit};
 
         var returnFunction = this.buildFunctionFromArray('thisReturnsTrue', withArgs0),
             executeFunction = this.buildFunctionFromArray('toExecute', withArgs1),
@@ -125,10 +135,16 @@ var _util = {
 
         var buildFunction = name + '(', a = 0;
         while (a < args.length) {
-            if (typeof args[a] === 'string') {
-                buildFunction += ('"' + args[a++] + '"');
+            if (this.isString(args[a])) {
+                buildFunction += ('"' + this.escape(args[a++]) + '"');
             }
-            else if (typeof args[a] === 'number') {
+            else if (this.isNumber(args[a])) {
+                buildFunction += args[a++];
+            }
+            else if (this.isObject(args[a])) {
+                buildFunction += this.escape(JSON.stringify(args[a++]));
+            }
+            else if (this.isBoolean(args[a])) {
                 buildFunction += args[a++];
             }
             if (a < args.length)
