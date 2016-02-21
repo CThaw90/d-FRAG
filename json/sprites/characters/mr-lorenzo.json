@@ -2,7 +2,7 @@
   "canCollide" : true,
   "canDialogue" : true,
   "frameRate" : 100,
-  "aiLogic" : "json/gameAI/roaming-character.json",
+  "aiLogic" : "json/gameAI/roaming.json",
   "facing": "down",
   "sprite" : {
     "imageSrc" : "img/characters/Mr_Lorenzo.png",
