@@ -90,6 +90,15 @@ function Object(config) {
         }
     };
 
+    self.place = function (x, y) {
+        if (_util.isNumber(x) && _util.isNumber(y)) {
+            collision.remove(self.id);
+            self.$container.style.left = x + 'px';
+            self.$container.style.top = y + 'px';
+            collision.add(self);
+        }
+    };
+
     self.move = function (direction, range) {
 
         switch (direction) {
