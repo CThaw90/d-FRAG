@@ -92,10 +92,13 @@ function Object(config) {
 
     self.place = function (x, y) {
         if (_util.isNumber(x) && _util.isNumber(y)) {
-            collision.remove(self.id);
             self.$container.style.left = x + 'px';
             self.$container.style.top = y + 'px';
-            collision.add(self);
+            collision.remove(self.id);
+            self.x = x;
+            self.y = y;
+            
+            collision.add(this);
         }
     };
 
