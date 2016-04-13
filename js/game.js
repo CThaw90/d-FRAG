@@ -2,13 +2,21 @@
  * Created by Chris on 10/8/2015.
  */
 
-function Game() {
+function Game () {
 
     var interaction = new Interactivity(),
         collision = new Collision(),
         http = new HttpRequest(),
         entities = {},
         loading = {},
+        scene  = new Scene({
+            modules: {
+                interact: interaction,
+                collision: collision,
+                entities: entities,
+                http: http
+            }
+        }),
 
         // May pass in the game object so every
         // entity has high level access to the game
@@ -35,14 +43,15 @@ function Game() {
                 }
             }
 
+            scene.run('introduction');
+
         }, []);
     };
 
     self.load = function (config) {
-        var /* mainCharacter = config.mainCharacter, */ stage = config.stage;
+        var stage = config.stage;
         interaction.detector(collision);
 
-        // loading[mainCharacter.id] = false;
         loading[stage.id] = false;
         self.config = config;
 
@@ -105,6 +114,35 @@ function Game() {
                             }
                         }
                     });
+                }
+            }
+        }
+
+        if (stage.scenes) {
+
+            for (var ss=0; ss < stage.scenes.length; ss++) {
+
+                if (stage.scenes[ss].load) {
+                    loading[stage.scenes[ss].id] = false;
+                    http.get({
+                        id: stage.scenes[ss].id,
+                        url: stage.scenes[ss].load,
+                        onSuccess: function (response) {
+                            var s = JSON.parse(response), sceneId = this.id, actors = {};
+                            for (var a=0; a < s.actors.length; a++) {
+                                if (entities[s.actors[a]])
+                                actors[s.actors[a]] = entities[s.actors[a]];
+                            }
+                            scene.add({
+                                id: sceneId,
+                                name: s.name,
+                                actors: actors,
+                                actions: s.actions
+                            });
+
+                            loading[sceneId] = true;
+                        }
+                    })
                 }
             }
         }

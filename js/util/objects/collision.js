@@ -47,9 +47,7 @@ function Collision() {
             remove(id, object.x, object.y, object.width, object.height);
             delete CDSObj.objects[id];
             delete CDSObj.events[id];
-
         }
-
     };
 
     /**

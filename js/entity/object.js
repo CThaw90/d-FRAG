@@ -97,7 +97,7 @@ function Object(config) {
             collision.remove(self.id);
             self.x = x;
             self.y = y;
-            
+
             collision.add(this);
         }
     };

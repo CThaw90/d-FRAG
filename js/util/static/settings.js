@@ -1,7 +1,7 @@
 /**
  * Created by christhaw on 1/10/16.
  */
-var withInteractions = [], withObjects = [];
+var withInteractions = [], withObjects = [], withScenes = [];
 
 _util.waitUntil(_util.domLoaded, [], function() {
 
@@ -235,6 +235,19 @@ _util.waitUntil(_util.domLoaded, [], function() {
                     }
                 }
             }
+        },
+        {
+            id: 'interaction_to_statically_place_mr-lorenzo',
+            objects: ['mr-lorenzo'],
+            type: _const.keyPress,
+            active: true,
+            config: {
+                keys: ['p']
+            },
+            does: function(interact, objects, collision, key) {
+                objects['mr-lorenzo'].stopAI();
+                objects['mr-lorenzo'].place(200, 200);
+            }
         }
     ];
     withObjects = {
@@ -256,10 +269,11 @@ _util.waitUntil(_util.domLoaded, [], function() {
                 {load: _const.basePath + 'json/sprites/doors/black-door.json', id: 'black-door'},
                 {load: _const.basePath + 'json/sprites/characters/character.json', id: 'character'},
                 {load: _const.basePath + 'json/sprites/characters/harold.json', id: 'harold'},
-                // {load: _const.basePath + 'json/sprites/characters/player-two.json', id: 'player-two'},
-                // {load: _const.basePath + 'json/sprites/characters/talking-character.json', id: 'talking-character'},
                 {load: _const.basePath + 'json/sprites/characters/mr-lorenzo.json', id: 'mr-lorenzo'},
                 {load: _const.basePath + 'json/sprites/characters/mr-ree.json', id: 'mr-ree'}
+            ],
+            scenes: [
+                {load: _const.basePath + 'json/scenes/introduction.json', id: 'introduction'}
             ]
         }
     };

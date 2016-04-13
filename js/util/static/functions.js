@@ -40,7 +40,7 @@ var _util = {
     // Checks if a variable is an HtmlElement
     isHtmlElement: function(h) {
         return h && h.toString().search(_const.htmlObjectRegex) !== -1
-            && typeof o === 'object';
+            && typeof h === 'object';
     },
 
     // Escapes all single quotes with backslashes
