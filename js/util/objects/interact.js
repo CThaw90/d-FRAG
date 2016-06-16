@@ -3,6 +3,19 @@
  *
  * Used to monitor and control interaction between objects
  */
+define('interact', ['exports', 'constants', 'utility', 'collision', 'interactions'], function (interact, constants, utility, collision, interactions) {
+
+    var self = {
+        // Triggered by movement
+        mTrigger: {},
+
+        // Triggered by a keypress
+        kTrigger: {},
+
+        // Information on all trigger configurations
+        info: {}
+    };
+});
 function Interactivity() {
 
     var self = this,

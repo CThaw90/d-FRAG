@@ -1,0 +1,59 @@
+{
+  "name" : "d-frag",
+  "version" : "0.0.1",
+  "description" : "A 2D Hacker RPG web game",
+  "author" : "Chris Thaw <chris_thaw@yahoo.com>",
+  "contributors" : [
+    {
+      "name" : "Chris Thaw",
+      "email" : "chris_thaw@yahoo.com"
+    },
+    {
+      "name" : "Kahlil Wallace",
+      "email" : "kahlil.wallace87@gmail.com"
+    }
+  ],
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/Khauma/d-FRAG.git"
+  },
+  "bugs" : {
+    "url": "https://github.com/Khauma/d-FRAG/issues"
+  },
+  "keywords" : [
+    "hackerjs",
+    "hacker",
+    "defrag",
+    "d-frag",
+    "rpg"
+  ],
+  "devDependencies" : {
+    "grunt": "1.0.1",
+    "grunt-bower-task": "0.4.0",
+    "grunt-contrib-clean": "1.0.0",
+    "grunt-contrib-compass": "1.1.1",
+    "grunt-contrib-copy": "1.0.0",
+    "grunt-contrib-imagemin": "1.0.1",
+    "grunt-contrib-jshint": "1.0.0",
+    "grunt-contrib-requirejs": "1.0.0",
+    "grunt-contrib-uglify": "1.0.1",
+    "grunt-contrib-watch": "1.0.0",
+    "grunt-karma": "2.0.0",
+    "grunt-sed": "0.1.1",
+    "grunt-string-replace": "1.2.1",
+    "jasmine-core": "2.4.1",
+    "karma": "0.13.22",
+    "karma-chrome-launcher": "1.0.1",
+    "karma-coverage": "1.0.0",
+    "karma-jasmine": "1.0.2",
+    "karma-junit-reporter": "1.0.0",
+    "karma-phantomjs-launcher": "1.0.0",
+    "karma-requirejs": "1.0.0",
+    "matchdep": "1.0.1",
+    "requirejs": "2.2.0"
+  },
+  "license" : "MIT",
+  "engines": {
+    "node": ">=0.8.0"
+  }
+}

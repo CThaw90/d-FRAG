@@ -1,0 +1,16 @@
+{
+  "name": "d-frag",
+  "description": "A 2D Hacker RPG Web game",
+  "version": "0.0.0",
+  "dependencies": {
+    "requirejs": "2.1.17",
+    "text": "2.0.14"
+  },
+  "main": "js/main.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "components"
+  ]
+}
