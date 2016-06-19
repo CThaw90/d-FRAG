@@ -12,17 +12,21 @@
 requirejs.config({
     baseUrl: './js/.',
     paths: {
+        collision: 'util/objects/collision',
         constants: 'util/static/constants',
+        game: 'game',
         http: 'util/objects/http',
         interact: 'util/objects/interact',
-        interactions: 'util/static/config/interactions',
+        interactions: 'config/interactions',
+        levels: 'config/levels',
+        object: 'entity/object',
         screen: 'util/objects/screen',
         stage: 'entity/stage',
         utility: 'util/static/utility'
     }
 });
 
-define(['utility'], function (utility) {
+define(['utility', 'levels', 'game', 'interact'], function (utility, levels, game, interact) {
 
     // Initialize D-FRAG game
     var startButton = document.createElement('button');
@@ -36,11 +40,17 @@ define(['utility'], function (utility) {
         startButton.innerText = 'Start Game';
         startButton.onclick = function () {
             startButton.parentNode.removeChild(startButton);
+            startGame();
         };
         document.body.appendChild(startButton);
     }, []);
 
     var startGame = function () {
 
+        game.load(levels.load('LEVEL_ONE_INTRODUCTION'));
+        utility.waitUntil(game.finishedLoading, [], function () {
+            game.play();
+            interact.init();
+        }, []);
     };
 });

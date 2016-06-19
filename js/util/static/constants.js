@@ -9,6 +9,7 @@ define({
 
     host: location.hostname,
     path: location.pathname,
+    basePath: '/defrag',
     keyPress: 'keypress',
     keyDown: 'keydown',
     keyUp: 'keyup',

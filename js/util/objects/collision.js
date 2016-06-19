@@ -154,7 +154,7 @@ define('collision', ['exports', 'constants', 'utility'], function (collision, co
             }
 
             if (self.CDSObj.vector[axis][pos[axis]]) {
-                var vector = CDSObj.vector[axis][pos[axis]], i = 0;
+                var vector = self.CDSObj.vector[axis][pos[axis]], i = 0;
                 for (; i < vector.length && !status; i++ ) {
                     if (vector[i].start < pos[self.reverse(axis)] && vector[i].end > pos[self.reverse(axis)] && obj.id !== vector[i].id) {
                         // Might use logic to dynamically remove stale vector coordinates who's
@@ -164,7 +164,7 @@ define('collision', ['exports', 'constants', 'utility'], function (collision, co
                         // TODO: Fix collision events..i think collision events are broken
                         self.CDSObj.events[vector[i].id].push(new Date().getTime());
                     }
-                    else if (vector[i].start < (pos[self.reverse(axis)] + dimen[self.reverse(axis)]) && vector[i].end > (pos[reverse(axis)] + dimen[self.reverse(axis)]) && obj.id !== vector[i].id) {
+                    else if (vector[i].start < (pos[self.reverse(axis)] + dimen[self.reverse(axis)]) && vector[i].end > (pos[self.reverse(axis)] + dimen[self.reverse(axis)]) && obj.id !== vector[i].id) {
                         // Might use logic to dynamically remove stale vector coordinates who's
                         // object might have been removed prior to the collision event
                         status = {vector: pos[axis], collisionId: vector[i].id};

@@ -1,11 +1,11 @@
 /**
  * Created by Chris on 10/8/2015.
  */
-define('stage', ['exports'], function (stage, utility, http) {
+define('stage', ['exports', 'utility', 'screen', 'http', 'object'], function (stage, utility, screen, http, object) {
 
     var self = {
         container: document.createElement('div'),
-        backgroundImage: new Image(),
+        backgroundImage: null,
         screenType: String(),
         loading: {},
         objects: {},
@@ -17,7 +17,36 @@ define('stage', ['exports'], function (stage, utility, http) {
     };
 
     self.loadObjects = function (objects) {
+        objects.forEach(function (obj) {
+            self.loading[obj.id] = false;
+            http.get({
+                id: obj.id,
+                url: obj.load,
+                onSuccess: function (response) {
+                    var o = JSON.parse(response), objectId = this.id;
+                    self.objects[objectId] = new object.Entity({
+                        canDialogue: o.canDialogue,
+                        frameRate: o.frameRate,
+                        parent: self.container,
+                        facing: o.facing,
+                        sprite: o.sprite,
+                        id: objectId
+                    });
 
+                    utility.waitUntil(self.objects[objectId].finishedLoading, [], function () {
+                        self.loading[objectId] = true;
+                    }, []);
+                }
+            });
+        });
+    };
+
+    stage.activate = function () {
+        for (var obj in self.objects) {
+            if (self.objects.hasOwnProperty(obj)) {
+                self.objects[obj].activate();
+            }
+        }
     };
 
     stage.element = function () {
@@ -27,15 +56,49 @@ define('stage', ['exports'], function (stage, utility, http) {
     stage.load = function (config) {
         self.backgroundImage = config.backgroundImage;
         self.screenType = config.screenType;
-        self.id = config.id;
+        stage.id = config.id;
 
         if (utility.isArray(config.objects)) {
-            self.loadObjects();
+            self.loadObjects(config.objects);
+        }
+        else {
+            console.log('No objects have been loaded to this stage');
         }
     };
 
-    stage.finishedLoading = function () {
+    stage.create = function () {
 
+        self.container.setAttribute('style', utility.jsonToCSS({
+            'background-image': 'url(' + self.backgroundImage.src + ')',
+            height: self.backgroundImage.height + 'px',
+            width: self.backgroundImage.width + 'px',
+            position: 'absolute',
+            left: '0px',
+            top: '0px'
+        }));
+
+        document.body.appendChild(self.container);
+    };
+
+    stage.returnSelf = function () {
+        return self;
+    };
+
+    stage.finishedLoading = function () {
+        var finished = true;
+        Object.keys(self.loading).forEach(function (key) {
+            finished = finished && self.loading[key];
+        });
+
+        return finished;
+    };
+
+    stage.objects = function () {
+        return self.objects;
+    };
+
+    stage.getObject = function (id) {
+        return self.objects[id];
     };
 });
 //function Stage(params) {

@@ -6,15 +6,15 @@
 define('interactions', ['exports', 'constants'], function (interactions, constants) {
 
     interactions.INTERACT_WITH_MAIN_CHARACTER = {
-        objects: ['character'],
+        objects: ['main-character'],
         type: constants.keyPress,
         active: true,
         config: {
             keys: ['leftArrow', 'upArrow', 'rightArrow', 'downArrow']
         },
         does: function (interact, objects, collision, key) {
-            var object = objects['character'];
-            if (key.type === constants.keyDown && !object.block) {
+            var object = objects['main-character'];
+            if (key.type === constants.keyDown && !object.isMoving()) {
 
                 switch (key.which) {
                     case constants.keyMap.rightArrow:
@@ -38,7 +38,7 @@ define('interactions', ['exports', 'constants'], function (interactions, constan
                         break;
                 }
             }
-            else if (key.type === constants.keyUp && object.block) {
+            else if (key.type === constants.keyUp && object.isMoving()) {
 
                 switch (key.which) {
                     case constants.keyMap.leftArrow:

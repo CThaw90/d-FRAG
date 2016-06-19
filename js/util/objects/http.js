@@ -33,7 +33,7 @@ define('http', ['exports', 'utility'], function (http, utility) {
 
             for (var key in headers) {
                 if (headers.hasOwnProperty(key)) {
-                    request.setRequestHeader(key, headers[key]);
+                    self.request.setRequestHeader(key, headers[key]);
                 }
             }
         }
@@ -67,7 +67,7 @@ define('http', ['exports', 'utility'], function (http, utility) {
     http.get = function (config) {
         self.request = new XMLHttpRequest();
         self.request.open(self.GET_METHOD, self.formatURL(config.url, config.params));
-        self.request.setRequestHeaders(config.headers);
+        self.setRequestHeaders(config.headers);
         self.request.onreadystatechange = self.constructReadyStateChange(config);
         self.request.send();
     };
