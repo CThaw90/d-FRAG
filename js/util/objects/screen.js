@@ -7,7 +7,8 @@
 define('screen', ['exports', 'utility', 'stage'], function (screen, utility, stage) {
 
     var self = {
-        screenLock: null,
+        screenLocked: false,
+        screenLock: 0,
         window: window,
         stage: null
     };
@@ -34,7 +35,35 @@ define('screen', ['exports', 'utility', 'stage'], function (screen, utility, sta
     screen.lockOn = function (entity) {
         if (!entity.id || !entity.height || !entity.width) {
             console.log('Invalid entity object. Game screen cannot lockOn');
+            return;
         }
+
+        console.log('Locking on object ' + entity.id);
+        self.screenLock = setInterval(function () {
+            var scrollLimitX = stage.width - parseInt(screen.width()),
+                scrollLimitY = stage.height - parseInt(screen.height()),
+                locationX = entity.x + (entity.width / 2),
+                locationY = entity.y + (entity.height / 2),
+                adjustPointX, adjustPointY;
+
+            adjustPointY = locationY - (parseInt(screen.height()) / 2);
+            adjustPointX = locationX - (parseInt(screen.width()) / 2);
+
+            adjustPointY = adjustPointY < scrollLimitY ? adjustPointY : scrollLimitY;
+            adjustPointX = adjustPointX < scrollLimitX ? adjustPointX : scrollLimitX;
+
+            adjustPointY = (adjustPointY > 0 ? adjustPointY : 0);
+            adjustPointX = (adjustPointX > 0 ? adjustPointX : 0);
+
+            scrollTo(adjustPointX, adjustPointY);
+        }, 1);
+
+        self.screenLocked = true;
+    };
+
+    screen.releaseLock = function () {
+        clearInterval(self.screenLock);
+        self.screenLocked = false;
     };
 
     screen.reload = function () {
@@ -43,21 +72,8 @@ define('screen', ['exports', 'utility', 'stage'], function (screen, utility, sta
             container: stage.element()
         };
     };
+
+    screen.isLocked = function () {
+        return self.screenLocked;
+    }
 });
-//function Screen(config) {
-//
-//    var self = this, screenLock, screenLocked = false;
-//
-//    self.lockOn = function(object) {
-//        if (!object || !object.height || object.width) return;
-//
-//        screenLocked = true;
-//        screenLock = setInterval(function() {
-//        }, 1);
-//    };
-//
-//    self.releaseLock = function() {
-//        clearInterval(screenLock);
-//        screenLocked = false;
-//    };
-//}

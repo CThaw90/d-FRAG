@@ -8,12 +8,12 @@ define('levels', ['exports', 'constants'], function (level, constants) {
             backgroundImage: constants.basePath + '/img/stages/grass.png',
             id: 'main-stage-level-one',
             objects: [
-                {load: constants.basePath + '/json/sprites/characters/character.json', id: 'main-character'}//,
-                //{load: constants.basePath + '/json/sprites/characters/harold.json', id: 'harold'},
-                //{load: constants.basePath + '/json/sprites/characters/mr-lorenzo.json', id: 'mr-lorenzo'},
-                //
-                //{load: constants.basePath + '/json/sprites/doors/steel-door.json', id: 'steel-door'},
-                //{load: constants.basePath + '/json/sprites/doors/black-door.json', id: 'black-door'}
+                {load: constants.basePath + '/json/sprites/characters/character.json', id: 'main-character'},
+                {load: constants.basePath + '/json/sprites/characters/harold.json', id: 'harold'},
+                {load: constants.basePath + '/json/sprites/characters/mr-lorenzo.json', id: 'mr-lorenzo'},
+
+                {load: constants.basePath + '/json/sprites/doors/steel-door.json', id: 'steel-door'},
+                {load: constants.basePath + '/json/sprites/doors/black-door.json', id: 'black-door'}
             ]
         },
         scenes: [

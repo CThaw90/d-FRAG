@@ -26,7 +26,7 @@ requirejs.config({
     }
 });
 
-define(['utility', 'levels', 'game', 'interact'], function (utility, levels, game, interact) {
+define(['utility', 'levels', 'game', 'interact', 'screen', 'stage'], function (utility, levels, game, interact, screen, stage) {
 
     // Initialize D-FRAG game
     var startButton = document.createElement('button');
@@ -51,6 +51,7 @@ define(['utility', 'levels', 'game', 'interact'], function (utility, levels, gam
         utility.waitUntil(game.finishedLoading, [], function () {
             game.play();
             interact.init();
+            screen.lockOn(stage.getObject('main-character'));
         }, []);
     };
 });

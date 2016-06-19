@@ -1,7 +1,7 @@
 /**
  * Created by Chris on 10/8/2015.
  */
-define('stage', ['exports', 'utility', 'screen', 'http', 'object'], function (stage, utility, screen, http, object) {
+define('stage', ['exports', 'utility', 'screen', 'collision', 'http', 'object'], function (stage, utility, screen, collision, http, object) {
 
     var self = {
         container: document.createElement('div'),
@@ -47,6 +47,8 @@ define('stage', ['exports', 'utility', 'screen', 'http', 'object'], function (st
                 self.objects[obj].activate();
             }
         }
+
+        collision.add(stage);
     };
 
     stage.element = function () {
@@ -78,6 +80,15 @@ define('stage', ['exports', 'utility', 'screen', 'http', 'object'], function (st
         }));
 
         document.body.appendChild(self.container);
+        stage.resize();
+    };
+
+    stage.resize = function () {
+        var bounds = self.container.getBoundingClientRect();
+        stage.height = bounds.height;
+        stage.width = bounds.width;
+        stage.x = bounds.left;
+        stage.y = bounds.top;
     };
 
     stage.returnSelf = function () {

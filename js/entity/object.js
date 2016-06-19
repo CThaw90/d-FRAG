@@ -85,7 +85,7 @@ define('object', ['exports', 'constants', 'utility', 'collision'], function (obj
             if (object.isMoving()) {
                 var pos = {
                         x: self.facing === constants.right ? (object.x + self.container.width) : object.x,
-                        y: self.facing === constants.down ? (object.x + self.container.height) : object.y
+                        y: self.facing === constants.down ? (object.y + self.container.height) : object.y
                     },
                     dimension = {height: object.height, width: object.width},
                     collided = self.canCollide && collision.check(pos, dimension, self.facing, self.range, object);
@@ -174,15 +174,16 @@ define('object', ['exports', 'constants', 'utility', 'collision'], function (obj
 
         object.animate = function (animation) {
             self.animationIndex = animation.type === 'loop' ? self.animationIndex : 0;
-            self.block = animation.block;
             self.animation = animation;
 
-            object.block = self.block;
+            object.flag = animation.flag;
         };
 
         object.activate = function () {
             self.frameHandle = setInterval(self.reloadObjectState, self.frameRate);
             self.resize();
+
+            collision.add(object);
         };
 
         object.deactivate = function (timeout) {
@@ -247,7 +248,6 @@ define('object', ['exports', 'constants', 'utility', 'collision'], function (obj
         object.stopAnimation = function () {
             self.animation = undefined;
             self.animationIndex = 0;
-            object.block = false;
         };
 
         object.trajecting = function () {
@@ -260,6 +260,7 @@ define('object', ['exports', 'constants', 'utility', 'collision'], function (obj
             self.range = frameRange || self.range;
             self.direction[direction] = true;
             self.canCollide = canCollide;
+            self.facing = direction;
         };
 
         object.finishedLoading = function () {
@@ -373,65 +374,6 @@ define('object', ['exports', 'constants', 'utility', 'collision'], function (obj
 //        }
 //    };
 //
-//    self.move = function (direction, range) {
-//
-//        switch (direction) {
-//
-//            case _const.right:
-//                self.x += range;
-//                break;
-//
-//            case _const.down:
-//                self.y += range;
-//                break;
-//
-//            case _const.left:
-//                self.y -= range;
-//                break;
-//
-//            case _const.up:
-//                self.x -= range;
-//                break;
-//
-//            default:
-//                break;
-//        }
-//
-//        self.$container.style.left = self.x + 'px';
-//        self.$container.style.top = self.y + 'px';
-//    };
-//
-//    self.trajecting = function() {
-//        return facing;
-//    };
-//
-//    self.traject = function(dir, fr, c) {
-//        self.stop();
-//
-//        direction[dir] = true;
-//        self.range = fr;
-//        facing = dir;
-//        collide = c;
-//    };
-//
-//    self.stop = function () {
-//        direction = {
-//            left: false, right: false,
-//            down: false, up: false
-//        };
-//    };
-//
-//    self.isMoving = function() {
-//        return direction.right || direction.left
-//            || direction.down || direction.up;
-//    };
-//
-//    self.stopAnimation = function() {
-//        self.animation = undefined;
-//        self.animationIndex = 0;
-//        self.block = false;
-//    };
-//
 //    self.talk = function(message) {
 //        if (dialogue) {
 //            dialogue.show(message);
@@ -469,94 +411,5 @@ define('object', ['exports', 'constants', 'utility', 'collision'], function (obj
 //
 //    if (config.canDialogue) {
 //        dialogue = new DialogueBox(this);
-//    }
-//
-//    function _reloadObjectState() {
-//
-//        if (_util.isObject(self.animation)) {
-//
-//            // Clear Canvas
-//            self.ctx.clearRect(
-//                0, 0,
-//                self.$container.width,
-//                self.$container.height
-//            );
-//
-//            // Store the object animation vector in a temporary object
-//            var oav = sprite['animationVector'][self.animation.name];
-//
-//            // Redraw the image unto the canvas
-//            self.$container.height = sprite['height'];
-//            self.$container.width = sprite['width'];
-//            if (sprite.hasOwnProperty('width') && sprite.hasOwnProperty('height')) {
-//                self.ctx.drawImage(
-//                    image, oav[self.animationIndex].x, oav[self.animationIndex].y,
-//                    sprite['width'], sprite['height'],
-//                    0, 0,
-//                    self.$container.width, self.$container.height
-//                );
-//            }
-//
-//            if (self.animation.type === 'iterate') {
-//
-//                if (self.animationIndex + 1 < oav.length) {
-//                    self.animationIndex++;
-//                } else {
-//                    self.flag = self.animation.flag;
-//                    self.animation = undefined;
-//                    self.block = false;
-//                }
-//
-//            } else if (self.animation.type === 'loop') {
-//
-//                if (self.animationIndex + 1 < oav.length) {
-//                    self.animationIndex++;
-//                } else {
-//                    self.animationIndex = 0;
-//                }
-//            }
-//        }
-//        if (self.isMoving()) {
-//            var pos = {
-//                    x: facing === _const.right ? (self.x + self.$container.width) : self.x,
-//                    y: facing === _const.down ? (self.y + self.$container.height) : self.y
-//                },
-//                dimension = {height: self.height, width: self.width},
-//                collided = collide && collision.check(pos, dimension, facing, self.range, self);
-//            if (collided) {
-//                self.event = {type: 'collision', data: collided};
-//            }
-//            else if (direction.up) {
-//                collision.remove(self.id);
-//                self.y -= self.range;
-//                collision.add(self);
-//            }
-//            else if (direction.right) {
-//                collision.remove(self.id);
-//                self.x += self.range;
-//                collision.add(self);
-//            }
-//            else if (direction.down) {
-//                collision.remove(self.id);
-//                self.y += self.range;
-//                collision.add(self);
-//            }
-//            else if (direction.left) {
-//                collision.remove(self.id);
-//                self.x -= self.range;
-//                collision.add(self);
-//            }
-//
-//            self.$container.style.left = self.x + 'px';
-//            self.$container.style.top = self.y + 'px';
-//        }
-//    }
-//
-//    function resize() {
-//        var bounds = self.$container.getBoundingClientRect();
-//        self.height = bounds.height;
-//        self.width = bounds.width;
-//        self.x = bounds.left;
-//        self.y = bounds.top;
 //    }
 //}
