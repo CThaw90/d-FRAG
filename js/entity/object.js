@@ -1,7 +1,7 @@
 /**
  * Created by christhaw on 11/20/15.
  */
-define('object', ['exports', 'constants', 'utility', 'collision'], function (object, constants, utility, collision) {
+define('object', ['exports', 'constants', 'utility', 'collision', 'dialogue'], function (object, constants, utility, collision, dialogue) {
 
     object.Entity = function (config) {
 
@@ -28,6 +28,7 @@ define('object', ['exports', 'constants', 'utility', 'collision'], function (obj
             image: null,
             canCollide: false,
             canDialogue: false,
+            dialogue: null,
             position: {
                 left: 0,
                 top: 0
@@ -120,17 +121,17 @@ define('object', ['exports', 'constants', 'utility', 'collision'], function (obj
         };
 
         self.resize = function () {
-            var bounds = self.container.getBoundingClientRect();
-            object.height = bounds.height;
-            object.width = bounds.width;
-            object.x = bounds.left;
-            object.y = bounds.top;
+            object.height = self.container.offsetHeight;
+            object.width = self.container.offsetWidth;
+            object.x = self.container.offsetLeft;
+            object.y = self.container.offsetTop;
         };
 
         self.frameRate = config.frameRate || constants.defaultFrameRate;
         self.canCollide = config.canCollide || false;
         self.canDialogue = config.canDialogue || false;
         self.parent = config.parent || null;
+        self.range = config.range || 5;
 
         if (utility.isObject(config.sprite)) {
             self.loading.sprite = false;
@@ -172,6 +173,10 @@ define('object', ['exports', 'constants', 'utility', 'collision'], function (obj
 
         object.id = config.id;
 
+        if (self.canDialogue) {
+            self.dialogue = new dialogue.box(object);
+        }
+
         object.animate = function (animation) {
             self.animationIndex = animation.type === 'loop' ? self.animationIndex : 0;
             self.animation = animation;
@@ -190,7 +195,7 @@ define('object', ['exports', 'constants', 'utility', 'collision'], function (obj
             clearInterval(self.frameHandle);
             if (timeout && utility.isNumber(timeout)) {
                 setTimeout(function () {
-                    self.activate();
+                    object.activate();
                 }, timeout);
             }
         };
@@ -198,6 +203,17 @@ define('object', ['exports', 'constants', 'utility', 'collision'], function (obj
         object.isMoving = function () {
             return self.direction.right || self.direction.left
                 || self.direction.down || self.direction.up;
+        };
+
+        object.isTalking = function () {
+            return self.dialogue && self.dialogue.isDisplayed();
+        };
+
+        object.setFrameRate = function (frameRate) {
+            if (utility.isNumber(frameRate)) {
+                self.frameRate = frameRate;
+                object.deactivate(1);
+            }
         };
 
         object.move = function (direction, range) {
@@ -247,7 +263,18 @@ define('object', ['exports', 'constants', 'utility', 'collision'], function (obj
 
         object.stopAnimation = function () {
             self.animation = undefined;
-            self.animationIndex = 0;
+        };
+
+        object.talk = function (txt) {
+            if (!object.isTalking()) {
+                self.dialogue.show(txt);
+            }
+        };
+
+        object.quiet = function () {
+            if (object.isTalking()) {
+                self.dialogue.hide();
+            }
         };
 
         object.trajecting = function () {
@@ -333,61 +360,6 @@ define('object', ['exports', 'constants', 'utility', 'collision'], function (obj
 //        );
 //    }
 //
-//    // Binds the image to the container canvas
-//    self.$container.appendChild(image);
-//
-//    self.frameRate =  config.frameRate || _const.defaultFrameRate;
-//
-//    self.animate = function(animation) {
-//        self.animationIndex = animation.type === 'loop' ? self.animationIndex : 0;
-//        self.block = animation.block;
-//        self.animation = animation;
-//    };
-//
-//    self.activate = function() {
-//        frameHandle = setInterval(_reloadObjectState, self.frameRate);
-//        resize();
-//
-//        if (config.canCollide) {
-//            collision.add(this);
-//        }
-//    };
-//
-//    self.deactivate = function (timeout) {
-//        clearInterval(frameHandle);
-//        if (timeout) {
-//            setTimeout(function() {
-//                self.activate();
-//            }, timeout);
-//        }
-//    };
-//
-//    self.place = function (x, y) {
-//        if (_util.isNumber(x) && _util.isNumber(y)) {
-//            self.$container.style.left = x + 'px';
-//            self.$container.style.top = y + 'px';
-//            collision.remove(self.id);
-//            self.x = x;
-//            self.y = y;
-//
-//            collision.add(this);
-//        }
-//    };
-//
-//    self.talk = function(message) {
-//        if (dialogue) {
-//            dialogue.show(message);
-//        }
-//    };
-//
-//    self.quiet = function() {
-//        if (dialogue) {
-//            dialogue.remove();
-//        }
-//    };
-//    self.isTalking = function() {
-//        return dialogue && dialogue.isDisplayed();
-//    };
 //
 //    self.loadAI = function(config) {
 //        config['object'] = self;
@@ -409,7 +381,4 @@ define('object', ['exports', 'constants', 'utility', 'collision'], function (obj
 //        ai = false;
 //    };
 //
-//    if (config.canDialogue) {
-//        dialogue = new DialogueBox(this);
-//    }
 //}

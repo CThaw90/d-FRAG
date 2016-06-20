@@ -23,6 +23,9 @@ define('interact', ['exports', 'constants', 'utility', 'collision', 'interaction
                 if (utility.isString(id)) {
                     o[id] = stage.getObject(id);
                 }
+                else if (utility.isObject(id)) {
+                    o[id.id] = id.object;
+                }
             });
         }
 
@@ -197,7 +200,7 @@ define('interact', ['exports', 'constants', 'utility', 'collision', 'interaction
         else if (utility.isString(ids)) {
             var o = {};
             o[ids] = true;
-            interact.blackListEnable(ids);
+            interact.blackListEnable(o);
         }
     };
 

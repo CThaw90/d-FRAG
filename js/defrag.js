@@ -14,6 +14,7 @@ requirejs.config({
     paths: {
         collision: 'util/objects/collision',
         constants: 'util/static/constants',
+        dialogue: 'util/objects/dialogue',
         game: 'game',
         http: 'util/objects/http',
         interact: 'util/objects/interact',

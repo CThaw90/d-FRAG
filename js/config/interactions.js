@@ -3,7 +3,7 @@
  *
  * Object of all possible interactions through out the game
  */
-define('interactions', ['exports', 'constants'], function (interactions, constants) {
+define('interactions', ['exports', 'constants', 'http', 'dialogue'], function (interactions, constants, http, dialogue) {
 
     interactions.INTERACT_WITH_MAIN_CHARACTER = {
         objects: ['main-character'],
@@ -150,6 +150,89 @@ define('interactions', ['exports', 'constants'], function (interactions, constan
                 else if (collided && collided.collisionId === object.id && object.flag === 'open' && trigger.trajecting() === 'up') {
                     object.animate({name: 'animateClosed', type: 'iterate', flag: 'closed'});
                 }
+            }
+        }
+    };
+
+    interactions.MAIN_CHARACTER_TALKING_TO_HAROLD = {
+        objects: ['main-character', 'harold'],
+        type: constants.keyPress,
+        active: true,
+        config: {
+            keys: ['space']
+        },
+        does: function (interact, objects, collision, key) {
+            var collided = null, mainCharacter = objects['main-character'], harold = objects['harold'];
+            if (collision.exists(harold.id) && key.type === constants.keyDown) {
+                var position = {
+                    x: harold.trajecting() === constants.right ? harold.x + harold.width : harold.x,
+                    y: harold.trajecting() === constants.down ? harold.y + harold.height : harold.y
+                }, dimension = {height: harold.height, width: harold.width},
+                    direction = harold.trajecting(),
+                    range = 5;
+
+                collided = collision.check(position, dimension, direction, range, harold);
+                if (collided && collided.collisionId === mainCharacter.id && !harold.isTalking()) {
+                    interact.whiteListDisable('MAIN_CHARACTER_TALKING_TO_HAROLD');
+                    harold.talk('Hello, there! My name is Harold!');
+                }
+                else if (collided && collided.collisionId === mainCharacter.id && harold.isTalking()) {
+                    interact.enableAll();
+                    harold.quiet();
+                }
+            }
+        }
+    };
+
+    interactions.MAIN_CHARACTER_CONVERSATION_WITH_MR_REE = {
+        objects: ['main-character', 'mr-ree', {id: 'mc_conversation_with_mr', object: new dialogue.conversation()}],
+        type: constants.keyPress,
+        active: true,
+        config: {
+            keys: ['space']
+        },
+        does: function (interact, objects, collision, key) {
+            var collided, mainCharacter = objects['main-character'], mrRee = objects['mr-ree'],
+                conversation = objects['mc_conversation_with_mr'],
+                position = {
+                    x: mainCharacter.trajecting() === constants.right ? mainCharacter.x + mainCharacter.width : mainCharacter.x,
+                    y: mainCharacter.trajecting() === constants.down ? mainCharacter.y + mainCharacter.height : mainCharacter.y
+                }, dimension = {height: mainCharacter.height, width: mainCharacter.width},
+                direction = mainCharacter.trajecting();
+            collided = collision.exists(mrRee.id) ? collision.check(position, dimension, direction, 5, mainCharacter) : false;
+            if (!conversation.conversing() && key.type === constants.keyDown && collided && collided.collisionId === mrRee.id) {
+                interact.whiteListDisable('MAIN_CHARACTER_CONVERSATION_WITH_MR_REE');
+                http.get({
+                    url: constants.basePath + '/json/dialogue/character_mr_ree_dialogue.json',
+                    onSuccess: function (response) {
+                        conversation.converse([mainCharacter, mrRee], JSON.parse(response));
+                        conversation.next();
+                    }
+                });
+            }
+            else if (key.type === constants.keyDown && conversation.conversing()) {
+                conversation.next();
+                if (!conversation.conversing()) {
+                    interact.blackListEnable('MAIN_CHARACTER_CONVERSATION_WITH_MR_REE')
+                }
+            }
+        }
+    };
+
+    interactions.MAIN_CHARACTER_SPEED_UP = {
+        objects: ['main-character'],
+        type: constants.keyPress,
+        active: true,
+        config: {
+            keys: ['shift']
+        },
+        does: function (interact, objects, collision, key) {
+            var object = objects['main-character'];
+            if (key.type === constants.keyDown) {
+                object.setFrameRate(25);
+            }
+            else if (key.type === constants.keyUp) {
+                object.setFrameRate(100);
             }
         }
     };
