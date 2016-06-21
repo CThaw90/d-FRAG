@@ -37,7 +37,6 @@ define('game', ['exports', 'utility', 'stage'], function (game, utility, stage) 
     };
 
     game.play = function () {
-        stage.activate();
     };
 
     game.finishedLoading = function () {
@@ -72,24 +71,6 @@ define('game', ['exports', 'utility', 'stage'], function (game, utility, stage) 
 //
 //    self.play = function (withInteractions) {
 //        _util.waitUntil(self.finishedLoading, [], function() {
-//            self.currentStage.placeAll();
-//            self.currentStage.lockOn('character');
-//            self.currentStage.activate();
-//
-//            if (_util.isArray(withInteractions)) {
-//                for (var index = 0; index < withInteractions.length; index++) {
-//                    var interact = withInteractions[index];
-//                    interaction.add({
-//                        id: interact.id,
-//                        objects: populateObjects(interact.objects),
-//                        trigger: entities[interact.trigger],
-//                        active: interact.active,
-//                        type: interact.type,
-//                        config: interact.config,
-//                        does: interact.does
-//                    });
-//                }
-//            }
 //
 //            scene.run('introduction');
 //
@@ -97,74 +78,6 @@ define('game', ['exports', 'utility', 'stage'], function (game, utility, stage) 
 //    };
 //
 //    self.load = function (config) {
-//        var stage = config.stage;
-//        interaction.detector(collision);
-//
-//        loading[stage.id] = false;
-//        self.config = config;
-//
-//        var backgroundImage = new Image();
-//        backgroundImage.src = stage.backgroundImage;
-//        backgroundImage.onload = function() {
-//            loading[stage.id] = true;
-//            self.currentStage = new Stage({
-//                container: document.createElement('div'),
-//                screenType: 'full',
-//                id: stage.id,
-//                cd: collision,
-//                background: {
-//                    image: {
-//                        object: backgroundImage
-//                    }
-//                }
-//            });
-//        };
-//        if (stage.objects) {
-//
-//            for (var so=0; so < stage.objects.length; so++) {
-//
-//                if (stage.objects[so].load) {
-//                    loading[stage.objects[so].id] = false;
-//                    http.get({
-//                        id: stage.objects[so].id,
-//                        url: stage.objects[so].load,
-//                        onSuccess: function(response) {
-//                            var o = JSON.parse(response), objectId = this.id;
-//                            entities[objectId] = new Object({
-//                                canDialogue: o.canDialogue,
-//                                canCollide: o.canCollide,
-//                                frameRate: o.frameRate,
-//                                facing: o.facing,
-//                                sprite: o.sprite,
-//                                cd: collision,
-//                                id: objectId
-//                            });
-//
-//                            _util.waitUntil(loaded, [stage.id], function() {
-//                                self.currentStage.queue(entities[objectId]);
-//                                loading[objectId] = true;
-//                            }, []);
-//
-//                            if (o.hasOwnProperty('aiLogic')) {
-//                                loading[objectId + 'aiLogic'] = false;
-//                                http.get({
-//                                    url: o['aiLogic'],
-//                                    onSuccess: function(response) {
-//                                        var ai = JSON.parse(response);
-//
-//                                        _util.waitUntil(loaded, [stage.id], function() {
-//                                            loading[objectId + 'aiLogic'] = true;
-//                                            entities[objectId].loadAI(ai);
-//                                            entities[objectId].startAI();
-//                                        }, []);
-//                                    }
-//                                });
-//                            }
-//                        }
-//                    });
-//                }
-//            }
-//        }
 //
 //        if (stage.scenes) {
 //
@@ -195,39 +108,4 @@ define('game', ['exports', 'utility', 'stage'], function (game, utility, stage) 
 //            }
 //        }
 //    };
-//
-//    self.finishedLoading = function() {
-//        var finished = true;
-//        for (var entity in loading) {
-//            finished = (loading[entity] ? true : false);
-//            if (!finished) break;
-//        }
-//
-//        return finished;
-//    };
-//
-//    self.getEntityById = function(id) {
-//        return entities.hasOwnProperty(id) ? entities[id] : {};
-//    };
-//
-//    function populateObjects(objects) {
-//        var o = {};
-//        if (objects && _util.isArray(objects)) {
-//            for (var i = 0; i < objects.length; i++) {
-//                if (_util.isString(objects[i])) {
-//                    o[objects[i]] = entities[objects[i]];
-//                }
-//                else if (_util.isObject(objects[i]) && objects[i].id && _util.isObject(objects[i].object)) {
-//                    o[objects[i].id] = objects[i].object;
-//                }
-//            }
-//        }
-//
-//        return o;
-//    }
-//
-//    function loaded(id) {
-//        return loading.hasOwnProperty(id) &&
-//            loading[id] ? true : false;
-//    }
 // }
