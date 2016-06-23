@@ -112,16 +112,26 @@ define('utility', ['constants'], function (constants) {
         waitUntil: function (thisReturnsTrue, withArgs0, toExecute, withArgs1, config) {
 
             if (!this.isFunction(thisReturnsTrue) || !this.isFunction(toExecute)) return;
-            if (!config) config = {interval: 1, limit: constants.maxLimit};
+            if (!config) {
+                config = {
+                    limit: constants.maxLimit,
+                    interval: 1,
+                    onTimeout: function () {
+                        console.error('Timeout occurred while waiting for ' + thisReturnsTrue + ' to resolve');
+                    },
+                    timeoutArgs: []
+                };
+            }
 
             var returnFunction = this.buildFunctionFromArray('thisReturnsTrue', withArgs0),
                 executeFunction = this.buildFunctionFromArray('toExecute', withArgs1),
-                iteration = 0;
+                iteration = 0, self = this, onTimeoutFunction;
 
             var wait = setInterval(function() {
                 if (iteration > limit) {
+                    onTimeoutFunction = self.buildFunctionFromArray('config.onTimeout', config.timeoutArgs || []);
+                    eval(onTimeoutFunction);
                     clearInterval(wait);
-                    return;
                 } else if (eval(returnFunction)) {
                     eval(executeFunction);
                     clearInterval(wait);
