@@ -12,6 +12,7 @@
 requirejs.config({
     baseUrl: './js/.',
     paths: {
+        ai: 'util/objects/ai',
         collision: 'util/objects/collision',
         constants: 'util/static/constants',
         dialogue: 'util/objects/dialogue',
@@ -27,7 +28,7 @@ requirejs.config({
     }
 });
 
-define(['utility', 'levels', 'game', 'interact', 'screen', 'stage'], function (utility, levels, game, interact, screen, stage) {
+define(['utility', 'levels', 'game', 'interact', 'screen', 'stage', 'ai'], function (utility, levels, game, interact, screen, stage, ai) {
 
     // Initialize D-FRAG game
     var startButton = document.createElement('button');

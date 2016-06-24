@@ -21,6 +21,7 @@ define('game', ['exports', 'utility', 'stage'], function (game, utility, stage) 
             stage.load({
                 backgroundImage: self.backgroundImage,
                 objects: stageConfig.objects,
+                ais: stageConfig.ais,
                 screenType: 'full',
                 id: stageConfig.id
             });
@@ -28,18 +29,20 @@ define('game', ['exports', 'utility', 'stage'], function (game, utility, stage) 
             utility.waitUntil(stage.finishedLoading, [], function () {
                 self.loading[stageConfig.id] = true;
                 stage.create();
-            }, []);
+            }, [], {onTimeout: stage.finishedLoading});
         };
 
         utility.waitUntil(game.finishedLoading, [], function () {
             console.log('Game finished loading...');
-        }, []);
+        }, [], {onTimeout: game.finishedLoading});
     };
 
     game.play = function () {
+        stage.activate();
     };
 
     game.finishedLoading = function () {
+        // Game
         var finished = true;
         Object.keys(self.loading).forEach(function (key) {
             finished = finished && self.loading[key];

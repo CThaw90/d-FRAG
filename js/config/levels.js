@@ -7,6 +7,9 @@ define('levels', ['exports', 'constants'], function (level, constants) {
         stage: {
             backgroundImage: constants.basePath + '/img/stages/grass.png',
             id: 'main-stage-level-one',
+            ais: [
+                {load: constants.basePath + '/json/ai/roaming.json'}
+            ],
             objects: [
                 {load: constants.basePath + '/json/sprites/characters/character.json', id: 'main-character'},
                 {load: constants.basePath + '/json/sprites/characters/harold.json', id: 'harold'},

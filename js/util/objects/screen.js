@@ -9,6 +9,7 @@ define('screen', ['exports', 'utility', 'stage'], function (screen, utility, sta
     var self = {
         screenLocked: false,
         screenLock: 0,
+        lockObject: false,
         window: window,
         stage: null
     };
@@ -39,6 +40,7 @@ define('screen', ['exports', 'utility', 'stage'], function (screen, utility, sta
         }
 
         console.log('Locking on object ' + entity.id);
+        self.lockObject = entity;
         self.screenLock = setInterval(function () {
             var scrollLimitX = stage.width - parseInt(screen.width()),
                 scrollLimitY = stage.height - parseInt(screen.height()),
@@ -64,6 +66,7 @@ define('screen', ['exports', 'utility', 'stage'], function (screen, utility, sta
     screen.releaseLock = function () {
         clearInterval(self.screenLock);
         self.screenLocked = false;
+        self.lockObject = false;
     };
 
     screen.reload = function () {
@@ -71,9 +74,14 @@ define('screen', ['exports', 'utility', 'stage'], function (screen, utility, sta
             dimension: stage.element().getBoundingClientRect(),
             container: stage.element()
         };
+
+        if (self.screenLocked) {
+            clearInterval(self.screenLock);
+            screen.lockOn(self.lockObject);
+        }
     };
 
     screen.isLocked = function () {
         return self.screenLocked;
-    }
+    };
 });

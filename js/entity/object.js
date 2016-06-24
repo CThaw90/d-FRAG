@@ -173,6 +173,7 @@ define('object', ['exports', 'constants', 'utility', 'collision', 'dialogue'], f
 
         object.id = config.id;
 
+        self.container.setAttribute('id', object.id);
         if (self.canDialogue) {
             self.dialogue = new dialogue.box(object);
         }
@@ -336,30 +337,6 @@ define('object', ['exports', 'constants', 'utility', 'collision', 'dialogue'], f
 //    self.id = config.id;
 //
 //    sprite = _util.isObject(config.sprite) ? config.sprite : {};
-//
-//    if (sprite.src || sprite['imageSrc']) {
-//        image = new Image();
-//        image.src = sprite.src || sprite['imageSrc'];
-//        image.height = config.height || sprite.height;
-//        image.width = config.width || sprite.width;
-//        image.onload = function() {
-//            self.ctx.drawImage(
-//                this, sprite.x || 0, sprite.y || 0,
-//                sprite.width, sprite.height,
-//                0, 0,
-//                sprite.width, sprite.height
-//            );
-//        }
-//    } else if (sprite.object) {
-//        image = sprite.object;
-//        self.ctx.drawImage(
-//            image, sprite.x || 0, sprite.y || 0,
-//            sprite['width'], sprite['height'],
-//            0, 0,
-//            config.width, config.height
-//        );
-//    }
-//
 //
 //    self.loadAI = function(config) {
 //        config['object'] = self;

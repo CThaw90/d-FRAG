@@ -96,9 +96,7 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
 
     self.randomized = function (config) {
 
-        self.object = config.object;
-
-        var valid = self.validateInstructions(config.instructions);
+        var object = config.object, valid = self.validateInstructions(config.instructions);
         valid = valid && config.intervals ? self.validateIntervals(config.intervals) : false;
 
         if (!valid) {
@@ -177,6 +175,16 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
 
         self.iQueue[config.id].iHandle = setInterval(self.iQueue[config.id].iFunction, config.interval || constants.defaultAiInterval);
         self.iQueue[config.id].running = true;
+    };
+
+    ai.add = function (config) {
+        if (!config.id) {
+            console.log('Cannot add ai configuration. No unique identifier.');
+            return;
+        }
+
+        self.iQueue[config.id].type = config.type;
+        self.iQueue[config.id].running = false;
     };
 
     ai.start = function (params) {
