@@ -42,19 +42,20 @@ define('stage', ['exports', 'utility', 'screen', 'collision', 'http', 'object', 
     };
 
     self.loadAIs = function (ais) {
-        ais.forEach(function (ai) {
-            if (self.loading[ai.id] !== undefined) {
-                console.log('Configuration already loaded with unique identifier \'' + ai.id + '\'');
+        ais.forEach(function (a) {
+            if (self.loading[a.id] !== undefined) {
+                console.log('Configuration already loaded with unique identifier \'' + a.id + '\'');
                 return;
             }
 
-            self.loading[ai.id] = false;
+            self.loading[a.id] = false;
             http.get({
-                id: ai.id,
-                url: ai.load,
+                id: a.id,
+                url: a.load,
                 onSuccess: function (response) {
                     console.log(JSON.parse(response));
                     self.loading[this.id] = true;
+                    ai.add(JSON.parse(response));
                 }
             })
         });

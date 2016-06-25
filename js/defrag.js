@@ -54,6 +54,7 @@ define(['utility', 'levels', 'game', 'interact', 'screen', 'stage', 'ai'], funct
             game.play();
             interact.init();
             screen.lockOn(stage.getObject('main-character'));
+            ai.start({entity: stage.getObject('harold'), engine: 'artificial_intelligence_for_roaming_character', id: 'harold_roaming_character'});
         }, []);
     };
 });

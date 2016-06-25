@@ -30,6 +30,25 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
         }
     };
 
+    self.validateConfiguration = function (config) {
+        if (!config.id) {
+            console.log('Cannot add ai configuration. No unique identifier.');
+            return false;
+        }
+
+        if (!self.validateInstructions(config.instructions) || (config.intervals && (!utility.isNumber(config.interval) || !self.validateIntervals(config.intervals)))) {
+            console.log('Cannot add ai configuration with id \'' + config.id + '\'. Invalid configuration format');
+            return false;
+        }
+
+        if (self.iQueue[config.id]) {
+            console.log('Cannot add ai configuration with id \'' + config.id + '\' ');
+            return false;
+        }
+
+        return true;
+    };
+
     self.validateInstructions = function (instructions) {
         var valid = false;
         if (utility.isArray(instructions)) {
@@ -56,7 +75,7 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
             intervals.forEach(function (interval) {
 
                 if (utility.isObject(interval)) {
-                    valid = utility.isString(interval.name) && self.object[interval.name] !== undefined;
+                    valid = utility.isString(interval.name);
 
                     if (valid && interval.methods) {
                         valid = self.validateMethods(interval.methods);
@@ -64,7 +83,6 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
 
                     if (valid && interval.functions) {
                         valid = utility.isArray(interval.functions) && utility.isString(interval.functions.name);
-                        valid = valid && self.object[interval.methods.name] !== undefined;
                         valid = valid && interval.functions.params && utility.isArray(interval.functions.params);
                     }
                 }
@@ -80,7 +98,6 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
             valid = true;
             methods.forEach(function (method) {
                 valid = utility.isString(method.name);
-                valid = valid && self.object.hasOwnProperty(method.name) && utility.isFunction(object[method.name]);
                 valid = valid && method.hasOwnProperty('params');
 
                 if (valid && utility.isArray(method.params)) {
@@ -167,22 +184,13 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
                 }, config.interval / 2);
             }
         };
-
-        //self.iQueue[config.id].iHandle = setInterval(self.iQueue[config.id].iFunction, config.interval || constants.defaultAiInterval);
-        //self.iQueue[config.id].running = true;
     };
 
     ai.add = function (config) {
-        if (!config.id) {
-            console.log('Cannot add ai configuration. No unique identifier.');
-            return;
-        }
 
-        if (!self.validateInstructions(config.instructions) || (config.intervals && (!utility.isNumber(config.interval) || !self.validateIntervals(config.intervals)))) {
-            console.log('Cannot add ai configuration with id \'' + config.id + '\'. Invalid configuration format');
-            return;
-        }
+        if (!self.validateConfiguration(config)) { return; }
 
+        self.iQueue[config.id] = {};
         self.iQueue[config.id].type = config.type;
         self.iQueue[config.id].running = false;
         self.iQueue[config.id].iFunction = null;
@@ -199,14 +207,26 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
     ai.start = function (params) {
 
         if (!params.id) {
-            console.log('Cannot start ai module. No unique identifier found');
+            console.log('Cannot start ai engine. No unique identifier found');
             return;
         }
 
-        switch (params.type) {
+        if (!self.iQueue[params.id]) {
+            console.log('Cannot start ai engine. No ai configuration with id \'' + params.id + '\'');
+            return;
+        }
+
+        switch (self.iQueue[params.id].type) {
 
             case constants.aiRandom:
-                self.randomized(params);
+                if (!self.iQueue[params.id].entity) {
+                    console.log('Cannot start randomized ai engine. No entity parameter');
+                    return;
+                }
+
+                self.iQueue[params.id].entity = params.entity;
+                self.iQueue[params.id].iHandle = setInterval(self.iQueue[params.id].iFunction, self.iQueue[params.id].interval);
+                self.iQueue[params.id].running = true;
                 break;
         }
     };
@@ -218,7 +238,13 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
         }
 
         self.iQueue[id].running = false;
-        clearInterval(self.iQueue[id]);
+        switch (self.iQueue[id].type) {
+
+            case constants.aiRandom:
+                clearInterval(self.iQueue[id].iHandle);
+                self.iQueue[id].entity = null;
+                break;
+        }
     };
 
     ai.remove = function (id) {
