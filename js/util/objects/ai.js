@@ -122,7 +122,7 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
             instructionEvaluations.push({name: instruction.name || '__instruction_' + evalIndex, execute: []});
             if (instruction.methods) {
                 instruction.methods.forEach(function (method) {
-                    builder = 'self.iQueue[\'' + config.id + '\'].entity[\'' + method.name + '\']';
+                    builder = 'self.iQueue[\'' + config.id + '\'].entities[\'{entityId}\'].object[\'' + method.name + '\']';
                     args = [];
                     if (method.params) {
                         method.params.forEach(function (param) {
@@ -141,6 +141,8 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
             else if (instruction.functions) {
                 console.log('Artificial Intelligence anonymous functions are not yet supported');
             }
+
+            evalIndex++;
         });
 
         if (config.intervals) {
@@ -153,7 +155,7 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
 
                 if (interval.methods) {
                     interval.methods.forEach(function (method) {
-                        builder = 'self.iQueue[\'' + config.id + '\'].entity[\'' + method.name + '\']';
+                        builder = 'self.iQueue[\'' + config.id + '\'].entities[\'{entityId}\'].object[\'' + method.name + '\']';
                         args = [];
                         if (method.params) {
                             method.params.forEach(function (param) {
@@ -166,12 +168,14 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
             });
         }
 
-        self.iQueue[config.id].iFunction = function () {
+        self.iQueue[config.id].interval = config.interval || constants.defaultAiInterval;
+        self.iQueue[config.id].iFunction = function (objectId) {
 
             var random = Math.floor(Math.random() * (instructionEvaluations.length * 10)) % instructionEvaluations.length;
             var evaluate = instructionEvaluations[random];
 
             evaluate.execute.forEach(function (andExecute) {
+                andExecute = andExecute.replace(new RegExp('\\{entityId\\}', 'g'), objectId);
                 eval(andExecute);
             });
 
@@ -179,6 +183,7 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
 
                 setTimeout(function () {
                     intervalEvaluations.forEach(function(andExecute) {
+                        andExecute = andExecute.replace(new RegExp('\\{entityId\\}', 'g'), objectId);
                         eval(andExecute);
                     });
                 }, config.interval / 2);
@@ -192,9 +197,7 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
 
         self.iQueue[config.id] = {};
         self.iQueue[config.id].type = config.type;
-        self.iQueue[config.id].running = false;
-        self.iQueue[config.id].iFunction = null;
-        self.iQueue[config.id].iHandle = 0;
+        self.iQueue[config.id].entities = {};
 
         switch (config.type) {
 
@@ -211,48 +214,65 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
             return;
         }
 
-        if (!self.iQueue[params.id]) {
+        if (!self.iQueue[params.engine]) {
             console.log('Cannot start ai engine. No ai configuration with id \'' + params.id + '\'');
             return;
         }
 
-        switch (self.iQueue[params.id].type) {
+        switch (self.iQueue[params.engine].type) {
 
             case constants.aiRandom:
-                if (!self.iQueue[params.id].entity) {
-                    console.log('Cannot start randomized ai engine. No entity parameter');
+                var aiEngine = self.iQueue[params.engine];
+                if (aiEngine.entities[params.id] && aiEngine.entities[params.id].running) {
+                    console.log('Cannot start engine for \'' + params.id +'\'. Engine for this identifier already running');
                     return;
                 }
+                else if (aiEngine.entities[params.id] && aiEngine.entities[params.id].object.id === params.entity.id) {
+                    aiEngine.entities[params.id].iHandle = setInterval(aiEngine.iFunction.bind(null, params.id), aiEngine.interval);
+                    aiEngine.entities[params.id].running = true;
+                }
+                else {
+                    aiEngine.entities[params.id] = {running: true};
+                    aiEngine.entities[params.id].object = params.entity;
+                    aiEngine.entities[params.id].iHandle = setInterval(aiEngine.iFunction.bind(null, params.id), aiEngine.interval);
+                }
 
-                self.iQueue[params.id].entity = params.entity;
-                self.iQueue[params.id].iHandle = setInterval(self.iQueue[params.id].iFunction, self.iQueue[params.id].interval);
-                self.iQueue[params.id].running = true;
                 break;
         }
     };
 
-    ai.stop = function (id) {
-        if (!self.iQueue[id]) {
+    ai.stop = function (engineId, objectId) {
+        if (!self.iQueue[engineId] || !self.iQueue[engineId].entities[objectId]) {
             console.log('No ai with id \'' + id + '\' running');
-            return;
+            return false;
         }
 
-        self.iQueue[id].running = false;
+        self.iQueue[engineId].entities[objectId].running = false;
         switch (self.iQueue[id].type) {
 
             case constants.aiRandom:
-                clearInterval(self.iQueue[id].iHandle);
-                self.iQueue[id].entity = null;
+                clearInterval(self.iQueue[engineId].entities[objectId].iHandle);
+                self.iQueue[engineId].entities[objectId].object = null;
                 break;
+        }
+
+        return true;
+    };
+
+    ai.remove = function (engineId, objectId) {
+        if (self.iQueue[engineId] && self.iQueue[engineId].entities[objectId]) {
+            var engine = self.iQueue[engineId];
+            if (ai.isRunning(engineId, objectId)) {
+                ai.stop(engineId, objectId);
+            }
+
+            delete engine.entities[objectId];
         }
     };
 
-    ai.remove = function (id) {
-        delete self.iQueue[id];
-    };
-
-    ai.isRunning = function (id) {
-        return self.iQueue[id] && self.iQueue[id].running;
+    ai.isRunning = function (engineId, objectId) {
+        return self.iQueue[engineId] && self.iQueue[engineId].entities[objectId]
+            && self.iQueue[engineId].entities[objectId].running;
     };
 
     ai.info = function (id) {
