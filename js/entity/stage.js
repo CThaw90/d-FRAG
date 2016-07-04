@@ -53,7 +53,6 @@ define('stage', ['exports', 'utility', 'screen', 'collision', 'http', 'object', 
                 id: a.id,
                 url: a.load,
                 onSuccess: function (response) {
-                    console.log(JSON.parse(response));
                     self.loading[this.id] = true;
                     ai.add(JSON.parse(response));
                 }
@@ -124,13 +123,41 @@ define('stage', ['exports', 'utility', 'screen', 'collision', 'http', 'object', 
     };
 
     stage.finishedLoading = function () {
-        // Stage
         var finished = true;
         Object.keys(self.loading).forEach(function (key) {
             finished = finished && self.loading[key];
         });
 
         return finished;
+    };
+
+    stage.placeEntity = function (params) {
+        if (!params.id) {
+            console.log('Cannot place entity. No unique identifier');
+            return;
+        }
+
+        if (!utility.isObject(params.object)) {
+            console.log('Cannot place entity. No associated object');
+            return;
+        }
+
+        if (!utility.isHtmlElement(params.object.element())) {
+            console.log('Cannot place entity. No associated HtmlElement');
+            return;
+        }
+
+        self.container.appendChild(params.object.element());
+        self.objects[params.id] = params.object;
+    };
+
+    stage.removeEntity = function (id) {
+        if (!self.objects[id]) {
+            return;
+        }
+
+        self.container.removeChild(self.objects[id].element());
+        delete self.objects[id];
     };
 
     stage.objects = function () {
@@ -141,27 +168,3 @@ define('stage', ['exports', 'utility', 'screen', 'collision', 'http', 'object', 
         return self.objects[id];
     };
 });
-//function Stage(params) {
-//
-//    self.placeEntity = function (params) {
-//
-//        if (!params.id) {
-//            console.log("No id for entity. Cannot place on stage");
-//            return;
-//        }
-//
-//        $stage.appendChild(params.object.$container);
-//        entities[params.id] = params.object;
-//    };
-//
-//    self.removeEntity = function(id) {
-//
-//        if (!entities[id]) return;
-//
-//        $stage.removeChild(entities[id].$container);
-//        delete entities[id];
-//    };
-//    self.releaseLock = function() {
-//        clearInterval(screenLock);
-//    };
-//}

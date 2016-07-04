@@ -174,7 +174,7 @@ define('interact', ['exports', 'constants', 'utility', 'collision', 'interaction
     interact.disableAll = function () {
         for (var key in self.info) {
             if (self.info.hasOwnProperty(key)) {
-                self.disable(key);
+                interact.disable(key);
             }
         }
     };

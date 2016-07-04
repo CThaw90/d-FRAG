@@ -22,13 +22,14 @@ requirejs.config({
         interactions: 'config/interactions',
         levels: 'config/levels',
         object: 'entity/object',
+        scene: 'scene/scene',
         screen: 'util/objects/screen',
         stage: 'entity/stage',
         utility: 'util/static/utility'
     }
 });
 
-define(['utility', 'levels', 'game', 'interact', 'screen', 'stage', 'ai'], function (utility, levels, game, interact, screen, stage, ai) {
+define(['utility', 'levels', 'game', 'interact', 'screen', 'stage', 'ai', 'scene'], function (utility, levels, game, interact, screen, stage, ai, scene) {
 
     // Initialize D-FRAG game
     var startButton = document.createElement('button');
@@ -55,6 +56,9 @@ define(['utility', 'levels', 'game', 'interact', 'screen', 'stage', 'ai'], funct
             interact.init();
             screen.lockOn(stage.getObject('main-character'));
             ai.start({entity: stage.getObject('harold'), engine: 'artificial_intelligence_for_roaming_character', id: 'harold_roaming_character'});
+            ai.start({entity: stage.getObject('mr-lorenzo'), engine: 'artificial_intelligence_for_roaming_character', id: 'mr-lorenzo_roaming_character'});
+            scene.run('d-FRAG_game_introduction_scene');
+
         }, []);
     };
 });

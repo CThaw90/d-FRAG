@@ -248,7 +248,7 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
         }
 
         self.iQueue[engineId].entities[objectId].running = false;
-        switch (self.iQueue[id].type) {
+        switch (self.iQueue[engineId].type) {
 
             case constants.aiRandom:
                 clearInterval(self.iQueue[engineId].entities[objectId].iHandle);

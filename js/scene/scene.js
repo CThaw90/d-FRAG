@@ -1,36 +1,45 @@
 /**
  * Created by christhaw on 2/28/16.
  */
-function Scene(config) {
+define('scene', ['exports', 'stage', 'constants', 'utility', 'interact', 'http', 'collision', 'ai'], function (scene, stage, constants, utility, interact, http, collision, ai) {
 
-    var modules = config.modules || {}, sceneDict = {}, self = this;
-    var execute = function (exec) {
-        console.log('Running ' + exec);
-        eval(exec);
+    var self = {
+        sceneDict: {},
+        modules: {
+            collision: collision,
+            interact: interact,
+            http: http,
+            ai: ai
+        },
+        execute: function (exec) {
+            console.log('Running ' + exec);
+            eval(exec);
+        },
+        actions: String(),
+        actor: String()
     };
-    self.add = function (scene) {
-        if (_util.isObject(scene) && !sceneDict[scene.id]) {
-            sceneDict[scene.id] = scene;
-            sceneDict[scene.id].execution = [];
 
+    scene.add = function (scene) {
+        if (utility.isObject(scene) && !self.sceneDict[scene.id]) {
+            self.sceneDict[scene.id] = scene;
+            self.sceneDict[scene.id].execution = [];
             for (var a=0; a < scene.actions.length; a++) {
                 var actionObject = scene.actions[a];
-                if (scene.actions[a].hasOwnProperty('module')) {
-                    sceneDict[scene.id].execution.push({
-                        action: _util.buildFunctionFromArray('modules.' + actionObject['module'] + '.' + actionObject.action['name'], actionObject.action['params']),
+                if (actionObject.module) {
+                    self.sceneDict[scene.id].execution.push({
+                        action: utility.buildFunctionFromArray('self.modules.' + actionObject['module'] + '.' + actionObject.action.name, actionObject.action.params),
                         duration: actionObject.duration || 0
                     });
                 }
-                else if (scene.actions[a].hasOwnProperty('actor')) {
-                    var invokeActorString = 'sceneDict[\'' + scene.id + '\'].actors';
-                    sceneDict[scene.id].execution.push({
-                        action: _util.buildFunctionFromArray(invokeActorString + '[\'' + actionObject['actor'] + '\'].' + actionObject.action['name'], actionObject.action['params']),
+                else if (actionObject.actor) {
+                    self.sceneDict[scene.id].execution.push({
+                        action: utility.buildFunctionFromArray('stage.getObject(\'' + actionObject.actor + '\').' + actionObject.action.name, actionObject.action.params),
                         duration: actionObject.duration || 0
                     });
                 }
             }
         }
-        else if (_util.isObject(scene)) {
+        else if (utility.isObject(scene)) {
             console.log('Could not add scene with name ' + scene.name);
         }
         else {
@@ -38,20 +47,26 @@ function Scene(config) {
         }
     };
 
-    self.remove = function (id) {
-        if (sceneDict[id]) {
-            delete sceneDict[id];
+    scene.remove = function (id) {
+        if (self.sceneDict[id]) {
+            delete self.sceneDict[id];
         }
     };
 
-    self.run = function(id) {
+    scene.run = function (id) {
         var execution, duration = 0, index = 0;
-        if (_util.isObject(sceneDict[id])) {
-            execution = sceneDict[id].execution || [];
+        if (utility.isObject(self.sceneDict[id])) {
+            execution = self.sceneDict[id].execution || [];
             for (var e=0; e < execution.length; e++) {
                 (function (index) {
-                    setTimeout(function() {
-                        eval(execution[index].action);
+                    setTimeout(function () {
+                        try {
+                            eval(execution[index].action);
+                        } catch (error) {
+                            console.error(error);
+                            console.log("Violating execution string /* START */ " + execution[index].action);
+                            console.log("Violating index - [" + index + "]");
+                        }
                     }, duration);
                 })(e);
                 duration += execution[e].duration;
@@ -61,6 +76,4 @@ function Scene(config) {
             console.log('Could not run scene with id ' + id + '. Scene does not exist');
         }
     };
-
-
-}
+});

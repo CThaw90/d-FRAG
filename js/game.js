@@ -1,8 +1,7 @@
 /**
  * Created by Chris on 10/8/2015.
  */
-
-define('game', ['exports', 'utility', 'stage'], function (game, utility, stage) {
+define('game', ['exports', 'utility', 'stage', 'scene', 'http'], function (game, utility, stage, scene, http) {
 
     var self = {
         loading: {},
@@ -32,6 +31,24 @@ define('game', ['exports', 'utility', 'stage'], function (game, utility, stage) 
             }, [], {onTimeout: stage.finishedLoading});
         };
 
+        if (utility.isArray(config.scenes)) {
+            config.scenes.forEach(function (s) {
+                self.loading[s.id] = false;
+                http.get({
+                    id: s.id,
+                    url: s.load,
+                    onSuccess: function (response) {
+                        self.loading[this.id] = true;
+                        var sceneObject = JSON.parse(response);
+                        scene.add(sceneObject);
+                    }
+                });
+            });
+        }
+        else {
+            console.log('No scenes have been loaded in with this level.');
+        }
+
         utility.waitUntil(game.finishedLoading, [], function () {
             console.log('Game finished loading...');
         }, [], {onTimeout: game.finishedLoading});
@@ -42,7 +59,6 @@ define('game', ['exports', 'utility', 'stage'], function (game, utility, stage) 
     };
 
     game.finishedLoading = function () {
-        // Game
         var finished = true;
         Object.keys(self.loading).forEach(function (key) {
             finished = finished && self.loading[key];
@@ -51,64 +67,3 @@ define('game', ['exports', 'utility', 'stage'], function (game, utility, stage) 
         return finished;
     };
 });
-
-//function Game () {
-//
-//    var interaction = new Interactivity(),
-//        collision = new Collision(),
-//        http = new HttpRequest(),
-//        entities = {},
-//        loading = {},
-//        scene  = new Scene({
-//            modules: {
-//                interact: interaction,
-//                collision: collision,
-//                entities: entities,
-//                http: http
-//            }
-//        }),
-//
-//        // May pass in the game object so every
-//        // entity has high level access to the game
-//        self = this;
-//
-//    self.play = function (withInteractions) {
-//        _util.waitUntil(self.finishedLoading, [], function() {
-//
-//            scene.run('introduction');
-//
-//        }, []);
-//    };
-//
-//    self.load = function (config) {
-//
-//        if (stage.scenes) {
-//
-//            for (var ss=0; ss < stage.scenes.length; ss++) {
-//
-//                if (stage.scenes[ss].load) {
-//                    loading[stage.scenes[ss].id] = false;
-//                    http.get({
-//                        id: stage.scenes[ss].id,
-//                        url: stage.scenes[ss].load,
-//                        onSuccess: function (response) {
-//                            var s = JSON.parse(response), sceneId = this.id, actors = {};
-//                            for (var a=0; a < s.actors.length; a++) {
-//                                if (entities[s.actors[a]])
-//                                actors[s.actors[a]] = entities[s.actors[a]];
-//                            }
-//                            scene.add({
-//                                id: sceneId,
-//                                name: s.name,
-//                                actors: actors,
-//                                actions: s.actions
-//                            });
-//
-//                            loading[sceneId] = true;
-//                        }
-//                    })
-//                }
-//            }
-//        }
-//    };
-// }
