@@ -5,3 +5,13 @@
 # Ignored Folder
 # ----------
 .ignore
+
+# NodeJS
+# ----------
+node_modules/
+npm-debug.log
+
+# Bower Components
+# ----------------
+bower_components/
+components/

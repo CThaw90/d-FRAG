@@ -1,10 +1,15 @@
 /**
  * Created by Chris on 10/7/2015.
+ *
+ * A collection of predefined constant values
+ * commonly used throughout the application
  */
 
-var _const = {
+define({
 
-    basePath: 'http://' + location.hostname + location.pathname,
+    host: location.hostname,
+    path: location.pathname,
+    basePath: '/defrag',
     keyPress: 'keypress',
     keyDown: 'keydown',
     keyUp: 'keyup',
@@ -75,4 +80,4 @@ var _const = {
     aiManual: 'AI_MANUAL_CONFIG',
     aiFollow: 'AI_FOLLOW_CONFIG',
     aiTarget: 'AI_TARGET_CONFIG'
-};
+});

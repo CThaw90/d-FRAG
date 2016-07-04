@@ -210,7 +210,7 @@ _util.waitUntil(_util.domLoaded, [], function() {
                 collided = collision.exists(mr_ree.id) ?
                     collision.check(position, dimension, direction, character.range, character) : false;
                 if (!dialogue.conversing() && key.type === _const.keyDown && collision.exists(mr_ree.id)) {
-                    var position = {
+                    position = {
                         x: character.trajecting() === _const.right ? character.x + character.width : character.x,
                         y: character.trajecting() === _const.down ? character.y + character.height : character.y
                     }, dimension = {height: character.height, width: character.width},

@@ -12,18 +12,24 @@
       "duration" : 0
     },
     {
-      "actor" : "harold",
+      "module" : "ai",
       "action" : {
-        "name" : "stopAI",
-        "params" : []
+        "name" : "stop",
+        "params" : [
+          "artificial_intelligence_for_roaming_character",
+          "harold_roaming_character"
+        ]
       },
       "duration" : 0
     },
     {
-      "actor" : "mr-lorenzo",
+      "module" : "ai",
       "action" : {
-        "name" : "stopAI",
-        "params" : []
+        "name" : "stop",
+        "params" : [
+          "artificial_intelligence_for_roaming_character",
+          "mr-lorenzo_roaming_character"
+        ]
       }
     },
     {

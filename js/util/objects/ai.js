@@ -13,225 +13,269 @@
  *      movement: AI exhibits movement behavior. Can be randomized or manually instructed
  *      animate: AI exhibits animation behavior. Can be randomized or manually instructed
  */
-function AI (config) {
+define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utility) {
 
-    var self = this, iFunction, iHandle, valid = false, running = false, object = {};
+    var self = {
+        iQueue: {},
 
-    self.start = function() {
-        if (!valid)
-            return;
-
-        iHandle = setInterval(iFunction, config.interval || _const.defaultAiInterval);
-        running = true;
+        intervals: {},
+        instructions: {
+            functions: {},
+            methods: {
+                params: {
+                    randomized: false,
+                    type: String()
+                }
+            }
+        }
     };
 
-    self.stop = function() {
-        if (!running)
-            return;
-
-        clearInterval(iHandle);
-        running = false;
-    };
-
-    switch (config.type) {
-
-        case _const.aiRandom:
-
-            randomizedAI();
-            break;
-
-        case _const.aiManual:
-
-            break;
-
-        case _const.aiFollow:
-
-            break;
-
-        case _const.aiTarget:
-
-            break;
-    }
-
-    function randomizedAI() {
-
-        object = config['object'];
-
-        valid = validateInstructions(config['instructions']);
-        valid = valid && config['intervals'] !== undefined ?
-            validateIntervals(config['intervals']) : valid;
-
-        if (!valid) {
-            console.log('Instruction validation failed');
-            return;
+    self.validateConfiguration = function (config) {
+        if (!config.id) {
+            console.log('Cannot add ai configuration. No unique identifier.');
+            return false;
         }
 
-        iFunction = function() {
+        if (!self.validateInstructions(config.instructions) || (config.intervals && (!utility.isNumber(config.interval) || !self.validateIntervals(config.intervals)))) {
+            console.log('Cannot add ai configuration with id \'' + config.id + '\'. Invalid configuration format');
+            return false;
+        }
 
-            var instructions = config['instructions'], evaluation = [];
-            for (var i = 0; i < instructions.length; i++) {
+        if (self.iQueue[config.id]) {
+            console.log('Cannot add ai configuration with id \'' + config.id + '\' ');
+            return false;
+        }
 
-                var instruction = instructions[i], builder = String(), params, args;
-                evaluation.push({name: instruction.name, execute: []});
-                if (instruction.hasOwnProperty('methods')) {
-                    var methods = instruction['methods'];
-                    for (var m = 0; m < methods.length; m++) {
+        return true;
+    };
 
-                        builder = "object['" + _util.escape(methods[m].name) + "']";
-                        if (methods[m].hasOwnProperty('params')) {
-
-                            params = methods[m]['params'];
-                            args = [];
-                            for (var p = 0; p < params.length; p++) {
-
-                                if (params['randomized']) {
-
-                                }
-                                else if (!params['randomized']) {
-                                    args.push(params[p]['body']);
-                                }
-                            }
-
-                            evaluation[i].execute.push(_util.buildFunctionFromArray(builder, args));
-                        }
-                    }
+    self.validateInstructions = function (instructions) {
+        var valid = false;
+        if (utility.isArray(instructions)) {
+            valid = true;
+            instructions.forEach(function (instruction) {
+                valid = utility.isString(instruction.name);
+                if (valid && instruction.methods) {
+                    valid = self.validateMethods(instruction.methods);
                 }
 
-                if (instruction.hasOwnProperty('functions')) {
-
+                if (valid && instruction.functions) {
+                    valid = true;
                 }
-            }
+            });
+        }
 
-            var random = Math.floor(Math.random() * (evaluation.length * 10)) % evaluation.length;
-            var evaluate = evaluation[random];
+        return valid;
+    };
 
-            for (var e = 0; e < evaluate.execute.length; e++) {
-                eval(evaluate.execute[e]);
-            }
+    self.validateIntervals = function (intervals) {
+        var valid = false;
+        if (utility.isArray(intervals)) {
+            valid = true;
+            intervals.forEach(function (interval) {
 
-            if (config['intervals'] && _util.isArray(config['intervals'])) {
-                
-                setTimeout(function() {
+                if (utility.isObject(interval)) {
+                    valid = utility.isString(interval.name);
 
-                    var intervalLength = config['intervals'].length, e = [];
-                    for (var _interval = 0; _interval < intervalLength; _interval++) {
-
-                        var interval = config['intervals'][_interval], builder = String();
-                        if (interval.hasOwnProperty('methods')) {
-
-                            var _methods = interval['methods'];
-                            for (var m = 0; m < _methods.length; m++) {
-
-                                builder = "object['" + _util.escape(_methods[m]['name']) + "']";
-                                if (_methods[m].hasOwnProperty('params')) {
-                                    var _params = _methods[m]['params'], args = [];
-                                    for (var p = 0; p < _params.length; p++) {
-
-                                    }
-
-                                    e.push(_util.buildFunctionFromArray(builder, args));
-                                }
-
-                            }
-                        }
-
-                        if (interval.hasOwnProperty('functions')) {
-
-                            var _functions = interval['functions'];
-                        }
-
-
-                        for (var val = 0; val < e.length; val++) {
-                            eval(e[val]);
-                        }
-
+                    if (valid && interval.methods) {
+                        valid = self.validateMethods(interval.methods);
                     }
 
-                }, (config.interval / 2));
+                    if (valid && interval.functions) {
+                        valid = utility.isArray(interval.functions) && utility.isString(interval.functions.name);
+                        valid = valid && interval.functions.params && utility.isArray(interval.functions.params);
+                    }
+                }
+            });
+        }
+
+        return valid;
+    };
+
+    self.validateMethods = function (methods) {
+        var valid = false;
+        if (utility.isArray(methods)) {
+            valid = true;
+            methods.forEach(function (method) {
+                valid = utility.isString(method.name);
+                valid = valid && method.hasOwnProperty('params');
+
+                if (valid && utility.isArray(method.params)) {
+                    method.params.forEach(function (param) {
+                        valid = valid && utility.isBoolean(param.randomized) && utility.isString(param.type);
+                    });
+                }
+            });
+        }
+
+        return valid;
+    };
+
+    self.randomized = function (config) {
+
+        self.iQueue[config.id].evaluation = {instructions: [], intervals: []};
+
+        var instructionEvaluations = self.iQueue[config.id].evaluation.instructions, evalIndex = 0;
+        config.instructions.forEach(function (instruction) {
+
+            var builder = String(), args;
+            instructionEvaluations.push({name: instruction.name || '__instruction_' + evalIndex, execute: []});
+            if (instruction.methods) {
+                instruction.methods.forEach(function (method) {
+                    builder = 'self.iQueue[\'' + config.id + '\'].entities[\'{entityId}\'].object[\'' + method.name + '\']';
+                    args = [];
+                    if (method.params) {
+                        method.params.forEach(function (param) {
+                            if (param.randomized) {
+
+                            }
+                            else {
+                                args.push(param.body);
+                            }
+                        });
+                    }
+
+                    instructionEvaluations[evalIndex].execute.push(utility.buildFunctionFromArray(builder, args));
+                });
+            }
+            else if (instruction.functions) {
+                console.log('Artificial Intelligence anonymous functions are not yet supported');
+            }
+
+            evalIndex++;
+        });
+
+        if (config.intervals) {
+
+            var intervalEvaluations = self.iQueue[config.id].evaluation.intervals;
+            evalIndex = 0;
+
+            config.intervals.forEach(function (interval) {
+                var builder = String(), args;
+
+                if (interval.methods) {
+                    interval.methods.forEach(function (method) {
+                        builder = 'self.iQueue[\'' + config.id + '\'].entities[\'{entityId}\'].object[\'' + method.name + '\']';
+                        args = [];
+                        if (method.params) {
+                            method.params.forEach(function (param) {
+
+                            });
+                            intervalEvaluations.push(utility.buildFunctionFromArray(builder, args));
+                        }
+                    });
+                }
+            });
+        }
+
+        self.iQueue[config.id].interval = config.interval || constants.defaultAiInterval;
+        self.iQueue[config.id].iFunction = function (objectId) {
+
+            var random = Math.floor(Math.random() * (instructionEvaluations.length * 10)) % instructionEvaluations.length;
+            var evaluate = instructionEvaluations[random];
+
+            evaluate.execute.forEach(function (andExecute) {
+                andExecute = andExecute.replace(new RegExp('\\{entityId\\}', 'g'), objectId);
+                eval(andExecute);
+            });
+
+            if (config.intervals) {
+
+                setTimeout(function () {
+                    intervalEvaluations.forEach(function(andExecute) {
+                        andExecute = andExecute.replace(new RegExp('\\{entityId\\}', 'g'), objectId);
+                        eval(andExecute);
+                    });
+                }, config.interval / 2);
             }
         };
-    }
+    };
 
-    function validateIntervals(intervals) {
+    ai.add = function (config) {
 
-        var valid = _util.isArray(intervals), interval = {};
+        if (!self.validateConfiguration(config)) { return; }
 
-        for (var int = 0; valid && int < intervals.length; int++) {
+        self.iQueue[config.id] = {};
+        self.iQueue[config.id].type = config.type;
+        self.iQueue[config.id].entities = {};
 
-            valid = _util.isObject(intervals[int]);
-            if ( valid ) {
-                interval = intervals[int];
-                valid = _util.isString(interval.name);
-                valid = valid ? object[interval.name] !== undefined : valid;
+        switch (config.type) {
 
-                if (interval['methods']) {
-                    valid = validateMethods(interval['methods']);
-                }
+            case constants.aiRandom:
+                self.randomized(config);
+                break;
+        }
+    };
 
-                if (interval['functions']) {
+    ai.start = function (params) {
 
-                    valid = _util.isArray(interval['functions']);
-                    valid = valid ? _util.isString(interval['functions']['name']) : valid;
-                    valid = valid ? object[interval['methods']['name']] !== undefined : valid;
-                    valid = valid && interval['functions']['params'] ? _util.isArray(interval['functions']['params']) : valid;
-                }
-            }
+        if (!params.id) {
+            console.log('Cannot start ai engine. No unique identifier found');
+            return;
         }
 
-        return valid;
-    }
-
-    function validateInstructions (instructions) {
-
-        var valid = _util.isArray(instructions);
-        for (var i = 0; valid && i < instructions.length; i++) {
-
-            var instruction = instructions[i], methods = null, functions = null, params = null;
-            valid = _util.isString(instruction.name);
-
-            if ( valid && instruction.hasOwnProperty('methods') ) {
-                valid = validateMethods(instruction['methods'])
-            }
-
-            if ( valid && instruction.hasOwnProperty('functions') ) {
-                valid = _util.isArray(instruction['functions']);
-                if ( valid ) {
-                    functions = instruction['functions'];
-                    for (var f = 0; valid && f < functions.length; f++) {
-
-                    }
-                }
-            }
+        if (!self.iQueue[params.engine]) {
+            console.log('Cannot start ai engine. No ai configuration with id \'' + params.id + '\'');
+            return;
         }
 
-        return valid;
-    }
+        switch (self.iQueue[params.engine].type) {
 
-    function validateMethods (methods) {
-
-        var valid = _util.isArray(methods), params;
-        if ( valid ) {
-
-            for (var m = 0; valid && m < methods.length; m++) {
-
-                valid = _util.isString(methods[m].name);
-                valid = valid ? object.hasOwnProperty(methods[m].name) && _util.isFunction(object[methods[m].name]) : valid;
-
-                valid = valid ? methods[m].hasOwnProperty('params') : valid;
-                valid = valid ? _util.isArray(methods[m]['params']) : valid;
-
-                if ( valid ) {
-
-                    params = methods[m]['params'];
-                    for (var p = 0; valid && p < params.length; p++) {
-
-                        valid = valid ? _util.isBoolean(params[p]['randomized']) : valid;
-                        valid = valid ? _util.isString(params[p]['type']) : valid;
-                    }
+            case constants.aiRandom:
+                var aiEngine = self.iQueue[params.engine];
+                if (aiEngine.entities[params.id] && aiEngine.entities[params.id].running) {
+                    console.log('Cannot start engine for \'' + params.id +'\'. Engine for this identifier already running');
+                    return;
                 }
-            }
+                else if (aiEngine.entities[params.id] && aiEngine.entities[params.id].object.id === params.entity.id) {
+                    aiEngine.entities[params.id].iHandle = setInterval(aiEngine.iFunction.bind(null, params.id), aiEngine.interval);
+                    aiEngine.entities[params.id].running = true;
+                }
+                else {
+                    aiEngine.entities[params.id] = {running: true};
+                    aiEngine.entities[params.id].object = params.entity;
+                    aiEngine.entities[params.id].iHandle = setInterval(aiEngine.iFunction.bind(null, params.id), aiEngine.interval);
+                }
+
+                break;
+        }
+    };
+
+    ai.stop = function (engineId, objectId) {
+        if (!self.iQueue[engineId] || !self.iQueue[engineId].entities[objectId]) {
+            console.log('No ai with id \'' + id + '\' running');
+            return false;
         }
 
-        return valid;
-    }
-}
+        self.iQueue[engineId].entities[objectId].running = false;
+        switch (self.iQueue[engineId].type) {
+
+            case constants.aiRandom:
+                clearInterval(self.iQueue[engineId].entities[objectId].iHandle);
+                self.iQueue[engineId].entities[objectId].object = null;
+                break;
+        }
+
+        return true;
+    };
+
+    ai.remove = function (engineId, objectId) {
+        if (self.iQueue[engineId] && self.iQueue[engineId].entities[objectId]) {
+            var engine = self.iQueue[engineId];
+            if (ai.isRunning(engineId, objectId)) {
+                ai.stop(engineId, objectId);
+            }
+
+            delete engine.entities[objectId];
+        }
+    };
+
+    ai.isRunning = function (engineId, objectId) {
+        return self.iQueue[engineId] && self.iQueue[engineId].entities[objectId]
+            && self.iQueue[engineId].entities[objectId].running;
+    };
+
+    ai.info = function (id) {
+        return {};
+    };
+});
