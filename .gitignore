@@ -15,3 +15,8 @@ npm-debug.log
 # ----------------
 bower_components/
 components/
+
+# Generated SASS
+# ----------------
+.sass-cache/
+css/

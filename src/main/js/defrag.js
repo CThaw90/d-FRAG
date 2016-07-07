@@ -10,7 +10,7 @@
  */
 
 requirejs.config({
-    baseUrl: './js/.',
+    baseUrl: './main/js/',
     paths: {
         ai: 'util/objects/ai',
         collision: 'util/objects/collision',
