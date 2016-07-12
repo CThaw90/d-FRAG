@@ -1,27 +1,27 @@
-define('levels', ['exports', 'constants'], function (level, constants) {
+define('levels', ['exports'], function (level) {
 
     var levels = {};
 
     levels.LEVEL_ONE_INTRODUCTION = {
 
         stage: {
-            backgroundImage: '/defrag/img/stages/grass.png',
-            id: 'main-stage-level-one',
+            backgroundImage: '/defrag-content/images/stages/grass.png',
+            id: 'main-stage-introduction',
             ais: [
-                {load: constants.basePath + '/json/ai/roaming.json'}
+                {load: '/defrag-content/artificial-intelligence/roaming-character.json'}
             ],
             objects: [
-                {load: '/defrag/json/sprites/characters/character.json', id: 'main-character'},
-                {load: '/defrag/json/sprites/characters/harold.json', id: 'harold'},
-                {load: '/defrag/json/sprites/characters/mr-lorenzo.json', id: 'mr-lorenzo'},
-                {load: '/defrag/json/sprites/characters/mr-ree.json', id: 'mr-ree'},
+                {load: '/defrag-content/objects/characters/main-character.json', id: 'main-character'},
+                {load: '/defrag-content/objects/characters/harold.json', id: 'harold'},
+                {load: '/defrag-content/objects/characters/mr-lorenzo.json', id: 'mr-lorenzo'},
+                {load: '/defrag-content/objects/characters/mr-ree.json', id: 'mr-ree'},
 
-                {load: '/defrag/json/sprites/doors/steel-door.json', id: 'steel-door'},
-                {load: '/defrag/json/sprites/doors/black-door.json', id: 'black-door'}
+                {load: '/defrag-content/objects/doors/steel-door.json', id: 'steel-door'},
+                {load: '/defrag-content/objects/doors/black-door.json', id: 'black-door'}
             ]
         },
         scenes: [
-            {load: '/defrag/json/scenes/introduction.json', id: 'introduction'}
+            {load: '/defrag-content/scenes/Introduction/opening_scene.json', id: 'introduction'}
         ]
     };
 

@@ -203,7 +203,7 @@ define('interactions', ['exports', 'constants', 'http', 'dialogue'], function (i
             if (!conversation.conversing() && key.type === constants.keyDown && collided && collided.collisionId === mrRee.id) {
                 interact.whiteListDisable('MAIN_CHARACTER_CONVERSATION_WITH_MR_REE');
                 http.get({
-                    url: constants.basePath + '/json/dialogue/character_mr_ree_dialogue.json',
+                    url: '/defrag-content/conversations/main_character_and_mr_ree_dialogue.json',
                     onSuccess: function (response) {
                         conversation.converse([mainCharacter, mrRee], JSON.parse(response));
                         conversation.next();

@@ -20,11 +20,23 @@ module.exports = function (grunt) {
             install: {
                 options: {
                     install: true,
-                    copy: true,
-                    cleanBowerDir: true,
-                    verbose: true,
-                    targetDir: '<%= gruntConfig.app %>/components'
+                    copy: false,
+                    cleanBowerDir: false,
+                    verbose: true
                 }
+            }
+        },
+        copy: {
+            main: {
+                files: [
+                    {expand: true, cwd: 'bower_components/', src: ['artificial-intelligence/**', '!./bower.json'], dest: 'src/main/components'},
+                    {expand: true, cwd: 'bower_components/', src: ['conversations/**', '!./bower.json'], dest: 'src/main/components'},
+                    {expand: true, cwd: 'bower_components/', src: ['images/**', '!./bower.json'], dest: 'src/main/components'},
+                    {expand: true, cwd: 'bower_components/', src: ['objects/**', '!./bower.json'], dest: 'src/main/components'},
+                    {expand: true, cwd: 'bower_components/', src: ['requirejs/**', '!./bower.json'], dest: 'src/main/components'},
+                    {expand: true, cwd: 'bower_components/', src: ['scenes/**', '!./bower.json'], dest: 'src/main/components'},
+                    {expand: true, cwd: 'bower_components/', src: ['text/**', '!.bower.json'], dest: 'src/main/components'}
+                ]
             }
         },
         compass: {
@@ -35,6 +47,15 @@ module.exports = function (grunt) {
                     force: true
                 }
             }
+        },
+        clean: {
+            bower: ['bower_components'],
+            build: ['src/main/components', 'src/main/css'],
+            cache: ['.cache']
         }
     });
+
+    grunt.registerTask('default', ['bower', 'compass', 'copy', 'clean:bower']);
+    grunt.registerTask('build', ['default']);
+    grunt.registerTask('cleanBuild', ['clean', 'build']);
 };

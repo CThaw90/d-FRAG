@@ -3,6 +3,11 @@
   "description": "A 2D Hacker RPG Web game",
   "version": "0.0.0",
   "dependencies": {
+    "artificial-intelligence": "http://www.gamesfolio.com/defrag-json/artificial-intelligence.zip",
+    "conversations": "http://www.gamesfolio.com/defrag-json/conversations.zip",
+    "images": "http://www.gamesfolio.com/defrag-images/images.zip",
+    "objects": "http://www.gamesfolio.com/defrag-json/objects.zip",
+    "scenes": "http://www.gamesfolio.com/defrag-json/scenes.zip",
     "requirejs": "2.1.17",
     "text": "2.0.14"
   },

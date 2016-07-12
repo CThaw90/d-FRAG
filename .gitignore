@@ -2,10 +2,6 @@
 # -------
 .idea
 
-# Ignored Folder
-# ----------
-.ignore
-
 # NodeJS
 # ----------
 node_modules/
@@ -15,6 +11,7 @@ npm-debug.log
 # ----------------
 bower_components/
 components/
+.cache/
 
 # Generated SASS
 # ----------------

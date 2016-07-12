@@ -18,8 +18,7 @@ define('object', ['exports', 'constants', 'utility', 'collision', 'dialogue'], f
             },
             loading: {},
             sprite: {
-                animationVector: {},
-                imageSrc: String()
+                animationVector: {}
             },
             animationIndex: 0,
             animation: null,
@@ -137,7 +136,7 @@ define('object', ['exports', 'constants', 'utility', 'collision', 'dialogue'], f
             self.loading.sprite = false;
             self.sprite = config.sprite;
             self.image = new Image();
-            self.image.src = self.sprite.imageSrc;
+            self.image.src = self.sprite.image;
             self.image.height = self.sprite.height;
             self.image.width = self.sprite.width;
             self.image.onload = function () {
