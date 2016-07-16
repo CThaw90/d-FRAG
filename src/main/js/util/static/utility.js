@@ -61,13 +61,18 @@ define('utility', ['constants'], function (constants) {
             return window.innerWidth + 'px';
         },
 
-        // Converts an array to an object with given value
-        arrayToObject: function(array, value) {
+        /**
+         * @description Converts an array to an object with given value
+         * @param array - the array to be converted
+         * @param value - the value to store in the object key
+         * @param key - optional custom set key to reference value in new object
+         */
+        arrayToObject: function(array, value, key) {
             var object = {};
             if (this.isArray(array)) {
                 for (var i=0; i < array.length; i++) {
                     if (this.isObject(array[i])) {
-                        object[array[i].id || array[i].key || array] = value || array[i];
+                        object[array[i].id || array[i].key || array[i][key] || key] = value || array[i];
                     }
                     else if (this.isString(array[i])) {
                         object[array[i]] = value || array[i];
@@ -87,10 +92,12 @@ define('utility', ['constants'], function (constants) {
                 return null;
 
             for (var i=0; i < rules.length; i++) {
-                keyValue = rules[i].split(':');
+                keyValue = rules[i].split(/:(.*)?/, 2);
                 if (keyValue.length === 2)
                     object[keyValue[0].trim()]=keyValue[1].trim();
             }
+
+            return object;
         },
 
         // Converts a JSON object into css rules
@@ -101,7 +108,9 @@ define('utility', ['constants'], function (constants) {
                 return null;
 
             for (var key in object) {
-                css += key+': '+object[key]+'; ';
+                if (object.hasOwnProperty(key)) {
+                    css += key+': '+object[key]+'; ';
+                }
             }
 
             return css;
