@@ -7,6 +7,7 @@ module.exports = function (grunt) {
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
     var gruntConfig = {
+        app: 'src/main',
         readJSON: 'Reads filesystem json file',
         initConfig: 'INITIALIZE_CONFIGURATION'
     };
