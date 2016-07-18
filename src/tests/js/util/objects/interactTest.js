@@ -28,6 +28,7 @@ define(['Squire', 'constants'], function (Squire, constants) {
                 }
             }
 
+            spyOn(window, 'addEventListener');
             if (stage.getObject.and.calls) {
                 stage.getObject.and.calls.reset();
                 stage.getObject.and.callFake(function (id) {
@@ -188,7 +189,6 @@ define(['Squire', 'constants'], function (Squire, constants) {
                 collision: collision,
                 interactions: interactions
             }).require(['interact', 'interactions'], function (interact, interactions) {
-                spyOn(window, 'addEventListener');
                 interact.init();
 
                 var self = interact.returnSelf(), interval;
@@ -251,6 +251,30 @@ define(['Squire', 'constants'], function (Squire, constants) {
                 self.info.interaction_module_running.interval();
                 expect(interactions.interaction_module_running.does).toHaveBeenCalledTimes(1);
                 expect(interactions.interaction_module_running.does).toHaveBeenCalledWith(interact, interactObject('running_trigger'), expectedSelf.mTrigger.interaction_module_running, collision);
+
+                done();
+            });
+        });
+
+        it('should disable an interaction object', function (done) {
+            var injector = new Squire();
+            injector.mock({
+                stage: stage,
+                collision: collision,
+                interactions: interactions
+            }).require(['interact'], function (interact) {
+                interact.init();
+
+                var self = interact.returnSelf();
+                self.info.interaction_module_character.listener({keyCode: constants.keyMap.space});
+                self.info.interaction_module_character.listener({keyCode: constants.keyMap.space});
+                expect(interactions.interaction_module_character.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_character.active).toBe(true);
+
+                interact.disable('interaction_module_character');
+                self.info.interaction_module_character.listener({keyCode: constants.keyMap.space});
+                expect(interactions.interaction_module_character.does).not.toHaveBeenCalledTimes(3);
+                expect(self.info.interaction_module_character.active).toBe(false);
 
                 done();
             });
