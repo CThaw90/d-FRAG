@@ -51,7 +51,7 @@ define('interact', ['exports', 'constants', 'utility', 'collision', 'interaction
      * @attribute type - the type of action that triggers an interaction or interaction check
      * @attribute config - Extra configurations used to determine where this interaction is allowed to happen
      *
-     *      @param config : for keypress type
+     *      @attribute config : for keypress type
      *      @attribute keys: [] - An array of key codes that are valid for the interaction
      *      @attribute all: Interaction is triggered for all keys. Can be configured down to a specific subset
      *          @attribute alpha: Only triggered by keys that are letters

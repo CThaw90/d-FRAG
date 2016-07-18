@@ -9,7 +9,15 @@ define(['Squire', 'constants'], function (Squire, constants) {
             interactions = getJSONFixture('json/interactions.json');
 
         stage.getObject.and.callFake(function (id) {
-            return {id: id};
+
+            return {
+                id: id,
+                x: 'X_COORDINATE',
+                y: 'Y_COORDINATE',
+                trajecting: function (payload) {
+                    return payload || 'trajecting';
+                }
+            };
         });
 
         /* Prepare interactions object */
@@ -23,7 +31,17 @@ define(['Squire', 'constants'], function (Squire, constants) {
             if (stage.getObject.and.calls) {
                 stage.getObject.and.calls.reset();
                 stage.getObject.and.callFake(function (id) {
-                    return {id: id, trajecting: function () {}};
+
+                    interactions[id].objectReference = {
+                        id: id,
+                        x: 'X_COORDINATE',
+                        y: 'Y_COORDINATE',
+                        trajecting: function (payload) {
+                            return payload || 'trajecting';
+                        }
+                    };
+
+                    return interactions[id].objectReference;
                 });
             }
 
@@ -53,7 +71,7 @@ define(['Squire', 'constants'], function (Squire, constants) {
                 collision: collision,
                 interactions: interactions
             }).require(['interact'], function (interact) {
-                var self = interact.returnSelf(), objects = {};
+                var self = interact.returnSelf(), objects;
 
                 objects = self.populateObjects(interactions['interaction_module_character'].objects);
 
@@ -63,10 +81,10 @@ define(['Squire', 'constants'], function (Squire, constants) {
                 expect(stage.getObject).toHaveBeenCalledWith('character_c');
                 expect(stage.getObject).toHaveBeenCalledWith('character_d');
                 expect(objects).toEqual({
-                    character_a: {id: 'character_a'},
-                    character_b: {id: 'character_b'},
-                    character_c: {id: 'character_c'},
-                    character_d: {id: 'character_d'}
+                    character_a: {id: 'character_a', x: jasmine.any(String), y: jasmine.any(String), trajecting: jasmine.any(Function)},
+                    character_b: {id: 'character_b', x: jasmine.any(String), y: jasmine.any(String), trajecting: jasmine.any(Function)},
+                    character_c: {id: 'character_c', x: jasmine.any(String), y: jasmine.any(String), trajecting: jasmine.any(Function)},
+                    character_d: {id: 'character_d', x: jasmine.any(String), y: jasmine.any(String), trajecting: jasmine.any(Function)}
                 });
 
                 done();
@@ -97,57 +115,60 @@ define(['Squire', 'constants'], function (Squire, constants) {
 
         it('should properly initialize with all interactions stored in the init interactions object', function (done) {
             var injector = new Squire(),
+                interactObject = function (objectId) {
+                    return {id: objectId, x: 'X_COORDINATE', y: 'Y_COORDINATE', trajecting: jasmine.any(Function)};
+                },
                 expectedSelf = {
                     mTrigger: {
                         interaction_module_movement: {
-                            movement_a: {id: 'movement_a'},
-                            movement_b: {id: 'movement_b'},
-                            movement_c: {id: 'movement_c'},
-                            movement_d: {id: 'movement_d'}
+                            movement_a: interactObject('movement_a'),
+                            movement_b: interactObject('movement_b'),
+                            movement_c: interactObject('movement_c'),
+                            movement_d: interactObject('movement_d')
                         },
                         interaction_module_detection: {
-                            detection_a: {id: 'detection_a'},
-                            detection_b: {id: 'detection_b'},
-                            detection_c: {id: 'detection_c'},
-                            detection_d: {id: 'detection_d'}
+                            detection_a: interactObject('detection_a'),
+                            detection_b: interactObject('detection_b'),
+                            detection_c: interactObject('detection_c'),
+                            detection_d: interactObject('detection_d')
                         },
                         interaction_module_walking: {
-                            walking_a: {id: 'walking_a'},
-                            walking_b: {id: 'walking_b'},
-                            walking_c: {id: 'walking_c'},
-                            walking_d: {id: 'walking_d'}
+                            walking_a: interactObject('walking_a'),
+                            walking_b: interactObject('walking_b'),
+                            walking_c: interactObject('walking_c'),
+                            walking_d: interactObject('walking_d')
                         },
                         interaction_module_running: {
-                            running_a: {id: 'running_a'},
-                            running_b: {id: 'running_b'},
-                            running_c: {id: 'running_c'},
-                            running_d: {id: 'running_d'}
+                            running_a: interactObject('running_a'),
+                            running_b: interactObject('running_b'),
+                            running_c: interactObject('running_c'),
+                            running_d: interactObject('running_d')
                         }
                     },
                     kTrigger: {
                         interaction_module_character: {
-                            character_a: {id: 'character_a'},
-                            character_b: {id: 'character_b'},
-                            character_c: {id: 'character_c'},
-                            character_d: {id: 'character_d'}
+                            character_a: interactObject('character_a'),
+                            character_b: interactObject('character_b'),
+                            character_c: interactObject('character_c'),
+                            character_d: interactObject('character_d')
                         },
                         interaction_module_tree: {
-                            tree_a: {id: 'tree_a'},
-                            tree_b: {id: 'tree_b'},
-                            tree_c: {id: 'tree_c'},
-                            tree_d: {id: 'tree_d'}
+                            tree_a: interactObject('tree_a'),
+                            tree_b: interactObject('tree_b'),
+                            tree_c: interactObject('tree_c'),
+                            tree_d: interactObject('tree_d')
                         },
                         interaction_module_wall: {
-                            wall_a: {id: 'wall_a'},
-                            wall_b: {id: 'wall_b'},
-                            wall_c: {id: 'wall_c'},
-                            wall_d: {id: 'wall_d'}
+                            wall_a: interactObject('wall_a'),
+                            wall_b: interactObject('wall_b'),
+                            wall_c: interactObject('wall_c'),
+                            wall_d: interactObject('wall_d')
                         },
                         interaction_module_door: {
-                            door_a: {id: 'door_a'},
-                            door_b: {id: 'door_b'},
-                            door_c: {id: 'door_c'},
-                            door_d: {id: 'door_d'}
+                            door_a: interactObject('door_a'),
+                            door_b: interactObject('door_b'),
+                            door_c: interactObject('door_c'),
+                            door_d: interactObject('door_d')
                         }
                     },
                     info: {
@@ -160,29 +181,18 @@ define(['Squire', 'constants'], function (Squire, constants) {
                         interaction_module_walking: { active: true, type: 'movement', interval: jasmine.any(Function) },
                         interaction_module_running: { active: true, type: 'movement', interval: jasmine.any(Function) }
                     }
-                },
-                objects = {
-                    interaction_module_character: { id: 'interaction_module_character' },
-                    interaction_module_tree: { id: 'interaction_module_tree' },
-                    interaction_module_wall: { id: 'interaction_module_wall' },
-                    interaction_module_door: { id: 'interaction_module_door' },
-                    interaction_module_movement: { id: 'interaction_module_movement'},
-                    interaction_module_detection: { id: 'interaction_module_detection'},
-                    interaction_module_walking: { id: 'interaction_module_walking'},
-                    interaction_module_running: {id: 'interaction_module_running'}
                 };
 
             injector.mock({
                 stage: stage,
                 collision: collision,
                 interactions: interactions
-            }).require(['interact'], function (interact) {
+            }).require(['interact', 'interactions'], function (interact, interactions) {
                 spyOn(window, 'addEventListener');
-                stage.getObject = function (id) { return {id: id}; };
                 interact.init();
-                var self = interact.returnSelf(), interval;
 
-                expect(window); // TODO: Finishing writing these unit tests
+                var self = interact.returnSelf(), interval;
+                // TODO: Finishing writing these unit tests
                 expect(window.setInterval).toHaveBeenCalledTimes(4);
                 expect(window.setInterval).toHaveBeenCalledWith(jasmine.any(Function), constants.movementCheckInterval);
                 expect(expectedSelf.mTrigger).toEqual(self.mTrigger);
@@ -193,6 +203,55 @@ define(['Squire', 'constants'], function (Squire, constants) {
                 expect(expectedSelf.kTrigger).toEqual(self.kTrigger);
 
                 expect(expectedSelf.info).toEqual(self.info);
+
+                self.info.interaction_module_character.listener({keyCode: constants.keyMap.enter});
+                expect(interactions.interaction_module_character.does).not.toHaveBeenCalled();
+
+                self.info.interaction_module_character.listener({keyCode: constants.keyMap.space});
+                expect(interactions.interaction_module_character.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_character.does).toHaveBeenCalledWith(interact, expectedSelf.kTrigger.interaction_module_character, collision, {keyCode: constants.keyMap.space});
+
+                self.info.interaction_module_tree.listener({keyCode: constants.keyMap.space});
+                expect(interactions.interaction_module_tree.does).not.toHaveBeenCalled();
+
+                self.info.interaction_module_tree.listener({keyCode: constants.keyMap.enter});
+                expect(interactions.interaction_module_tree.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_tree.does).toHaveBeenCalledWith(interact, expectedSelf.kTrigger.interaction_module_tree, collision, {keyCode: constants.keyMap.enter});
+
+                self.info.interaction_module_wall.listener({keyCode: constants.keyMap.enter});
+                expect(interactions.interaction_module_wall.does).not.toHaveBeenCalled();
+
+                self.info.interaction_module_wall.listener({keyCode: constants.keyMap.shift});
+                expect(interactions.interaction_module_wall.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_wall.does).toHaveBeenCalledWith(interact, expectedSelf.kTrigger.interaction_module_wall, collision, {keyCode: constants.keyMap.shift});
+
+                self.info.interaction_module_door.listener({keyCode: constants.keyMap.shift});
+                expect(interactions.interaction_module_door.does).not.toHaveBeenCalled();
+
+                self.info.interaction_module_door.listener({keyCode: constants.keyMap.upArrow});
+                expect(interactions.interaction_module_door.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_door.does).toHaveBeenCalledWith(interact, expectedSelf.kTrigger.interaction_module_door, collision, {keyCode: constants.keyMap.upArrow});
+
+                expect(interactions.interaction_module_movement.does).not.toHaveBeenCalled();
+                self.info.interaction_module_movement.interval();
+                expect(interactions.interaction_module_movement.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_movement.does).toHaveBeenCalledWith(interact, interactObject('trigger_a'), expectedSelf.mTrigger.interaction_module_movement, collision);
+
+                expect(interactions.interaction_module_detection.does).not.toHaveBeenCalled();
+                self.info.interaction_module_detection.interval();
+                expect(interactions.interaction_module_detection.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_detection.does).toHaveBeenCalledWith(interact, interactObject('detection_trigger'), expectedSelf.mTrigger.interaction_module_detection, collision);
+
+                expect(interactions.interaction_module_walking.does).not.toHaveBeenCalled();
+                self.info.interaction_module_walking.interval();
+                expect(interactions.interaction_module_walking.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_walking.does).toHaveBeenCalledWith(interact, interactObject('walking_trigger'), expectedSelf.mTrigger.interaction_module_walking, collision);
+
+                expect(interactions.interaction_module_running.does).not.toHaveBeenCalled();
+                self.info.interaction_module_running.interval();
+                expect(interactions.interaction_module_running.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_running.does).toHaveBeenCalledWith(interact, interactObject('running_trigger'), expectedSelf.mTrigger.interaction_module_running, collision);
+
                 done();
             });
         });
