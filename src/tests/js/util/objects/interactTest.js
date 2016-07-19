@@ -15,9 +15,7 @@ define(['Squire', 'constants'], function (Squire, constants) {
                                 self.info[int].listener({keyCode: constants.keyMap[interactions[int].config.keys]});
                                 break;
                             case constants.movement:
-                                for (var obj in interactions[int].objects) {
-                                    objectReference[obj].x = Math.random();
-                                }
+                                objectReference[interactions[int].trigger].x = Math.random();
                                 self.info[int].interval();
                                 break;
                         }
@@ -309,7 +307,7 @@ define(['Squire', 'constants'], function (Squire, constants) {
             });
         });
 
-        it('should disable all interactions except ones white listed', function (done) {
+        it('should disable all interactions except ones white listed and enable all interactions except ones black listed', function (done) {
             var injector = new Squire();
             injector.mock({
                 stage: stage,
@@ -341,6 +339,40 @@ define(['Squire', 'constants'], function (Squire, constants) {
                 expect(interactions.interaction_module_detection.does).toHaveBeenCalledTimes(1);
                 expect(interactions.interaction_module_walking.does).toHaveBeenCalledTimes(1);
                 expect(interactions.interaction_module_running.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_character.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_tree.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_wall.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_door.does).toHaveBeenCalledTimes(2);
+
+                interact.whiteListDisable([
+                    'interaction_module_movement',
+                    'interaction_module_detection',
+                    'interaction_module_walking',
+                    'interaction_module_running'
+                ]);
+
+                makeInteractiveCalls(self);
+                expect(interactions.interaction_module_movement.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_detection.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_walking.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_running.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_character.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_tree.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_wall.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_door.does).toHaveBeenCalledTimes(2);
+
+                interact.blackListEnable([
+                    'interaction_module_character',
+                    'interaction_module_tree',
+                    'interaction_module_wall',
+                    'interaction_module_door'
+                ]);
+
+                makeInteractiveCalls(self);
+                expect(interactions.interaction_module_movement.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_detection.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_walking.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_running.does).toHaveBeenCalledTimes(2);
                 expect(interactions.interaction_module_character.does).toHaveBeenCalledTimes(2);
                 expect(interactions.interaction_module_tree.does).toHaveBeenCalledTimes(2);
                 expect(interactions.interaction_module_wall.does).toHaveBeenCalledTimes(2);
