@@ -6,11 +6,28 @@ define(['Squire', 'constants'], function (Squire, constants) {
     describe('Game interaction module', function () {
         var stage = jasmine.createSpyObj('stage', ['getObject']),
             collision = jasmine.createSpyObj('collision', ['check']),
-            interactions = getJSONFixture('json/interactions.json');
+            interactions = getJSONFixture('json/interactions.json'),
+            makeInteractiveCalls = function(self) {
+                for (var int in interactions) {
+                    if (interactions.hasOwnProperty(int)) {
+                        switch (interactions[int].type) {
+                            case constants.keyPress:
+                                self.info[int].listener({keyCode: constants.keyMap[interactions[int].config.keys]});
+                                break;
+                            case constants.movement:
+                                for (var obj in interactions[int].objects) {
+                                    objectReference[obj].x = Math.random();
+                                }
+                                self.info[int].interval();
+                                break;
+                        }
+                    }
+                }
+            },
+            objectReference = {};
 
         stage.getObject.and.callFake(function (id) {
-
-            return {
+            objectReference[id] = {
                 id: id,
                 x: 'X_COORDINATE',
                 y: 'Y_COORDINATE',
@@ -18,6 +35,8 @@ define(['Squire', 'constants'], function (Squire, constants) {
                     return payload || 'trajecting';
                 }
             };
+
+            return objectReference[id];
         });
 
         /* Prepare interactions object */
@@ -256,7 +275,7 @@ define(['Squire', 'constants'], function (Squire, constants) {
             });
         });
 
-        it('should disable an interaction object', function (done) {
+        it('should disable an re-enable interaction object', function (done) {
             var injector = new Squire();
             injector.mock({
                 stage: stage,
@@ -275,6 +294,103 @@ define(['Squire', 'constants'], function (Squire, constants) {
                 self.info.interaction_module_character.listener({keyCode: constants.keyMap.space});
                 expect(interactions.interaction_module_character.does).not.toHaveBeenCalledTimes(3);
                 expect(self.info.interaction_module_character.active).toBe(false);
+
+                interact.enable('interaction_module_tree');
+                self.info.interaction_module_character.listener({keyCode: constants.keyMap.space});
+                expect(interactions.interaction_module_character.does).not.toHaveBeenCalledTimes(3);
+                expect(self.info.interaction_module_character.active).toBe(false);
+
+                interact.enable('interaction_module_character');
+                self.info.interaction_module_character.listener({keyCode: constants.keyMap.space});
+                expect(interactions.interaction_module_character.does).toHaveBeenCalledTimes(3);
+                expect(self.info.interaction_module_character.active).toBe(true);
+
+                done();
+            });
+        });
+
+        it('should disable all interactions except ones white listed', function (done) {
+            var injector = new Squire();
+            injector.mock({
+                stage: stage,
+                collision: collision,
+                interactions: interactions
+            }).require(['interact'], function (interact) {
+                interact.init();
+                var self = interact.returnSelf();
+
+                makeInteractiveCalls(self);
+                expect(interactions.interaction_module_movement.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_detection.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_walking.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_running.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_character.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_tree.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_wall.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_door.does).toHaveBeenCalledTimes(1);
+
+                interact.whiteListDisable([
+                    'interaction_module_character',
+                    'interaction_module_tree',
+                    'interaction_module_wall',
+                    'interaction_module_door'
+                ]);
+
+                makeInteractiveCalls(self);
+                expect(interactions.interaction_module_movement.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_detection.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_walking.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_running.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_character.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_tree.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_wall.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_door.does).toHaveBeenCalledTimes(2);
+
+                done();
+            });
+        });
+
+        it('should disable and re-enable all interaction objects', function (done) {
+            var injector = new Squire();
+            injector.mock({
+                stage: stage,
+                collision: collision,
+                interactions: interactions
+            }).require(['interact'], function (interact) {
+                interact.init();
+                var self = interact.returnSelf();
+
+                makeInteractiveCalls(self);
+                expect(interactions.interaction_module_movement.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_detection.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_walking.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_running.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_character.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_tree.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_wall.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_door.does).toHaveBeenCalledTimes(1);
+
+                interact.disableAll();
+                makeInteractiveCalls(self);
+                expect(interactions.interaction_module_movement.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_detection.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_walking.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_running.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_character.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_tree.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_wall.does).toHaveBeenCalledTimes(1);
+                expect(interactions.interaction_module_door.does).toHaveBeenCalledTimes(1);
+
+                interact.enableAll();
+                makeInteractiveCalls(self);
+                expect(interactions.interaction_module_movement.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_detection.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_walking.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_running.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_character.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_tree.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_wall.does).toHaveBeenCalledTimes(2);
+                expect(interactions.interaction_module_door.does).toHaveBeenCalledTimes(2);
 
                 done();
             });
