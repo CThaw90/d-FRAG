@@ -33,7 +33,7 @@ define('collision', ['exports', 'constants', 'utility'], function (collision, co
     self.setVectorCoordinates = function (object) {
 
         // Damn Javascript returns null as a number. Have to figure out a clean work around
-        if (isNaN(object.width) || isNaN(object.height) || isNaN(object.x) || isNaN(object.y)) { return; }
+        if (window.isNaN(object.width) || window.isNaN(object.height) || window.isNaN(object.x) || window.isNaN(object.y)) { return; }
 
         var LEFT_SIDE = parseInt(object.x), RIGHT_SIDE = parseInt(object.x) + parseInt(object.width),
             TOP_SIDE = parseInt(object.y), BOTTOM_SIDE = parseInt(object.y) + parseInt(object.height);
@@ -223,5 +223,9 @@ define('collision', ['exports', 'constants', 'utility'], function (collision, co
             delete self.CDSObj.objects[id];
             delete self.CDSObj.events[id];
         }
+    };
+
+    collision.returnSelf = function () {
+        return self;
     };
 });

@@ -27,6 +27,7 @@ require.config({
         Squire: '../main/components/Squire.js/src/Squire',
         utility: '../main/js/util/static/utility',
         constants: '../main/js/util/static/constants',
+        collision: '../main/js/util/objects/collision',
         interact: '../main/js/util/objects/interact',
         game: '../main/js/game'
     },
