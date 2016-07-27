@@ -36,6 +36,7 @@ define(['utility'], function (utility) {
         it('Should determine if an object is a valid type object', function () {
             var valueIs = {anObject: {}, notAnObject: '{}', alsoNotAnObject: []}, anObject = true;
 
+            expect(utility.isObject(null)).not.toBe(anObject);
             expect(utility.isObject(undefined)).not.toBe(anObject);
             expect(utility.isObject(valueIs.anObject)).toBe(anObject);
             expect(utility.isObject(valueIs.notAnObject)).not.toBe(anObject);

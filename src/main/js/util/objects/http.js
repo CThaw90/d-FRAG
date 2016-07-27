@@ -16,16 +16,17 @@ define('http', ['exports', 'utility'], function (http, utility) {
         }
     };
 
-    self.formatURL = function (url, params) {
-        var formattedUrl = url + "?";
+    http.formatURL = function (url, params) {
+        var formattedUrl = url + "?", ampersand = "";
         for (var key in params) {
 
             if (params.hasOwnProperty(key)) {
-                formattedUrl += (key + "=" + params[key] + "&");
+                formattedUrl += (ampersand + key + "=" + params[key]);
+                ampersand = "&";
             }
         }
 
-        return formattedUrl.substring(0, formattedUrl.length -1);
+        return formattedUrl;
     };
 
     self.setRequestHeaders = function (headers) {
@@ -66,7 +67,7 @@ define('http', ['exports', 'utility'], function (http, utility) {
 
     http.get = function (config) {
         self.request = new XMLHttpRequest();
-        self.request.open(self.GET_METHOD, self.formatURL(config.url, config.params));
+        self.request.open(self.GET_METHOD, http.formatURL(config.url, config.params));
         self.setRequestHeaders(config.headers);
         self.request.onreadystatechange = self.constructReadyStateChange(config);
         self.request.send();

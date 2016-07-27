@@ -29,6 +29,7 @@ require.config({
         constants: '../main/js/util/static/constants',
         collision: '../main/js/util/objects/collision',
         interact: '../main/js/util/objects/interact',
+        http: '../main/js/util/objects/http',
         game: '../main/js/game'
     },
 
