@@ -130,6 +130,9 @@ define('collision', ['exports', 'constants', 'utility'], function (collision, co
      * @param range - the movement space of an object entity per frameRate
      * @param obj - a reference to the object for relational information
      */
+    /* TODO: Fix so that width and height are calculated within collision check
+    *  New api version will only require the entity object to be passed in
+    * */
     collision.check = function (pos, dimen, dir, range, obj) {
         var status = false, axis = null, tmp = range + 1;
         dimen.y = dimen.height;

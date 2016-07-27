@@ -25,7 +25,7 @@ define('utility', ['constants'], function (constants) {
 
         // Checks if a variable is javascript object
         isObject: function(o) {
-            return o && !this.isArray(o) && typeof o === 'object';
+            return !this.isArray(o) && typeof o === 'object';
         },
 
         // Checks if a variable is a javascript array
