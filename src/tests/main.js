@@ -30,7 +30,8 @@ require.config({
         collision: '../main/js/util/objects/collision',
         interact: '../main/js/util/objects/interact',
         http: '../main/js/util/objects/http',
-        game: '../main/js/game'
+        game: '../main/js/game',
+        interactions: '../main/js/config/interactions'
     },
 
     // ask Require.js to load these files (all our tests)
