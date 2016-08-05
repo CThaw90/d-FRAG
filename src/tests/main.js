@@ -31,6 +31,7 @@ require.config({
         interact: '../main/js/util/objects/interact',
         http: '../main/js/util/objects/http',
         game: '../main/js/game',
+        dialogue: '../main/js/util/objects/dialogue',
         interactions: '../main/js/config/interactions'
     },
 

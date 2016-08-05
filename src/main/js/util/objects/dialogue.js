@@ -14,6 +14,7 @@ define('dialogue', ['exports', 'constants', 'utility', 'stage'], function (dialo
         };
 
         api.show = function (message) {
+            if (self.displayed) api.hide();
             self.container.innerText = message;
             self.container.textContent = message;
             self.parent.appendChild(self.container);
@@ -43,6 +44,10 @@ define('dialogue', ['exports', 'constants', 'utility', 'stage'], function (dialo
             return self.displayed;
         };
 
+        api.returnSelf = function () {
+            return self;
+        };
+
         self.container.setAttribute('class', 'dialogue-box');
         self.container.setAttribute('style', 'position: absolute');
         self.container.setAttribute('id', 'dialogue-box-for-' + object.id);
@@ -67,6 +72,11 @@ define('dialogue', ['exports', 'constants', 'utility', 'stage'], function (dialo
             id: ''
         };
 
+        self.conversation = conversation;
+        self.objects = entities;
+        if (utility.isArray(entities)) {
+            self.objects = utility.arrayToObject(entities);
+        }
         self.checkStatus = function () {
             if (self.index === conversation.length) {
                 api.end();
@@ -147,8 +157,13 @@ define('dialogue', ['exports', 'constants', 'utility', 'stage'], function (dialo
 
         api.setIndex = function (index) {
             if (utility.isNumber(index)) {
+                self.objects[conversation[self.index > 0 ? self.index - 1 : 0].objectId].quiet();
                 self.index = index;
             }
         };
+
+        api.returnSelf = function () {
+            return self;
+        }
     };
 });
