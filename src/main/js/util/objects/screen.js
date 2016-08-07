@@ -39,7 +39,6 @@ define('screen', ['exports', 'utility', 'stage'], function (screen, utility, sta
             return;
         }
 
-        console.log('Locking on object ' + entity.id);
         self.lockObject = entity;
         self.screenLock = setInterval(function () {
             var scrollLimitX = stage.width - parseInt(screen.width()),
