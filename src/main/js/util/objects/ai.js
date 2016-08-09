@@ -17,7 +17,6 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
 
     var self = {
         iQueue: {},
-
         intervals: {},
         instructions: {
             functions: {},
@@ -275,7 +274,18 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
             && self.iQueue[engineId].entities[objectId].running;
     };
 
-    ai.info = function (id) {
-        return {};
+    ai.info = function (engineId, objectId) {
+        var info = {engine: 'NOT_AVAILABLE'};
+        if (engineId && objectId) {
+            info = self.iQueue[engineId].entities[objectId] || {engine: 'NOT_AVAILABLE'};
+        }
+        else if (engineId) {
+            info = self.iQueue[engineId] || {engine: 'NOT_AVAILABLE'};
+        }
+        return info;
+    };
+
+    ai.returnSelf = function () {
+        return self;
     };
 });
