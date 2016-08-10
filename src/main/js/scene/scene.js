@@ -20,7 +20,7 @@ define('scene', ['exports', 'stage', 'constants', 'utility', 'interact', 'http',
     };
 
     scene.add = function (scene) {
-        if (utility.isObject(scene) && !self.sceneDict[scene.id]) {
+        if (utility.isObject(scene) && scene.id && !self.sceneDict[scene.id]) {
             self.sceneDict[scene.id] = scene;
             self.sceneDict[scene.id].execution = [];
             for (var a=0; a < scene.actions.length; a++) {
@@ -42,7 +42,9 @@ define('scene', ['exports', 'stage', 'constants', 'utility', 'interact', 'http',
         else if (utility.isObject(scene)) {
             console.log('Could not add scene with name ' + scene.name);
         }
-        else {
+        else if (!scene.id) {
+            console.log('Could not add scene. No unique identifier');
+        } else {
             console.log('Could not add scene. Not an Object');
         }
     };
@@ -75,5 +77,9 @@ define('scene', ['exports', 'stage', 'constants', 'utility', 'interact', 'http',
         else {
             console.log('Could not run scene with id ' + id + '. Scene does not exist');
         }
+    };
+
+    scene.returnSelf = function () {
+        return self;
     };
 });

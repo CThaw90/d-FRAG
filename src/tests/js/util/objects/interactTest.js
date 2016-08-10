@@ -6,7 +6,7 @@ define(['Squire', 'constants'], function (Squire, constants) {
     describe('Game interaction module', function () {
         var stage = jasmine.createSpyObj('stage', ['getObject']),
             collision = jasmine.createSpyObj('collision', ['check']),
-            interactions = getJSONFixture('json/interactions.json'),
+            interactions = getJSONFixture('json/interact/interactions.json'),
             makeInteractiveCalls = function(self) {
                 for (var int in interactions) {
                     if (interactions.hasOwnProperty(int)) {

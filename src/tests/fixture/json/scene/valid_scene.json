@@ -1,0 +1,248 @@
+{
+  "id" : "d-FRAG_game_introduction_scene",
+  "name" : "Introduction Scene",
+  "actors" : ["character", "harold", "mr-ree", "mr-lorenzo"],
+  "actions" : [
+    {
+      "module" : "interact",
+      "action" : {
+        "name" : "disableAll",
+        "params" : []
+      },
+      "duration" : 0
+    },
+    {
+      "module" : "ai",
+      "action" : {
+        "name" : "stop",
+        "params" : [
+          "artificial_intelligence_for_roaming_character",
+          "harold_roaming_character"
+        ]
+      },
+      "duration" : 0
+    },
+    {
+      "module" : "ai",
+      "action" : {
+        "name" : "stop",
+        "params" : [
+          "artificial_intelligence_for_roaming_character",
+          "mr-lorenzo_roaming_character"
+        ]
+      }
+    },
+    {
+      "actor" : "harold",
+      "action" : {
+        "name" : "place",
+        "params" : [100, -150]
+      },
+      "duration" : 1000
+    },
+    {
+      "actor" : "harold",
+      "action" : {
+        "name" : "animate",
+        "params" : [
+          {
+            "name": "animate-movingDown",
+            "type" : "loop",
+            "block" : true
+          }
+        ]
+      },
+      "duration" : 0
+    },
+    {
+      "actor" : "harold",
+      "action" : {
+        "name" : "traject",
+        "params" : ["down", 5, false]
+      },
+      "duration" : 5000
+    },
+    {
+      "actor" : "harold",
+      "action" : {
+        "name" : "stopAnimation",
+        "params" : []
+      }
+    },
+    {
+      "actor" : "harold",
+      "action" : {
+        "name" : "stop",
+        "params" : []
+      },
+      "duration" : 0
+    },
+    {
+      "actor" : "harold",
+      "action" : {
+        "name" : "talk",
+        "params" : ["Hm. I must locate Mr. Ree."]
+      },
+      "duration" : 2000
+    },
+    {
+      "actor" : "harold",
+      "action" : {
+        "name" : "quiet",
+        "params" : []
+      }
+    },
+    {
+      "actor" : "harold",
+      "action" : {
+        "name" : "talk",
+        "params" : ["Where is Mr. Ree?"]
+      },
+      "duration" : 2000
+    },
+    {
+      "actor" : "harold",
+      "action" : {
+        "name" : "quiet",
+        "params" : []
+      },
+      "duration" : 0
+    },
+    {
+      "actor" : "harold",
+      "action" : {
+        "name" : "talk",
+        "params" : ["You there!"]
+      },
+      "duration" : 1000
+    },
+    {
+      "actor" : "harold",
+      "action" : {
+        "name" : "quiet",
+        "params" : []
+      }
+    },
+    {
+      "actor" : "mr-lorenzo",
+      "action" : {
+        "name" : "animate",
+        "params" : [
+          {
+            "name" : "animate-movingUp",
+            "type" : "iterate",
+            "block" : false
+          }
+        ]
+      },
+      "duration" : 110
+    },
+    {
+      "actor" : "mr-lorenzo",
+      "action" : {
+        "name" : "stopAnimation",
+        "params" : []
+      }
+    },
+    {
+      "actor" : "mr-lorenzo",
+      "action" : {
+        "name" : "talk",
+        "params" : "!"
+      },
+      "duration" : 1000
+    },
+    {
+      "actor" : "mr-lorenzo",
+      "action" : {
+        "name" : "quiet",
+        "params" : []
+      },
+      "duration" : 0
+    },
+    {
+      "actor" : "mr-lorenzo",
+      "action" : {
+        "name" : "animate",
+        "params" : [
+          {
+            "name" : "animate-movingUp",
+            "type" : "loop",
+            "block" : true
+          }
+        ]
+      }
+    },
+    {
+      "actor" : "mr-lorenzo",
+      "action" : {
+        "name" : "traject",
+        "params" : ["up", 5, false]
+      },
+      "duration" : 2000
+    },
+    {
+      "actor" : "mr-lorenzo",
+      "action" : {
+        "name" : "animate",
+        "params" : [
+          {
+            "name" : "animate-movingLeft",
+            "type" : "loop",
+            "block" : true
+          }
+        ]
+      }
+    },
+    {
+      "actor" : "mr-lorenzo",
+      "action" : {
+        "name" : "traject",
+        "params" : ["left", 5, false]
+      },
+      "duration" : 2000
+    },
+    {
+      "actor" : "mr-lorenzo",
+      "action" : {
+        "name" : "animate",
+        "params" : [
+          {
+            "name" : "animate-movingUp",
+            "type" : "loop",
+            "block" : true
+          }
+        ]
+      }
+    },
+    {
+      "actor" : "mr-lorenzo",
+      "action" : {
+        "name" : "traject",
+        "params" : ["up", 5, false]
+      },
+      "duration" : 700
+    },
+    {
+      "actor" : "mr-lorenzo",
+      "action" : {
+        "name" : "stop",
+        "params" : []
+      }
+    },
+    {
+      "actor" : "mr-lorenzo",
+      "action" : {
+        "name" : "stopAnimation",
+        "params" : []
+      }
+    },
+    {
+      "module" : "interact",
+      "action" : {
+        "name" : "enableAll",
+        "params" : []
+      }
+    }
+  ]
+}

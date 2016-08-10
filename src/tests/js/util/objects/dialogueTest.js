@@ -113,7 +113,7 @@ define(['Squire', 'constants'], function (Squire, constants) {
 
     describe('Dialogue Module Conversation', function () {
         var object, entity, stage = jasmine.createSpyObj('stage', ['element']),
-            conversationObject = getJSONFixture('json/conversation.json');
+            conversationObject = getJSONFixture('json/conversation/conversation.json');
 
         beforeEach(function () {
             object = jasmine.createSpyObj('object', ['talk', 'quiet', 'isTalking']);
@@ -158,7 +158,7 @@ define(['Squire', 'constants'], function (Squire, constants) {
                 stage: stage
             }).require(['dialogue'], function (dialogue) {
                 var conversation = new dialogue.conversation([entity, object]), self = conversation.returnSelf(),
-                    invalidConversation = getJSONFixture('json/invalid_conversation.json');
+                    invalidConversation = getJSONFixture('json/conversation/invalid_conversation.json');
                 expect(self.validateConversation(invalidConversation.conversation)).toBe(false);
                 expect(self.validateConversation(invalidConversation)).toBe(false);
                 expect(self.validateConversation(conversationObject)).toBe(false);
