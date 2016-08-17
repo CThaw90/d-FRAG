@@ -35,7 +35,8 @@ require.config({
         dialogue: '../main/js/util/objects/dialogue',
         screen: '../main/js/util/objects/screen',
         interactions: '../main/js/config/interactions',
-        scene: '../main/js/scene/scene'
+        scene: '../main/js/scene/scene',
+        stage: '../main/js/entity/stage'
     },
 
     // ask Require.js to load these files (all our tests)

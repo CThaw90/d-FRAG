@@ -1,7 +1,7 @@
 /**
  * Created by Chris on 10/8/2015.
  */
-define('stage', ['exports', 'utility', 'screen', 'collision', 'http', 'object', 'ai'], function (stage, utility, screen, collision, http, object, ai) {
+define('stage', ['exports', 'utility', 'collision', 'http', 'object', 'ai'], function (stage, utility, collision, http, object, ai) {
 
     var self = {
         container: document.createElement('div'),

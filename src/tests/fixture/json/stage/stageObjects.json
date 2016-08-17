@@ -1,0 +1,66 @@
+[
+  {
+    "load": "http://d-FRAG.play/d-FRAG-Content/json/sprites/trees/tree_a.json",
+    "id": "tree_a"
+  },
+  {
+    "load": "http://d-FRAG.play/d-FRAG-Content/json/sprites/trees/tree_b.json",
+    "id": "tree_b"
+  },
+  {
+    "load": "http://d-FRAG.play/d-FRAG-Content/json/sprites/trees/tree_c.json",
+    "id": "tree_c"
+  },
+  {
+    "load": "http://d-FRAG.play/d-FRAG-Content/json/sprites/trees/tree_d.json",
+    "id": "tree_d"
+  },
+  {
+    "load": "http://d-FRAG.play/d-FRAG-Content/json/sprites/trees/tree_e.json",
+    "id": "tree_e"
+  },
+  {
+    "load": "http://d-FRAG.play/d-FRAG-Content/json/sprites/trees/tree_f.json",
+    "id": "tree_f"
+  },
+  {
+    "load": "http://d-FRAG.play/d-FRAG-Content/json/sprites/trees/tree_h.json",
+    "id": "tree_h"
+  },
+  {
+    "load": "http://d-FRAG.play/d-FRAG-Content/json/sprites/trees/tree_i.json",
+    "id": "tree_i"
+  },
+  {
+    "load": "http://d-FRAG.play/d-FRAG-Content/json/sprites/walls/stone-walls_a.json",
+    "id": "stone-walls_a"
+  },
+  {
+    "load": "http://d-FRAG.play/d-FRAG-Content/json/sprites/walls/stone-walls_b.json",
+    "id": "stone-walls_b"
+  },
+  {
+    "load": "http://d-FRAG.play/d-FRAG-Content/json/sprites/doors/steel-door.json",
+    "id": "steel-door"
+  },
+  {
+    "load": "http://d-FRAG.play/d-FRAG-Content/json/sprites/doors/black-door.json",
+    "id": "black-door"
+  },
+  {
+    "load": "http://d-FRAG.play/d-FRAG-Content/json/sprites/characters/character.json",
+    "id": "character"
+  },
+  {
+    "load": "http://d-FRAG.play/d-FRAG-Content/json/sprites/characters/harold.json",
+    "id": "harold"
+  },
+  {
+    "load": "http://d-FRAG.play/d-FRAG-Content/json/sprites/characters/mr-lorenzo.json",
+    "id": "mr-lorenzo"
+  },
+  {
+    "load": "http://d-FRAG.play/d-FRAG-Content/json/sprites/characters/mr-ree.json",
+    "id": "mr-ree"
+  }
+]

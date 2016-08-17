@@ -39,7 +39,7 @@ define(['Squire'], function (Squire) {
 
                 scene.remove('d-FRAG_game_introduction_scene');
                 expect(self.sceneDict['d-FRAG_game_introduction_scene']).toBeUndefined();
-                
+
                 done();
             });
         });
