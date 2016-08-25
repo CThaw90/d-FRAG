@@ -188,6 +188,7 @@ define('object', ['exports', 'constants', 'utility', 'collision', 'dialogue'], f
             self.frameHandle = setInterval(self.reloadObjectState, self.frameRate);
             self.resize();
 
+            // TODO: Maybe put this in a can collide method
             collision.add(object);
         };
 
@@ -297,6 +298,10 @@ define('object', ['exports', 'constants', 'utility', 'collision', 'dialogue'], f
             });
 
             return finished;
+        };
+
+        object.returnSelf = function () {
+            return self;
         };
     };
 });

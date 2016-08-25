@@ -18,22 +18,22 @@ define('interactions', ['exports', 'constants', 'http', 'dialogue'], function (i
 
                 switch (key.which) {
                     case constants.keyMap.rightArrow:
-                        object.animate({name: 'animate-movingRight', type: 'loop', block: true});
+                        object.animate({name: 'animate-movingRight', type: 'loop'});
                         object.traject(constants.right, 5, true);
                         break;
 
                     case constants.keyMap.upArrow:
-                        object.animate({name: 'animate-movingUp', type: 'loop', block: true});
+                        object.animate({name: 'animate-movingUp', type: 'loop'});
                         object.traject(constants.up, 5, true);
                         break;
 
                     case constants.keyMap.leftArrow:
-                        object.animate({name: 'animate-movingLeft', type: 'loop', block: true});
+                        object.animate({name: 'animate-movingLeft', type: 'loop'});
                         object.traject(constants.left, 5, true);
                         break;
 
                     case constants.keyMap.downArrow:
-                        object.animate({name: 'animate-movingDown', type: 'loop', block: true});
+                        object.animate({name: 'animate-movingDown', type: 'loop'});
                         object.traject(constants.down, 5, true);
                         break;
                 }

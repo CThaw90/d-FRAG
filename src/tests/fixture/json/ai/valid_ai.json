@@ -1,0 +1,178 @@
+{
+  "id" : "artificial_intelligence_for_roaming_character",
+  "type" : "AI_RANDOM_CONFIG",
+  "interval" : 2000,
+  "instructions" : [
+    {
+      "name" : "rightMovement",
+      "methods" : [
+        {
+          "name" : "animate",
+          "params" : [
+            {
+              "randomized" : false,
+              "type" : "object",
+              "body" : {
+                "name" : "animate-movingRight",
+                "type" : "loop",
+                "block" : true
+              }
+            }
+          ]
+        },
+        {
+          "name" : "traject",
+          "params" : [
+            {
+              "randomized" : false,
+              "type" : "string",
+              "body" : "right"
+            },
+            {
+              "randomized" : false,
+              "type" : "integer",
+              "body" : 5
+            },
+            {
+              "randomized" : false,
+              "type" : "boolean",
+              "body" : true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name" : "upMovement",
+      "methods" : [
+        {
+          "name" : "animate",
+          "params" : [
+            {
+              "randomized" : false,
+              "type" : "object",
+              "body" : {
+                "name" : "animate-movingUp",
+                "type" : "loop",
+                "block" : true
+              }
+            }
+          ]
+        },
+        {
+          "name" : "traject",
+          "params" : [
+            {
+              "randomized" : false,
+              "type" : "string",
+              "body" : "up"
+            },
+            {
+              "randomized" : false,
+              "type" : "integer",
+              "body" : 5
+            },
+            {
+              "randomized" : false,
+              "type" : "boolean",
+              "body" : true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name" : "leftMovement",
+      "methods" : [
+        {
+          "name" : "animate",
+          "params" : [
+            {
+              "randomized" : false,
+              "type" : "object",
+              "body" : {
+                "name" : "animate-movingLeft",
+                "type" : "loop",
+                "block" : true
+              }
+            }
+          ]
+        },
+        {
+          "name" : "traject",
+          "params" : [
+            {
+              "randomized" : false,
+              "type" : "string",
+              "body" : "left"
+            },
+            {
+              "randomized" : false,
+              "type" : "integer",
+              "body" : 5
+            },
+            {
+              "randomized" : false,
+              "type" : "boolean",
+              "body" : true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name" : "downMovement",
+      "methods" : [
+        {
+          "name" : "animate",
+          "params" : [
+            {
+              "randomized" : false,
+              "type" : "object",
+              "body" : {
+                "name" : "animate-movingDown",
+                "type" : "loop",
+                "block" : true
+              }
+            }
+          ]
+        },
+        {
+          "name" : "traject",
+          "params" : [
+            {
+              "randomized" : false,
+              "type" : "string",
+              "body" : "down"
+            },
+            {
+              "randomized" : false,
+              "type" : "integer",
+              "body" : 5
+            },
+            {
+              "randomized" : false,
+              "type" : "boolean",
+              "body" : true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "intervals" : [
+    {
+      "name" : "stop",
+      "methods" : [
+        {
+          "name" : "stopAnimation",
+          "params" : []
+        },
+        {
+          "name" : "stop",
+          "params" : []
+        }
+      ]
+    }
+  ]
+}

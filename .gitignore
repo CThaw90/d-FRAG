@@ -17,3 +17,7 @@ components/
 # ----------------
 .sass-cache/
 css/
+
+# Generated Karma
+# ----------------
+reports/

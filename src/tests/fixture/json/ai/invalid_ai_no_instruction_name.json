@@ -1,0 +1,15 @@
+{
+  "id": "invalid_artificial_intelligence_configuration_for_testing",
+  "type": "AI_RANDOM_CONFIG",
+  "interval": 2000,
+  "instructions": [
+    {
+      "methods": [
+        {
+          "name": "animate",
+          "params": []
+        }
+      ]
+    }
+  ]
+}

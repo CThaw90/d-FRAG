@@ -8,6 +8,7 @@
     "images": "http://www.gamesfolio.com/defrag-images/images.zip",
     "objects": "http://www.gamesfolio.com/defrag-json/objects.zip",
     "scenes": "http://www.gamesfolio.com/defrag-json/scenes.zip",
+    "Squire.js": "squire#~0.2.0",
     "requirejs": "2.1.17",
     "text": "2.0.14"
   },

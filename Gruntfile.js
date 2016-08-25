@@ -8,8 +8,7 @@ module.exports = function (grunt) {
 
     var gruntConfig = {
         app: 'src/main',
-        dist: 'target/dist',
-        version: grunt.option('release') ? grunt.option('release') : 'release',
+        readJSON: 'Reads filesystem json file',
         initConfig: 'INITIALIZE_CONFIGURATION'
     };
 
@@ -35,7 +34,8 @@ module.exports = function (grunt) {
                     {expand: true, cwd: 'bower_components/', src: ['objects/**', '!./bower.json'], dest: 'src/main/components'},
                     {expand: true, cwd: 'bower_components/', src: ['requirejs/**', '!./bower.json'], dest: 'src/main/components'},
                     {expand: true, cwd: 'bower_components/', src: ['scenes/**', '!./bower.json'], dest: 'src/main/components'},
-                    {expand: true, cwd: 'bower_components/', src: ['text/**', '!.bower.json'], dest: 'src/main/components'}
+                    {expand: true, cwd: 'bower_components/', src: ['text/**', '!.bower.json'], dest: 'src/main/components'},
+                    {expand: true, cwd: 'bower_components/', src: ['Squire.js/**', '!.bower.json'], dest: 'src/main/components'}
                 ]
             }
         },
@@ -51,11 +51,31 @@ module.exports = function (grunt) {
         clean: {
             bower: ['bower_components'],
             build: ['src/main/components', 'src/main/css'],
-            cache: ['.cache']
+            cache: ['.cache'],
+            reports: ['reports']
+        },
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js',
+                runnerPort: 9999,
+                singleRun: true,
+                browsers: ['PhantomJS'],
+                reporters: ['dots', 'coverage', 'progress'],
+                coverageReporter: {
+                    reporters: [
+                        {
+                            type: 'lcov',
+                            dir: 'reports/karma-coverage/',
+                            subdir: '.',
+                            file: 'lcov.info'
+                        }
+                    ]
+                }
+            }
         }
     });
 
     grunt.registerTask('default', ['bower', 'compass', 'copy', 'clean:bower']);
-    grunt.registerTask('build', ['default']);
+    grunt.registerTask('build', ['default', 'karma']);
     grunt.registerTask('cleanBuild', ['clean', 'build']);
 };

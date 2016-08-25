@@ -1,0 +1,66 @@
+{
+  "interaction_module_character": {
+    "objects": ["character_a", "character_b", "character_c", "character_d"],
+    "type": "keypress",
+    "active": true,
+    "config": {
+      "keys": ["space"]
+    },
+    "does": {}
+  },
+  "interaction_module_tree": {
+    "objects": ["tree_a", "tree_b", "tree_c", "tree_d"],
+    "type": "keypress",
+    "active": true,
+    "config": {
+      "keys": ["enter"]
+    },
+    "does": {}
+  },
+  "interaction_module_wall": {
+    "objects": ["wall_a", "wall_b", "wall_c", "wall_d"],
+    "type": "keypress",
+    "active": true,
+    "config": {
+      "keys": ["shift"]
+    },
+    "does": {}
+  },
+  "interaction_module_door": {
+    "objects": ["door_a", "door_b", "door_c", "door_d"],
+    "type": "keypress",
+    "active": true,
+    "config": {
+      "keys": ["upArrow"]
+    },
+    "does": {}
+  },
+  "interaction_module_movement": {
+    "objects": ["movement_a", "movement_b", "movement_c", "movement_d"],
+    "trigger": "trigger_a",
+    "type": "movement",
+    "active": true,
+    "does": {}
+  },
+  "interaction_module_detection": {
+    "objects": ["detection_a", "detection_b", "detection_c", "detection_d"],
+    "trigger": "detection_trigger",
+    "type": "movement",
+    "active": true,
+    "does": {}
+  },
+  "interaction_module_walking": {
+    "objects": ["walking_a", "walking_b", "walking_c", "walking_d"],
+    "trigger": "walking_trigger",
+    "type": "movement",
+    "active": true,
+    "does": {}
+  },
+  "interaction_module_running": {
+    "objects": ["running_a", "running_b", "running_c", "running_d"],
+    "trigger": "running_trigger",
+    "type": "movement",
+    "active": true,
+    "does": {}
+  }
+}
