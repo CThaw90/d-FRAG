@@ -309,7 +309,7 @@ define(['Squire', 'constants', 'utility'], function (Squire, constants, utility)
                     expect(self.ctx.drawImage).toHaveBeenCalledWith(self.image, 154, 20, 50, 80, 0, 0, 50, 80);
                     expect(self.ctx.drawImage).toHaveBeenCalledWith(self.image, 154, 20, 50, 80, 0, 0, 50, 80);
                     done();
-                }, 10);
+                }, 15);
             });
         });
     });

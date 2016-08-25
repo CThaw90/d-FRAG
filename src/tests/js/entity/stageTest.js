@@ -12,7 +12,7 @@ define(['Squire'], function (Squire) {
             collision = jasmine.createSpyObj('collision', ['add']);
             http = jasmine.createSpyObj('http', ['get']);
             object = jasmine.createSpyObj('object', ['Entity']);
-            config = {backgroundImage: {src: 'backgroundImage.png'}, id: 'testingStage'};
+            config = {backgroundImage: {src: '/base/src/main/components/images/stages/grass.png'}, id: 'testingStage'};
 
             object.Entity = function () {};
             object.Entity.prototype = jasmine.createSpyObj('Entity', ['finishedLoading', 'activate']);
