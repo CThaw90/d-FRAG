@@ -21,6 +21,9 @@ module.exports = function (config) {
             {pattern: 'src/tests/fixture/js/**/*.js', included: false},
 
             // app js
+            {pattern: 'src/main/components/**/*.jpeg', included: false},
+            {pattern: 'src/main/components/**/*.png', included: false},
+            {pattern: 'src/main/components/**/*.jpg', included: false},
             {pattern: 'src/main/components/**/*.js', included: false},
             {pattern: 'src/main/js/**/*.js', included: false},
             {pattern: 'src/main/js/*.js', included: false},

@@ -35,6 +35,7 @@ require.config({
         dialogue: '../main/js/util/objects/dialogue',
         screen: '../main/js/util/objects/screen',
         interactions: '../main/js/config/interactions',
+        object: '../main/js/entity/object',
         scene: '../main/js/scene/scene',
         stage: '../main/js/entity/stage'
     },
