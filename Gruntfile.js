@@ -37,7 +37,18 @@ module.exports = function (grunt) {
                     {expand: true, cwd: 'bower_components/', src: ['text/**', '!.bower.json'], dest: 'src/main/components'},
                     {expand: true, cwd: 'bower_components/', src: ['Squire.js/**', '!.bower.json'], dest: 'src/main/components'}
                 ]
-            }
+            },
+            json: {
+                files: [
+                    {expand: true, cwd: 'src/main/components', src: ['artificial-intelligence/**'], dest: 'dist/components'},
+                    {expand: true, cwd: 'src/main/components', src: ['conversations/**'], dest: 'dist/components'},
+                    {expand: true, cwd: 'src/main/components', src: ['objects/**'], dest: 'dist/components'},
+                    {expand: true, cwd: 'src/main/components', src: ['scenes/**'], dest: 'dist/components'}
+                ]
+            },
+            html: {files: [ {expand: true, cwd: 'src', src: 'index.html', dest: 'dist'} ] },
+            css: {files: [ {expand: true, cwd: 'src/main/css/', src: ['defrag.css'], dest: 'dist/css'} ] },
+            js: { files: [ {expand: true, cwd: 'src/main/components/requirejs', src: ['require.js'], dest: 'dist/js'} ] }
         },
         compass: {
             main: {
@@ -52,6 +63,7 @@ module.exports = function (grunt) {
             bower: ['bower_components'],
             build: ['src/main/components', 'src/main/css'],
             cache: ['.cache'],
+            dist: ['dist', 'dist.zip'],
             reports: ['reports']
         },
         karma: {
@@ -72,10 +84,45 @@ module.exports = function (grunt) {
                     ]
                 }
             }
+        },
+        requirejs: {
+            compile: {
+                options: {
+                    baseUrl: 'src/main/js',
+                    mainConfigFile: 'src/main/js/defrag.js',
+                    removeCombined: false,
+                    inlineText: true,
+                    optimize: 'none',
+                    out: 'dist/js/defrag.js',
+                    name: 'defrag'
+                }
+            }
+        },
+        sed: {
+            main: {
+                path: './dist/index.html',
+                pattern: 'main/',
+                replacement: '',
+                recursive: false
+            },
+            src: {
+                path: './dist/index.html',
+                pattern: 'components/requirejs',
+                replacement: 'js',
+                recursive: false
+            }
+        },
+        zip_directories: {
+            dist: {
+                files: [{expand: true, src: ['dist'], dest: '.'}]
+            }
         }
     });
 
-    grunt.registerTask('default', ['bower', 'compass', 'copy', 'clean:bower']);
-    grunt.registerTask('build', ['default', 'karma']);
+    grunt.registerTask('dist', ['requirejs', 'copy:html', 'copy:css', 'copy:js', 'copy:json']);
+    grunt.registerTask('default', ['bower', 'compass', 'copy:main', 'clean:bower']);
+    grunt.registerTask('deploy', ['build', 'dist', 'sed', 'zip']);
     grunt.registerTask('cleanBuild', ['clean', 'build']);
+    grunt.registerTask('zip', ['zip_directories:dist']);
+    grunt.registerTask('build', ['default', 'karma']);
 };

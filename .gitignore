@@ -21,3 +21,8 @@ css/
 # Generated Karma
 # ----------------
 reports/
+
+# Build
+# ----------------
+dist.zip
+dist/
