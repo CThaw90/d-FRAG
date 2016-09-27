@@ -4,16 +4,13 @@
 'use strict';
 
 module.exports = function (grunt) {
-    require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
-
-    var gruntConfig = {
-        app: 'src/main',
-        readJSON: 'Reads filesystem json file',
-        initConfig: 'INITIALIZE_CONFIGURATION'
-    };
 
     grunt.initConfig({
-        gruntConfig: gruntConfig,
+        gruntConfig: {
+            initConfig: String(),
+            readJSON: String(),
+            app: 'src/main'
+        },
         pkg: grunt.file.readJSON('package.json'),
         bower: {
             install: {
@@ -118,6 +115,17 @@ module.exports = function (grunt) {
             }
         }
     });
+
+    grunt.loadNpmTasks('grunt-bower-task');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-compass');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-zip-directories');
+    grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-sed');
 
     grunt.registerTask('dist', ['requirejs', 'copy:html', 'copy:css', 'copy:js', 'copy:json']);
     grunt.registerTask('default', ['bower', 'compass', 'copy:main', 'clean:bower']);

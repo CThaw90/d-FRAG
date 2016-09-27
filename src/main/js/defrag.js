@@ -15,6 +15,7 @@ requirejs.config({
         ai: 'util/objects/ai',
         collision: 'util/objects/collision',
         constants: 'util/static/constants',
+        debug: 'util/static/debug',
         dialogue: 'util/objects/dialogue',
         game: 'game',
         http: 'util/objects/http',

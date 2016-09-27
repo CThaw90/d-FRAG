@@ -1,7 +1,7 @@
 /**
  * Created by Chris on 10/8/2015.
  */
-define('stage', ['exports', 'utility', 'collision', 'http', 'object', 'ai'], function (stage, utility, collision, http, object, ai) {
+define('stage', ['exports', 'utility', 'collision', 'http', 'object', 'ai', 'debug'], function (stage, utility, collision, http, object, ai, debug) {
 
     var self = {
         container: document.createElement('div'),
@@ -44,7 +44,7 @@ define('stage', ['exports', 'utility', 'collision', 'http', 'object', 'ai'], fun
     self.loadAIs = function (ais) {
         ais.forEach(function (a) {
             if (self.loading[a.id] !== undefined) {
-                console.log('Configuration already loaded with unique identifier \'' + a.id + '\'');
+                debug.warn('Configuration already loaded with unique identifier \'' + a.id + '\'');
                 return;
             }
 
@@ -83,14 +83,14 @@ define('stage', ['exports', 'utility', 'collision', 'http', 'object', 'ai'], fun
             self.loadObjects(config.objects);
         }
         else {
-            console.log('No objects have been loaded to this stage');
+            debug.info('No objects have been loaded to this stage');
         }
 
         if (utility.isArray(config.ais)) {
             self.loadAIs(config.ais);
         }
         else {
-            console.log('No AIs have been loaded to this stage');
+            debug.info('No AIs have been loaded to this stage');
         }
 
         self.container.setAttribute('id', stage.id);
@@ -133,17 +133,17 @@ define('stage', ['exports', 'utility', 'collision', 'http', 'object', 'ai'], fun
 
     stage.placeEntity = function (params) {
         if (!params.id) {
-            console.log('Cannot place entity. No unique identifier');
+            debug.error('Cannot place entity. No unique identifier');
             return;
         }
 
         if (!utility.isObject(params.object)) {
-            console.log('Cannot place entity. No associated object');
+            debug.error('Cannot place entity. No associated object');
             return;
         }
 
         if (!utility.isHtmlElement(params.object.element())) {
-            console.log('Cannot place entity. No associated HtmlElement');
+            debug.error('Cannot place entity. No associated HtmlElement');
             return;
         }
 

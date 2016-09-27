@@ -1,7 +1,7 @@
 /**
  * Created by christhaw on 10/26/15.
  */
-define('collision', ['exports', 'constants', 'utility'], function (collision, constants, utility) {
+define('collision', ['exports', 'constants', 'utility', 'debug'], function (collision, constants, utility, debug) {
 
     var self = {
         // The Collision Detection System Object
@@ -152,7 +152,7 @@ define('collision', ['exports', 'constants', 'utility'], function (collision, co
                     axis = 'x';
                     break;
                 default:
-                    console.log('Huge Error');
+                    debug.error('Huge Error');
                     return;
             }
 
@@ -205,7 +205,7 @@ define('collision', ['exports', 'constants', 'utility'], function (collision, co
                     pos[axis]--;
                     break;
                 default:
-                    console.log('Huge Error');
+                    debug.error('Huge Error');
                     return;
             }
 

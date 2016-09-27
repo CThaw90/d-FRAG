@@ -1,7 +1,7 @@
 /**
  * Created by christhaw on 2/28/16.
  */
-define('scene', ['exports', 'stage', 'constants', 'utility', 'interact', 'http', 'collision', 'ai'], function (scene, stage, constants, utility, interact, http, collision, ai) {
+define('scene', ['exports', 'stage', 'constants', 'utility', 'interact', 'http', 'collision', 'ai', 'debug'], function (scene, stage, constants, utility, interact, http, collision, ai, debug) {
 
     var self = {
         sceneDict: {},
@@ -12,7 +12,7 @@ define('scene', ['exports', 'stage', 'constants', 'utility', 'interact', 'http',
             ai: ai
         },
         execute: function (exec) {
-            console.log('Running ' + exec);
+            debug.trace('Running ' + exec);
             eval(exec);
         },
         actions: String(),
@@ -40,12 +40,12 @@ define('scene', ['exports', 'stage', 'constants', 'utility', 'interact', 'http',
             }
         }
         else if (utility.isObject(scene)) {
-            console.log('Could not add scene with name ' + scene.name);
+            debug.error('Could not add scene with name ' + scene.name);
         }
         else if (!scene.id) {
-            console.log('Could not add scene. No unique identifier');
+            debug.error('Could not add scene. No unique identifier');
         } else {
-            console.log('Could not add scene. Not an Object');
+            debug.error('Could not add scene. Not an Object');
         }
     };
 
@@ -65,9 +65,9 @@ define('scene', ['exports', 'stage', 'constants', 'utility', 'interact', 'http',
                         try {
                             eval(execution[index].action);
                         } catch (error) {
-                            console.error(error);
-                            console.log("Violating execution string /* START */ " + execution[index].action);
-                            console.log("Violating index - [" + index + "]");
+                            debug.error(error);
+                            debug.warn("Violating execution string /* START */ " + execution[index].action);
+                            debug.warn("Violating index - [" + index + "]");
                         }
                     }, duration);
                 })(e);
@@ -75,7 +75,7 @@ define('scene', ['exports', 'stage', 'constants', 'utility', 'interact', 'http',
             }
         }
         else {
-            console.log('Could not run scene with id ' + id + '. Scene does not exist');
+            debug.error('Could not run scene with id ' + id + '. Scene does not exist');
         }
     };
 

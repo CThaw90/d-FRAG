@@ -4,7 +4,7 @@
  * This utility object represents a game screen view
  * shown from the user perspective
  */
-define('screen', ['exports', 'utility', 'stage'], function (screen, utility, stage) {
+define('screen', ['exports', 'utility', 'stage', 'debug'], function (screen, utility, stage, debug) {
 
     var self = {
         screenLocked: false,
@@ -35,7 +35,7 @@ define('screen', ['exports', 'utility', 'stage'], function (screen, utility, sta
      */
     screen.lockOn = function (entity) {
         if (!entity.id || !entity.height || !entity.width) {
-            console.log('Invalid entity object. Game screen cannot lockOn');
+            debug.warn('Invalid entity object. Game screen cannot lockOn');
             return;
         }
 

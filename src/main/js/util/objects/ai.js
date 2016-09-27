@@ -13,7 +13,7 @@
  *      movement: AI exhibits movement behavior. Can be randomized or manually instructed
  *      animate: AI exhibits animation behavior. Can be randomized or manually instructed
  */
-define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utility) {
+define('ai', ['exports', 'constants', 'utility', 'debug'], function (ai, constants, utility, debug) {
 
     var self = {
         iQueue: {},
@@ -31,17 +31,17 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
 
     self.validateConfiguration = function (config) {
         if (!config.id) {
-            console.log('Cannot add ai configuration. No unique identifier.');
+            debug.warn('Cannot add ai configuration. No unique identifier.');
             return false;
         }
 
         if (!self.validateInstructions(config.instructions) || (config.intervals && (!utility.isNumber(config.interval) || !self.validateIntervals(config.intervals)))) {
-            console.log('Cannot add ai configuration with id \'' + config.id + '\'. Invalid configuration format');
+            debug.warn('Cannot add ai configuration with id \'' + config.id + '\'. Invalid configuration format');
             return false;
         }
 
         if (self.iQueue[config.id]) {
-            console.log('Cannot add ai configuration with id \'' + config.id + '\' ');
+            debug.warn('Cannot add ai configuration with id \'' + config.id + '\' ');
             return false;
         }
 
@@ -138,7 +138,7 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
                 });
             }
             else if (instruction.functions) {
-                console.log('Artificial Intelligence anonymous functions are not yet supported');
+                debug.info('Artificial Intelligence anonymous functions are not yet supported');
             }
 
             evalIndex++;
@@ -209,12 +209,12 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
     ai.start = function (params) {
 
         if (!params.id) {
-            console.log('Cannot start ai engine. No unique identifier found');
+            debug.warn('Cannot start ai engine. No unique identifier found');
             return;
         }
 
         if (!self.iQueue[params.engine]) {
-            console.log('Cannot start ai engine. No ai configuration with id \'' + params.id + '\'');
+            debug.warn('Cannot start ai engine. No ai configuration with id \'' + params.id + '\'');
             return;
         }
 
@@ -223,7 +223,7 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
             case constants.aiRandom:
                 var aiEngine = self.iQueue[params.engine];
                 if (aiEngine.entities[params.id] && aiEngine.entities[params.id].running) {
-                    console.log('Cannot start engine for \'' + params.id +'\'. Engine for this identifier already running');
+                    debug.warn('Cannot start engine for \'' + params.id +'\'. Engine for this identifier already running');
                     return;
                 }
                 else if (aiEngine.entities[params.id] && aiEngine.entities[params.id].object.id === params.entity.id) {
@@ -242,7 +242,7 @@ define('ai', ['exports', 'constants', 'utility'], function (ai, constants, utili
 
     ai.stop = function (engineId, objectId) {
         if (!self.iQueue[engineId] || !self.iQueue[engineId].entities[objectId]) {
-            console.log('No ai with id \'' + id + '\' running');
+            debug.info('No ai with id \'' + id + '\' running');
             return false;
         }
 

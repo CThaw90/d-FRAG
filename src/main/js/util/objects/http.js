@@ -2,7 +2,7 @@
  * Created by cthaw on 11/8/15.
  *
  */
-define('http', ['exports', 'utility'], function (http, utility) {
+define('http', ['exports', 'utility', 'debug'], function (http, utility, debug) {
 
     var self = {
         DELETE_METHOD: 'DELETE',
@@ -60,7 +60,7 @@ define('http', ['exports', 'utility'], function (http, utility) {
 
             if (this.readyState === 4) {
 
-                console.log('Response from server is '+this.responseText);
+                debug.trace('Response from server is '+this.responseText);
             }
         };
     };

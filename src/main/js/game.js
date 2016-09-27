@@ -1,7 +1,7 @@
 /**
  * Created by Chris on 10/8/2015.
  */
-define('game', ['exports', 'utility', 'stage', 'scene', 'http'], function (game, utility, stage, scene, http) {
+define('game', ['exports', 'utility', 'stage', 'scene', 'http', 'debug'], function (game, utility, stage, scene, http, debug) {
 
     var self = {
         loading: {},
@@ -46,11 +46,11 @@ define('game', ['exports', 'utility', 'stage', 'scene', 'http'], function (game,
             });
         }
         else {
-            console.log('No scenes have been loaded in with this level.');
+            debug.info('No scenes have been loaded in with this level.');
         }
 
         utility.waitUntil(game.finishedLoading, [], function () {
-            console.log('Game finished loading...');
+            debug.info('Game finished loading...');
         }, [], {onTimeout: game.finishedLoading});
     };
 

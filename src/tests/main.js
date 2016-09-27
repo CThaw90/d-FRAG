@@ -37,7 +37,8 @@ require.config({
         interactions: '../main/js/config/interactions',
         object: '../main/js/entity/object',
         scene: '../main/js/scene/scene',
-        stage: '../main/js/entity/stage'
+        stage: '../main/js/entity/stage',
+        debug: '../main/js/util/static/debug'
     },
 
     // ask Require.js to load these files (all our tests)
