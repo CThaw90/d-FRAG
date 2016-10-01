@@ -1,14 +1,12 @@
 .full-screen {
   background-color: #000000;
-  position: relative;
+  position: absolute;
   overflow: hidden;
-  /*
-      Make height and width dynamic in javascript
-      for consistency in different screen sizes and
-      in use for resizable screen features
-  */
-  height: 99%;
-  width: 99%;
+  z-index: 10000;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  top: 0;
 }
 
 html, body {

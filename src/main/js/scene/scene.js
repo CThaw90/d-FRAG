@@ -1,13 +1,14 @@
 /**
  * Created by christhaw on 2/28/16.
  */
-define('scene', ['exports', 'stage', 'constants', 'utility', 'interact', 'http', 'collision', 'ai', 'debug'], function (scene, stage, constants, utility, interact, http, collision, ai, debug) {
+define('scene', ['exports', 'stage', 'constants', 'utility', 'interact', 'http', 'collision', 'ai', 'screen', 'debug'], function (scene, stage, constants, utility, interact, http, collision, ai, screen, debug) {
 
     var self = {
         sceneDict: {},
         modules: {
             collision: collision,
             interact: interact,
+            screen: screen,
             http: http,
             ai: ai
         },

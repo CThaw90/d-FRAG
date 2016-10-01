@@ -8,10 +8,39 @@ define('screen', ['exports', 'utility', 'stage', 'debug'], function (screen, uti
 
     var self = {
         screenLocked: false,
-        screenLock: 0,
+        fadeActive: false,
         lockObject: false,
+        screenLock: 0,
         window: window,
         stage: null
+    };
+
+    self.fadeElement = self.window.document.createElement('div');
+    self.fadeElement.setAttribute('id', 'screenFadeElement');
+    self.fadeElement.setAttribute('class', 'full-screen');
+    self.fadeCSSObject = {
+        transition: 'opacity 3s',
+        position: 'absolute',
+        left: 0,
+        top: 0
+    };
+
+    screen.fadeFromBlack = function (timeout) {
+        var t = utility.isNumber(timeout) ? timeout : 3;
+        if (!self.fadeActive) {
+            self.window.document.body.appendChild(self.fadeElement);
+            self.fadeActive = true;
+        }
+        self.fadeElement.setAttribute('style', utility.jsonToCSS(self.fadeCSSObject));
+        self.fadeCSSObject.transition = 'opacity ' + t + 's';
+        self.fadeCSSObject.opacity = 0;
+        self.window.setTimeout(function () {
+            self.fadeElement.setAttribute('style', utility.jsonToCSS(self.fadeCSSObject));
+            self.window.setTimeout(function () {
+                self.window.document.body.removeChild(self.fadeElement);
+                self.fadeActive = false;
+            }, timeout * 1000);
+        }, 1);
     };
 
     screen.height = function () {
@@ -82,5 +111,9 @@ define('screen', ['exports', 'utility', 'stage', 'debug'], function (screen, uti
 
     screen.isLocked = function () {
         return self.screenLocked;
+    };
+
+    screen.returnSelf = function () {
+        return self;
     };
 });

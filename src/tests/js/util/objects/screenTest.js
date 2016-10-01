@@ -93,5 +93,22 @@ define(['Squire'], function (Squire) {
                 done();
             });
         });
+
+        it('should fade in the game screen from all black', function (done) {
+            var injector = new Squire();
+            injector.mock({
+                stage: stage
+            }).require(['screen'], function (screen) {
+                var self = screen.returnSelf();
+                spyOn(self.fadeElement, 'setAttribute');
+                spyOn(self.window, 'setTimeout').and.callFake(function (innerFunction) {
+                    innerFunction();
+                });
+                screen.fadeFromBlack(5);
+                expect(self.window.setTimeout).toHaveBeenCalledWith(jasmine.any(Function), 1);
+
+                done();
+            });
+        });
     });
 });
