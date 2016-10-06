@@ -22,6 +22,7 @@ requirejs.config({
         interact: 'util/objects/interact',
         interactions: 'config/interactions',
         levels: 'config/levels',
+        loader: 'util/static/loader',
         object: 'entity/object',
         scene: 'scene/scene',
         screen: 'util/objects/screen',
