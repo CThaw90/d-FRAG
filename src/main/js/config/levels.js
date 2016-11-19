@@ -1,6 +1,8 @@
 define('levels', ['exports'], function (level) {
 
-    var levels = {};
+    var levels = {
+        levelFiles: []
+    };
 
     levels.LEVEL_ONE_INTRODUCTION = {
 
@@ -27,5 +29,10 @@ define('levels', ['exports'], function (level) {
 
     level.load = function (levelId) {
         return levels[levelId] || {};
+    };
+
+    level.add = function (level) {
+        if (!level.id) { return; }
+        levels[level.id] = level;
     };
 });

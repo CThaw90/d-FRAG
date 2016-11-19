@@ -3,11 +3,13 @@
   "description": "A 2D Hacker RPG Web game",
   "version": "0.0.0",
   "dependencies": {
-    "artificial-intelligence": "http://www.gamesfolio.com/defrag-json/artificial-intelligence.zip",
-    "conversations": "http://www.gamesfolio.com/defrag-json/conversations.zip",
+    "artificial-intelligence": "http://www.gamesfolio.com/defrag-json/artificial-intelligence/0.0.4.zip",
+    "configuration": "http://www.gamesfolio.com/defrag-json/configuration/0.0.4.zip",
+    "conversations": "http://www.gamesfolio.com/defrag-json/conversations/0.0.4.zip",
     "images": "http://www.gamesfolio.com/defrag-images/images.zip",
-    "objects": "http://www.gamesfolio.com/defrag-json/objects.zip",
-    "scenes": "http://www.gamesfolio.com/defrag-json/scenes.zip",
+    "levels": "http://www.gamesfolio.com/defrag-json/levels/0.0.4.zip",
+    "objects": "http://www.gamesfolio.com/defrag-json/objects/0.0.4.zip",
+    "scenes": "http://www.gamesfolio.com/defrag-json/scenes/0.0.4.zip",
     "Squire.js": "squire#~0.2.0",
     "requirejs": "2.1.17",
     "text": "2.0.14"
