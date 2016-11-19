@@ -26,8 +26,10 @@ module.exports = function (grunt) {
             main: {
                 files: [
                     {expand: true, cwd: 'bower_components/', src: ['artificial-intelligence/**', '!./bower.json'], dest: 'src/main/components'},
+                    {expand: true, cwd: 'bower_components/', src: ['configuration/**', '!./bower.json'], dest: 'src/main/components'},
                     {expand: true, cwd: 'bower_components/', src: ['conversations/**', '!./bower.json'], dest: 'src/main/components'},
                     {expand: true, cwd: 'bower_components/', src: ['images/**', '!./bower.json'], dest: 'src/main/components'},
+                    {expand: true, cwd: 'bower_components/', src: ['levels/**', '!./bower.json'], dest: 'src/main/components'},
                     {expand: true, cwd: 'bower_components/', src: ['objects/**', '!./bower.json'], dest: 'src/main/components'},
                     {expand: true, cwd: 'bower_components/', src: ['requirejs/**', '!./bower.json'], dest: 'src/main/components'},
                     {expand: true, cwd: 'bower_components/', src: ['scenes/**', '!./bower.json'], dest: 'src/main/components'},

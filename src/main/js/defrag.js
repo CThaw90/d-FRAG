@@ -13,6 +13,7 @@ requirejs.config({
     baseUrl: './main/js/',
     paths: {
         ai: 'util/objects/ai',
+        app: 'app/app',
         collision: 'util/objects/collision',
         constants: 'util/static/constants',
         debug: 'util/static/debug',
@@ -22,6 +23,7 @@ requirejs.config({
         interact: 'util/objects/interact',
         interactions: 'config/interactions',
         levels: 'config/levels',
+        loader: 'util/static/loader',
         object: 'entity/object',
         scene: 'scene/scene',
         screen: 'util/objects/screen',
@@ -30,7 +32,7 @@ requirejs.config({
     }
 });
 
-define(['utility', 'levels', 'game', 'interact', 'screen', 'stage', 'ai', 'scene'], function (utility, levels, game, interact, screen, stage, ai, scene) {
+define(['utility', 'app', 'loader'], function (utility, app, loader) {
 
     // Initialize D-FRAG game
     var startButton = document.createElement('button');
@@ -44,23 +46,9 @@ define(['utility', 'levels', 'game', 'interact', 'screen', 'stage', 'ai', 'scene
         startButton.innerText = 'Start Game';
         startButton.onclick = function () {
             startButton.parentNode.removeChild(startButton);
-            startGame();
+            loader.initialize();
+            app.start();
         };
         document.body.appendChild(startButton);
     }, []);
-
-    var startGame = function () {
-
-        game.load(levels.load('LEVEL_ONE_INTRODUCTION'));
-        utility.waitUntil(game.finishedLoading, [], function () {
-            game.play();
-            interact.init();
-            screen.lockOn(stage.getObject('main-character'));
-            ai.start({entity: stage.getObject('harold'), engine: 'artificial_intelligence_for_roaming_character', id: 'harold_roaming_character'});
-            ai.start({entity: stage.getObject('mr-lorenzo'), engine: 'artificial_intelligence_for_roaming_character', id: 'mr-lorenzo_roaming_character'});
-            screen.fadeFromBlack(5);
-            scene.run('d-FRAG_game_introduction_scene');
-
-        }, []);
-    };
 });

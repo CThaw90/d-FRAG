@@ -35,6 +35,9 @@ define({
     movement: 'movement',
     movementCheckInterval: 1,
 
+    configId: 'configurationId',
+    configurationUrl: '/defrag-content/configuration/configuration.json',
+
     // Regular Expression objects
     // ----------------------------------
 
@@ -79,5 +82,11 @@ define({
     aiRandom: 'AI_RANDOM_CONFIG',
     aiManual: 'AI_MANUAL_CONFIG',
     aiFollow: 'AI_FOLLOW_CONFIG',
-    aiTarget: 'AI_TARGET_CONFIG'
+    aiTarget: 'AI_TARGET_CONFIG',
+
+    // Level Configuration Identifiers
+    // -------------------------------------------
+    levelIds: {
+        INTRO: 'THE_INTRODUCTION'
+    }
 });

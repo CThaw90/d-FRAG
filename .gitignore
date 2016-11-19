@@ -16,6 +16,8 @@ components/
 # Generated SASS
 # ----------------
 .sass-cache/
+*.css.map
+*.css
 css/
 
 # Generated Karma
